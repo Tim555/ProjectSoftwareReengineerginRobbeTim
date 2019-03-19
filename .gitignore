@@ -9,3 +9,8 @@
 
 # Intellij Idea
 .idea
+
+# Latex files #
+*.aux
+*.log
+*.synctex.gz
