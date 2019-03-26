@@ -15,3 +15,6 @@
 *.log
 *.synctex.gz
 /.clover/
+
+#mutated tests
+/src/mutated/
