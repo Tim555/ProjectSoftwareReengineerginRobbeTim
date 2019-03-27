@@ -8,13 +8,13 @@
 
     <name>JFreeChart</name>
 
-    <artifactId>jfreechart</artifactId>
-    <groupId>org.jfree</groupId>
+    <artifactId>jfreechartLocal</artifactId>
+    <groupId>org.jfreeLocal</groupId>
     <version>1.6.0-snapshot</version>
     <packaging>jar</packaging>
 
     <organization>
-        <name>JFree.org</name>
+        <name>JFreeTest.org</name>
         <url>http://www.jfree.org/</url>
     </organization>
     <inceptionYear>2001</inceptionYear>
@@ -66,7 +66,15 @@
           <id>ossrh</id>
           <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
-    </distributionManagement>    
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>project.local</id>
+            <name>project</name>
+            <url>file:${project.basedir}/repo</url>
+        </repository>
+    </repositories>
     
     <build>
         <testSourceDirectory>src/test/java</testSourceDirectory>

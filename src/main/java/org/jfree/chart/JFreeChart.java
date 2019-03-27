@@ -281,8 +281,6 @@ public class JFreeChart implements Drawable, TitleChangeListener,
     public JFreeChart(String title, Font titleFont, Plot plot,
                       boolean createLegend) {
 
-
-
         Args.nullNotPermitted(plot, "plot");
         this.id = null;
         plot.setChart(this);
