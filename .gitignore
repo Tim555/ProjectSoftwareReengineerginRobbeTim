@@ -9,3 +9,5 @@
 
 # Intellij Idea
 .idea
+/.clover/
+/src/mutated/
