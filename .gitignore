@@ -11,3 +11,13 @@
 .idea
 /.clover/
 /src/mutated/
+
+
+# Latex files #
+*.aux
+*.log
+*.synctex.gz
+/.clover/
+
+#mutated tests
+/src/mutated/
