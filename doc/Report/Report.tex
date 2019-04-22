@@ -15,9 +15,37 @@
 %\end{abstract}
 
 \section{Introduction}
-In this report, we are going to talk about which tools we are going to use in order to guarantee a smooth refactoring of the JFreechart code. In what follows, we are going to describe for each major refactoring topic (Code Analysis, Test Coverage) which tools are available, which tools we will be using and why we choose those specific tools. The third chapter is about testing. When refactoring a system, we need certainty that the newly implemented changes or refactorings will not break the existing functionality. With testing, we are able to give us a certain degree of confidence to refactor the code. We will explain some test strategies we will use and how good the current codebase performs on different testing metrics.
+In this report, we are going to talk about which tools we are going to use in order to guarantee a smooth refactoring of the JFreechart code. In what follows, we are going to describe for each major refactoring topic (Code Analysis, Test Coverage) which tools are available, which tools we will be using and why we choose those specific tools. The third chapter is about testing. When refactoring a system, we need certainty that the newly implemented changes or refactorings will not break the existing functionality. With testing, we are able to give us a certain degree of confidence to refactor the code. We will explain some test strategies we will use and how good the current code base performs on different testing metrics.
+
+\section{Project Scope}
+
+In this section, we will discuss the scope of the project as well as the risks that are involved with it.
+
+\subsection{Scope}
+The purpose of this project is to inspect and improve the current code base of JFreeChart, such that implementing new functionality becomes easier. The new functionality that is desired is possibility to create time sequences, where each data point of the graph has a different shape. The data points are also given by a tuple \textit{(x, y, shape)} and are stored in a database. 
+
+To identify the parts of the code that are related to this features (the feature hotspots), we will first use visualization techniques as well as code metrics. Not only will this give us a better understanding of the code base, we can also use the metrics to quantify the improvements that we will make by refactoring.
+
+We will determine the test coverage of code base. If the coverage is not adequate for the refactoring process on the 'feature hotspots' that where identified in the previous step, we will update the test suite with more tests. We will not, however, add tests to improve the test coverage of whole code base.
+
+In the refactoring step, we will improve the code structure, such that it is more suited to implement the new functionality. We will not implement the new functionality ourselves, or change the functionality of the code. 
+
+\subsection{Non-Functional Requirements}
+During the re-engineering process, we will also aim to improve the code to better meet the non-functional requirement. 
+
+The first two requirements that we will consider are adaptability and maintainability. By improving the systems adaptability, the system should be able to deal with different kinds of input more easily. This will help us in adding the new shaped data points. 
+
+extensibility
+
+testibility
+
+reusability -> code clones
+
+robustness
 
 \section{Tool Choice}
+
+In this section, we will discuss all tools that were reviewed for this project. For each tool, we will briefly describe their features, their advantages, and their disadvantages, as well as explaining which tools we will use throughout the project. 
 
 \subsection{Tools for visualization and metrics}
 In order to have a better understanding about the project at hand, there are some tools that help us visualize the code. Since staring at code for hours is not efficient, we searched for some tools which gave us some important metrics to estimate the quality of the good and to get some better and deeper understanding about the codebase.
@@ -89,52 +117,7 @@ PITest seemed very promising, it is a mutation testing tool that is available as
 
 Though Little Darwin is a research tool, it was the only tool that was able to work out of the box. It also provides a good and precise report of the coverage of each class in each package. Therefor, it is our preferred tool for mutation testing.  
 
-\section{Test Coverage}
 
-\subsection{Initial Test Coverage}
-
-\begin{table}[]
-	\begin{center}
-	\begin{tabular}{|l||l|}
-		\hline
-		&  Coverage \\ \hline\hline
-		Line	& $71.2\%$   \\
-		Branch	& $46.7\%$  \\
-		Method	& $72.1\%$  \\ \hline
-	\end{tabular}
-	\caption{Test coverage according to EMMA}
-	\end{center}
-	
-\end{table}
-
-\begin{table}[]
-	\begin{center}
-		\begin{tabular}{|l||l|}
-			\hline
-			&  Coverage \\ \hline\hline
-			Line	& $58.3\%$   \\
-			Class	& $82.8\%$  \\
-			Method	& $63.3\%$  \\ \hline
-		\end{tabular}
-		\caption{Test coverage according to IntelliJ IDEA}
-	\end{center}
-\end{table}
-
-
-\begin{table}[]
-	\begin{center}
-		\begin{tabular}{|l||l|}
-			\hline
-			&  Coverage \\ \hline\hline
-			Line	& $71\%$   \\
-			Branch  & $46\%$ \\
-			Method	& $71\%$  \\ 
-			Class	& $89\%$  \\
-			\hline
-		\end{tabular}
-		\caption{Test coverage according to JaCoCo}
-	\end{center}
-\end{table}
 
 
 \end{document}
