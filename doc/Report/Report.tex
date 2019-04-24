@@ -15,7 +15,7 @@
 %\end{abstract}
 
 \section{Introduction}
-In this report, we are going to talk about which tools we are going to use in order to guarantee a smooth refactoring of the JFreechart code. In what follows, we are going to describe for each major refactoring topic (Code Analysis, Test Coverage) which tools are available, which tools we will be using and why we choose those specific tools. The third chapter is about testing. When refactoring a system, we need certainty that the newly implemented changes or refactoring will not break the existing functionality. With testing, we are able to give us a certain degree of confidence to refactor the code. We will explain some test strategies we will use and how good the current code base performs on different testing metrics.
+In this report, we are going to talk about which tools we are going to use in order to guarantee a smooth refactoring of the JFreechart code. In what follows, we firstly are goig to talk about the Project Scope. Next, we are going to describe for each major refactoring topic (Visualization, Refactoring itself, Code Analysis, Test Coverage and Duplicate code analysis) which tools are available, which tools we will be using and why we choose those specific tools. The third chapter is about testing. When refactoring a system, we need certainty that the newly implemented changes or refactoring will not break the existing functionality. With testing, we are able to give us a certain degree of confidence to refactor the code. We will explain some test strategies we will use and how good the current code base performs on different testing metrics.
 
 \section{Project Scope}
 
@@ -63,7 +63,7 @@ Inheritance chains should not be too long. We will therefor aim to limit each ch
 In this section, we will discuss all tools that were reviewed for this project. For each tool, we will briefly describe their features, their advantages, and their disadvantages, as well as explaining which tools we will use throughout the project. 
 
 \subsection{Tools for visualization and metrics}
-In order to have a better understanding about the project at hand, there are some tools that help us visualize the code. Since staring at code for hours is not efficient, we searched for some tools which gave us some important metrics to estimate the quality of the good and to get some better and deeper understanding about the codebase.
+In order to have a better understanding about the project at hand, there are some tools that help us visualize the code. Since staring at code for hours is not efficient, we searched for some tools which gave us some important metrics to estimate the quality of the good and to get some better and deeper understanding about the codebase. We have reviewed the following tools: Codescene, JDeodorant and Moose.
 
 A first tool we tried out was Codescene (https://codescene.io), this tool gave us some metrics to play around with. Some important metrics we gathered from Codescene are: Lines of code, hotspots in the code, number of active contributors, 'age' of the code, which files need refactoring, which files are coupled to one another. These metrics are really valuable, but not for what we are doing. Maybe the coupling part can be useful, the others are mere information. 
 
@@ -71,12 +71,16 @@ Another tool that was worth taking a look at, was JDeodorant (an eclipse plug-in
 
 Moose is a known tool, but we were not able to make it work. 
 
+We will be using Codescene to gather some important metrics about the original codebase and JDeodorant will help us to fastly detect code smells and also helps us visualize them.
+
 \subsection{Tools for refactoring}
-When refactoring, we can do everything manually. But there are tools available which assist us with this process, so it is worth taking a look at. 
+When refactoring, we can do everything manually. But there are tools available which assist us with this process, so it is worth taking a look at. We will review the following tools: Eclipse and IntelliJ's built in refactoring tools and also JDeodorant.
 
 Eclipse has built in tools for these, but since we are going to develop in IntelliJ, we are not going to explore this functionality. But IntelliJ itself also has refactoring tools available, which we are going to use.
 
-Also in this section is JDeodorant an adequate tool. It helps us detecting the possible refactorings, but it does not aide us with the refactoring. Besides that, the tool is worth mentioning here. 
+Also in this section is JDeodorant an adequate tool. It helps us detecting the possible refactorings, but it does not aide us with the refactoring. Besides that, the tool is worth mentioning here.
+
+We will use the built in IntelliJ refactoring tools, since we will both be using the IntelliJ IDE. JDeodorant is an eclipse plugin, but it is worth using. So we will need to switch IDE's in order to use JDeodorant. 
 
 \subsection{Tools for Duplicate Code Analysis}
 For the duplicate code analysis, the tools that were reviewed for this project are Intellij, iclones, DuDe, Clone Doctor and PMD CPD. 
