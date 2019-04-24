@@ -44,6 +44,7 @@ Re-usability encourages programmers to reuse pieces of codes as much as they can
 We will also aim to improve robustness. Because the current library can interact with a database as well as a file, we will take into account to make improvements such that it would be easier to incorporate more input formats.
 
 \subsection{Objective Solution Metrics}
+\label{sectionObjective}
 What makes a solution \textit{good} is often very subjective. However, we will aim to quantify the improvements we will make, to objectively justify our solutions. 
 
 As for the main requirement of implementing the new functionality, we can use the amount of lines of code that are needed to implement the new feature. However, since implementing the new functionality is not in the scope of the project, we will make an estimation based on the the amount of classes and methods that are needed. \\
@@ -135,5 +136,35 @@ The Major Mutation Framework only works file per file or in combination with the
 PITest seemed very promising, it is a mutation testing tool that is available as plug-in for Intellij that promises to be much faster and much more efficient than competing tools. However, we were not able to make it work with the JFreeChart project. 
 
 Though Little Darwin is a research tool, it was the only tool that was able to work out of the box. It also provides a good and precise report of the coverage of each class in each package. Therefor, it is our preferred tool for mutation testing.  
+
+
+\section{Initial Analysis}
+
+In the initial analysis we will try to get an understanding of the current code base, as well as quantifying it according to the metrics that we discussed in Section \ref{sectionObjective}. 
+
+\subsection{Technical Debt}
+The technical debt of the project reflects the implied cost of additional rework caused by choosing an easy solution now instead of using a better  approach that is more complex (wikipedia).
+We have analyzed important metrics like: hotspots, refactoring targets, temporal coupling, and defects.
+
+Hostpots are modules with the most development activity. Hotspots are possible refactoring targets, since a lot of activity indicates a lot of changes and possible refactoring targets. 
+When analyzing JFreeChart, we discovered that most hotspots are located in the plot module, the renderer module, and the ChartPanel class.
+
+Refactoring targets are modules that are detected by the codescene tool that, according to the tools algorithm, contain code smells or have a disproportional complexity. The must serious targets are XYPlot.java, CategoryPlot.java, and PiePlot.java. 
+
+temporal coupling shows which classes are coupled and if they are loosely coupled or strictly. Our tool identified all coupling and the classes that are most strictly coupled are CombinedDomainXYPlot and CombinedRangeXYPlot.java(83 \%), Day.java and Hour.java (78 \%), CombinedDomainCategoryPlot and CombinedRangeCategoryPlot (77 \%), Day.java and Minute.java (76 \%), and Quarter.java and Year.java (73 \%).
+
+Finally we analyzed the defects, which show the costs on the technical depth. We identified the plot module, the render module, the axis module, the ChartPanel.java class, and the data.general module. This is expected, since they were also identified as hotspots.
+
+
+\subsection{Test Coverage}
+
+In the next step, we analyzed the test coverage of the current test suite. We analyzed the line coverage, the branch coverage, and method coverage. We also analyzed the coverage with mutation testing. 
+
+The line coverage shows the percentage of lines that are executed during the tests. We calculated that the line coverage is 71 \%. 
+
+The method coverage shows the percentage of methods that were tested of each class. The coverage that was calculated was 71 \%. 
+
+The branch coverage shows the percentage of each branch of each control statement that is tested. This coverage was 46 \%. 
+
 
 \end{document}
