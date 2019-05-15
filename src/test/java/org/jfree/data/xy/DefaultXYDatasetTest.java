@@ -224,5 +224,4 @@ public class DefaultXYDatasetTest {
         d.addSeries("S2", data2);
         return d;
     }
-
 }
