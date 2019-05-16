@@ -240,7 +240,7 @@ public class DefaultXYDatasetTest {
     }
 
     /**
-     * Remove series
+     * Data null
      */
     @Test(expected = IllegalArgumentException.class)
     public void addSeriesNullTest() {
@@ -318,5 +318,34 @@ public class DefaultXYDatasetTest {
         double[][] data2 = new double[][] {x2, y2};
         d2.addSeries("S1", data2);
         assertFalse(d1.equals(d2));
+    }
+
+    @Test
+    public void hashcodeTest() {
+        DefaultXYDataset d1 = new DefaultXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1, y1};
+        d1.addSeries("S1", data1);
+
+        d1.hashCode();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getItemCountNegativeNumberTest() {
+        DefaultXYDataset d1 = new DefaultXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1, y1};
+        d1.getItemCount(-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getItemCountLargerThanSeriesNumberTest() {
+        DefaultXYDataset d1 = new DefaultXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1, y1};
+        d1.getItemCount(Integer.MAX_VALUE);
     }
 }

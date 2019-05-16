@@ -210,6 +210,15 @@ public class DefaultXYZDatasetTest {
     }
 
     /**
+     * Data null
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void addSeriesNullTest() {
+        DefaultXYZDataset d = new DefaultXYZDataset();
+        d.addSeries("S1", null);
+    }
+
+    /**
      * Creates a sample dataset for testing.
      *
      * @return A sample dataset.
@@ -228,6 +237,133 @@ public class DefaultXYZDatasetTest {
         double[][] data2 = new double[][] {x2, y2, z2};
         d.addSeries("S2", data2);
         return d;
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getItemCountNegativeNumberTest() {
+        DefaultXYZDataset d1 = new DefaultXYZDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[] z1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1, y1, z1};
+        d1.getItemCount(-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getItemCountLargerThanSeriesNumberTest() {
+        DefaultXYZDataset d1 = new DefaultXYZDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[] z1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1, y1, z1};
+        d1.getItemCount(Integer.MAX_VALUE);
+    }
+
+
+
+    /**
+     * Data length not 3
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void dateLengthNotTwoTest() {
+        DefaultXYZDataset d = new DefaultXYZDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1};
+        d.addSeries("S1", data1);
+    }
+
+    /**
+     * Two series not same size
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void dateLengthNotSameSize1Test() {
+        DefaultXYZDataset d = new DefaultXYZDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0, 4.0};
+        double[] z1 = new double[] {1.0, 2.0, 3.0, 4.0};
+        double[][] data1 = new double[][] {x1, y1, z1};
+        d.addSeries("S1", data1);
+    }
+
+    /**
+     * Two series not same size
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void dateLengthNotSameSize2Test() {
+        DefaultXYZDataset d = new DefaultXYZDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0, 4.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[] z1 = new double[] {1.0, 2.0, 3.0, 4.0};
+        double[][] data1 = new double[][] {x1, y1, z1};
+        d.addSeries("S1", data1);
+    }
+
+
+
+    /**
+     * Two series not same size
+     */
+    @Test
+    public void equalsTest() {
+        DefaultXYZDataset d = new DefaultXYZDataset();
+        DefaultXYZDataset d2 = new DefaultXYZDataset();
+
+        d.equals(d2);
+    }
+
+    /**
+     * Equals itself test
+     */
+    @Test
+    public void equalsItselfTest() {
+        DefaultXYZDataset d = new DefaultXYZDataset();
+        assertTrue(d.equals(d));
+    }
+
+    /**
+     * Equals other objecttype
+     */
+    @Test
+    public void equalsWrongObjectTest() {
+        DefaultXYZDataset d = new DefaultXYZDataset();
+        Double k = new Double(50);
+        assertFalse(d.equals(k));
+    }
+
+    /**
+     * Two series not same size
+     */
+    @Test
+    public void equalsWrongSize() {
+        DefaultXYZDataset d1 = new DefaultXYZDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[] z1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1, y1, z1};
+        d1.addSeries("S1", data1);
+
+        DefaultXYZDataset d2 = new DefaultXYZDataset();
+        double[] x2 = new double[] {1.0, 2.0, 3.0};
+        double[] y2= new double[] {1.0, 2.0, 3.1};
+        double[] z2 = new double[] {1.0, 2.0, 3.0};
+        double[][] data2 = new double[][] {x2, y2, z2};
+        d2.addSeries("S1", data2);
+        assertFalse(d1.equals(d2));
+    }
+
+
+    @Test
+    public void hashcodeTest() {
+        DefaultXYZDataset d1 = new DefaultXYZDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[] z1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1, y1, z1};
+        d1.addSeries("S1", data1);
+
+        d1.hashCode();
     }
 
 }
