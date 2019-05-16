@@ -86,7 +86,7 @@ public class AbstrXYZDatasetTest {
     @Test
     public void testZValueNull() {
         AbstractXYZDataset d = new DatasetXYZNull();
-        assertEquals(d.getZValue(0, 0), null);
+        assertEquals(d.getZValue(0, 0), Double.NaN);
     }
 
 }
