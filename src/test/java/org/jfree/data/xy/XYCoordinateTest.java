@@ -72,6 +72,8 @@ public class XYCoordinateTest {
         assertFalse(v1.equals(v2));
         v2 = new XYCoordinate(1.1, 2.2);
         assertTrue(v1.equals(v2));
+
+        assertFalse(v1.equals(5));
     }
 
     /**

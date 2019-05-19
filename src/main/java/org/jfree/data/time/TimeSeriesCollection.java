@@ -601,21 +601,7 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         Iterator iterator = this.data.iterator();
         while (iterator.hasNext()) {
             TimeSeries series = (TimeSeries) iterator.next();
-            int count = series.getItemCount();
-            if (count > 0) {
-                RegularTimePeriod start = series.getTimePeriod(0);
-                RegularTimePeriod end = series.getTimePeriod(count - 1);
-                Range temp;
-                if (!includeInterval) {
-                    temp = new Range(getX(start), getX(end));
-                }
-                else {
-                    temp = new Range(
-                            start.getFirstMillisecond(this.workingCalendar),
-                            end.getLastMillisecond(this.workingCalendar));
-                }
-                result = Range.combine(result, temp);
-            }
+            result = getRange(includeInterval, result, series);
         }
         return result;
     }
@@ -638,21 +624,25 @@ public class TimeSeriesCollection extends AbstractIntervalXYDataset
         while (iterator.hasNext()) {
             Comparable seriesKey = (Comparable) iterator.next();
             TimeSeries series = getSeries(seriesKey);
-            int count = series.getItemCount();
-            if (count > 0) {
-                RegularTimePeriod start = series.getTimePeriod(0);
-                RegularTimePeriod end = series.getTimePeriod(count - 1);
-                Range temp;
-                if (!includeInterval) {
-                    temp = new Range(getX(start), getX(end));
-                }
-                else {
-                    temp = new Range(
-                            start.getFirstMillisecond(this.workingCalendar),
-                            end.getLastMillisecond(this.workingCalendar));
-                }
-                result = Range.combine(result, temp);
+            result = getRange(includeInterval, result, series);
+        }
+        return result;
+    }
+
+    private Range getRange(boolean includeInterval, Range result, TimeSeries series) {
+        int count = series.getItemCount();
+        if (count > 0) {
+            RegularTimePeriod start = series.getTimePeriod(0);
+            RegularTimePeriod end = series.getTimePeriod(count - 1);
+            Range temp;
+            if (!includeInterval) {
+                temp = new Range(getX(start), getX(end));
+            } else {
+                temp = new Range(
+                        start.getFirstMillisecond(this.workingCalendar),
+                        end.getLastMillisecond(this.workingCalendar));
             }
+            result = Range.combine(result, temp);
         }
         return result;
     }

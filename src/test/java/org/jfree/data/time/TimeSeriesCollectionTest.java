@@ -467,4 +467,10 @@ public class TimeSeriesCollectionTest {
         collection.setXPosition(TimePeriodAnchor.END);
         assertNull(collection.getRangeBounds(Arrays.asList("S1"), range, true));
     }
+
+    @Test
+    public void testEmptyData() {
+        TimeSeriesCollection s1 = new TimeSeriesCollection();
+        assertNull(s1.getDomainBounds(true));
+    }
 }

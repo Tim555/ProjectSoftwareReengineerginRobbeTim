@@ -52,6 +52,10 @@ import java.io.Serializable;
  */
 public class Vector implements Serializable {
 
+    private int hashStartNumberHash = 193;
+    private int hashMultiplyFactor = 37;
+    private int hashShiftValue = 32;
+
     /** The vector x. */
     private double x;
 
@@ -137,11 +141,11 @@ public class Vector implements Serializable {
      */
     @Override
     public int hashCode() {
-        int result = 193;
+        int result = this.hashStartNumberHash;
         long temp = Double.doubleToLongBits(this.x);
-        result = 37 * result + (int) (temp ^ (temp >>> 32));
+        result = hashMultiplyFactor * result + (int) (temp ^ (temp >>> hashShiftValue));
         temp = Double.doubleToLongBits(this.y);
-        result = 37 * result + (int) (temp ^ (temp >>> 32));
+        result = hashMultiplyFactor * result + (int) (temp ^ (temp >>> hashShiftValue));
         return result;
     }
 
