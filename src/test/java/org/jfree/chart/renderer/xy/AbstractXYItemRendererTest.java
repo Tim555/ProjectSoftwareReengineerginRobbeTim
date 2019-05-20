@@ -41,10 +41,9 @@
 
 package org.jfree.chart.renderer.xy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.*;
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.jfree.chart.labels.StandardXYSeriesLabelGenerator;
@@ -54,6 +53,17 @@ import org.jfree.data.Range;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for the {@link AbstractXYItemRenderer} class.
@@ -73,6 +83,29 @@ public class AbstractXYItemRendererTest {
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(series);
         return dataset;
+    }
+
+    private XYPlot getPlot(){
+
+        NumberAxis xAxis = new NumberAxis("testX");
+        NumberAxis yAxis = new NumberAxis("testY");
+        XYItemRenderer renderer= new XYLineAndShapeRenderer(true, false);
+        XYPlot plot = new XYPlot(createDataset1(), xAxis, yAxis, renderer);
+        return plot;
+    }
+
+    static boolean bufferedImagesEqual(BufferedImage img1, BufferedImage img2) {
+        if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) {
+            for (int x = 0; x < img1.getWidth(); x++) {
+                for (int y = 0; y < img1.getHeight(); y++) {
+                    if (img1.getRGB(x, y) != img2.getRGB(x, y))
+                        return false;
+                }
+            }
+        } else {
+            return false;
+        }
+        return true;
     }
 
     private static final double EPSILON = 0.0000000001;
@@ -185,5 +218,145 @@ public class AbstractXYItemRendererTest {
         r2.setSeriesToolTipGenerator(1, new StandardXYToolTipGenerator());
         assertNotEquals(r1, r2);
     }
+
+
+    @Test
+    public void test_MarkersVertical() throws IOException {
+        XYPlot plot = getPlot();
+        XYItemRenderer renderer = plot.getRenderer();
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+       // BufferedImage test  = new BufferedImage(200 , 100,
+       //         BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+        Marker marker1 = new ValueMarker(2);
+        Marker marker2 = new IntervalMarker(3,4);
+
+
+        renderer.drawDomainMarker(g2, plot, plot.getRangeAxis(), marker1, area);
+        renderer.drawDomainMarker(g2, plot, plot.getRangeAxis(), marker2, area);
+
+        renderer.drawRangeMarker(g2, plot, plot.getRangeAxis(), marker1, area);
+        renderer.drawRangeMarker(g2, plot, plot.getRangeAxis(), marker2, area);
+
+        File file = new File("./.testImages/testMarkersVertical");
+        file.delete();
+        boolean result = ImageIO.write(image, "jpeg", file);
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testMarkersVerticalOracle"));
+            real = ImageIO.read(new File("./.testImages/testMarkersVertical"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+
+
+    }
+
+    @Test
+    public void test_MarkersHorizontal() throws IOException {
+        XYPlot plot = getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+        XYItemRenderer renderer = plot.getRenderer();
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+        // BufferedImage test  = new BufferedImage(200 , 100,
+        //         BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+        Marker marker1 = new ValueMarker(2);
+        Marker marker2 = new IntervalMarker(3,4);
+
+
+        renderer.drawDomainMarker(g2, plot, plot.getRangeAxis(), marker1, area);
+        renderer.drawDomainMarker(g2, plot, plot.getRangeAxis(), marker2, area);
+
+        renderer.drawRangeMarker(g2, plot, plot.getRangeAxis(), marker1, area);
+        renderer.drawRangeMarker(g2, plot, plot.getRangeAxis(), marker2, area);
+
+        File file = new File("./.testImages/testMarkersVertical");
+        file.delete();
+        boolean result = ImageIO.write(image, "jpeg", file);
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testMarkersVerticalOracle"));
+            real = ImageIO.read(new File("./.testImages/testMarkersVertical"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+
+
+    }
+
+    @Test
+    public void test_MarkersLabel() throws IOException {
+        XYPlot plot = getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+        XYItemRenderer renderer = plot.getRenderer();
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+        // BufferedImage test  = new BufferedImage(200 , 100,
+        //         BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+        Marker marker1 = new ValueMarker(2);
+        Marker marker2 = new IntervalMarker(3,4);
+
+        marker1.setLabel("TestLabel1");
+        marker2.setLabel("TestLabel2");
+
+
+        renderer.drawDomainMarker(g2, plot, plot.getRangeAxis(), marker1, area);
+        renderer.drawDomainMarker(g2, plot, plot.getRangeAxis(), marker2, area);
+
+        renderer.drawRangeMarker(g2, plot, plot.getRangeAxis(), marker1, area);
+        renderer.drawRangeMarker(g2, plot, plot.getRangeAxis(), marker2, area);
+
+        File file = new File("./.testImages/testMarkersLabel");
+        file.delete();
+        boolean result = ImageIO.write(image, "jpeg", file);
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testMarkersLabelOracle"));
+            real = ImageIO.read(new File("./.testImages/testMarkersLabel"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+
+
+    }
+
+
 
 }
