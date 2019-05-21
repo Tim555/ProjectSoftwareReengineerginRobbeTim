@@ -103,6 +103,11 @@ public class DefaultTableXYDatasetTest {
 
         s1.add(3.0, 3.3);
         assertFalse(d1.equals(d2));
+
+
+
+        d1.setIntervalPositionFactor(0.33);
+        assertFalse(d1.equals(d2));
     }
 
     /**
@@ -344,5 +349,19 @@ public class DefaultTableXYDatasetTest {
         d.addSeries(s1);
 
         assertTrue(d.getDomainLowerBound(false) == 3.0);
+        assertTrue(d.getDomainUpperBound(false) == 7.0);
+    }
+
+    @Test
+    public void basicXYTest() {
+        DefaultTableXYDataset d = new DefaultTableXYDataset(true);
+        XYSeries s1 = new XYSeries("Series 1", true, false);
+        s1.add(3.0, 1.1);
+        d.addSeries(s1);
+
+        Number n = 3.0;
+        Number n2 = 1.1;
+        assertTrue(d.getX(0,  0).equals(n));
+        assertTrue(d.getY(0,  0).equals(n2));
     }
 }

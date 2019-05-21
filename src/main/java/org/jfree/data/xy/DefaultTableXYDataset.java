@@ -81,8 +81,8 @@ import org.jfree.data.general.SeriesChangeEvent;
  * An {@link XYDataset} where every series shares the same x-values (required
  * for generating stacked area charts).
  */
-public class DefaultTableXYDataset extends AbstractIntervalXYDataset
-        implements TableXYDataset, IntervalXYDataset, DomainInfo,
+public class DefaultTableXYDataset extends AbstractTableXYDataset
+        implements TableXYDataset, IntervalXYDataset,
                    PublicCloneable {
 
     /**
@@ -101,7 +101,6 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
     private boolean autoPrune = false;
 
     /** The delegate used to control the interval width. */
-    private IntervalXYDelegate intervalDelegate;
 
     /**
      * Creates a new empty dataset.
@@ -118,10 +117,10 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
      *                   {@code null}.
      */
     public DefaultTableXYDataset(boolean autoPrune) {
+        super();
         this.autoPrune = autoPrune;
         this.data = new ArrayList();
         this.xPoints = new HashSet();
-        this.intervalDelegate = new IntervalXYDelegate(this, false);
         addChangeListener(this.intervalDelegate);
     }
 
@@ -554,113 +553,6 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
                 getIntervalPositionFactor());
         clone.updateXPoints();
         return clone;
-    }
-
-    /**
-     * Returns the minimum x-value in the dataset.
-     *
-     * @param includeInterval  a flag that determines whether or not the
-     *                         x-interval is taken into account.
-     *
-     * @return The minimum value.
-     */
-    @Override
-    public double getDomainLowerBound(boolean includeInterval) {
-        return this.intervalDelegate.getDomainLowerBound(includeInterval);
-    }
-
-    /**
-     * Returns the maximum x-value in the dataset.
-     *
-     * @param includeInterval  a flag that determines whether or not the
-     *                         x-interval is taken into account.
-     *
-     * @return The maximum value.
-     */
-    @Override
-    public double getDomainUpperBound(boolean includeInterval) {
-        return this.intervalDelegate.getDomainUpperBound(includeInterval);
-    }
-
-    /**
-     * Returns the range of the values in this dataset's domain.
-     *
-     * @param includeInterval  a flag that determines whether or not the
-     *                         x-interval is taken into account.
-     *
-     * @return The range.
-     */
-    @Override
-    public Range getDomainBounds(boolean includeInterval) {
-        if (includeInterval) {
-            return this.intervalDelegate.getDomainBounds(includeInterval);
-        }
-        else {
-            return DatasetUtils.iterateDomainBounds(this, includeInterval);
-        }
-    }
-
-    /**
-     * Returns the interval position factor.
-     *
-     * @return The interval position factor.
-     */
-    public double getIntervalPositionFactor() {
-        return this.intervalDelegate.getIntervalPositionFactor();
-    }
-
-    /**
-     * Sets the interval position factor. Must be between 0.0 and 1.0 inclusive.
-     * If the factor is 0.5, the gap is in the middle of the x values. If it
-     * is lesser than 0.5, the gap is farther to the left and if greater than
-     * 0.5 it gets farther to the right.
-     *
-     * @param d the new interval position factor.
-     */
-    public void setIntervalPositionFactor(double d) {
-        this.intervalDelegate.setIntervalPositionFactor(d);
-        fireDatasetChanged();
-    }
-
-    /**
-     * returns the full interval width.
-     *
-     * @return The interval width to use.
-     */
-    public double getIntervalWidth() {
-        return this.intervalDelegate.getIntervalWidth();
-    }
-
-    /**
-     * Sets the interval width to a fixed value, and sends a
-     * {@link DatasetChangeEvent} to all registered listeners.
-     *
-     * @param d  the new interval width (must be &gt; 0).
-     */
-    public void setIntervalWidth(double d) {
-        this.intervalDelegate.setFixedIntervalWidth(d);
-        fireDatasetChanged();
-    }
-
-    /**
-     * Returns whether the interval width is automatically calculated or not.
-     *
-     * @return A flag that determines whether or not the interval width is
-     *         automatically calculated.
-     */
-    public boolean isAutoWidth() {
-        return this.intervalDelegate.isAutoWidth();
-    }
-
-    /**
-     * Sets the flag that indicates whether the interval width is automatically
-     * calculated or not.
-     *
-     * @param b  a boolean.
-     */
-    public void setAutoWidth(boolean b) {
-        this.intervalDelegate.setAutoWidth(b);
-        fireDatasetChanged();
     }
 
 }

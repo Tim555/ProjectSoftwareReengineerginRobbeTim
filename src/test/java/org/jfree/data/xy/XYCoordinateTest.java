@@ -108,4 +108,42 @@ public class XYCoordinateTest {
         assertEquals(v1, v2);
     }
 
+    @Test
+    public void testCompareTo() {
+        XYCoordinate v1 = new XYCoordinate(1.0, 2.0);
+        XYCoordinate v2 = new XYCoordinate(1.0, 2.0);
+        assertTrue(v1.compareTo(v2) == 0);
+        assertTrue(v1.getX() == v2.getX());
+        assertTrue(v1.getY() == v2.getY());
+
+        v1 = new XYCoordinate(1.0, 0.0);
+        v2 = new XYCoordinate(1.0, 2.0);
+        assertTrue(v1.compareTo(v2) == -1);
+
+        v1 = new XYCoordinate(1.0, 3.0);
+        v2 = new XYCoordinate(1.0, 2.0);
+        assertTrue(v1.compareTo(v2) == 1);
+
+        v1 = new XYCoordinate(0.0, 2.0);
+        v2 = new XYCoordinate(1.0, 2.0);
+        assertTrue(v1.compareTo(v2) == -1);
+
+        v1 = new XYCoordinate(3.0, 2.0);
+        v2 = new XYCoordinate(1.0, 2.0);
+        assertTrue(v1.compareTo(v2) == 1);
+
+        v1 = new XYCoordinate();
+        v2 = new XYCoordinate(0.0, 0.0);
+
+        assertTrue(v1.compareTo(v2) == 0);
+
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCompareToIlligableObject() {
+        XYCoordinate v1 = new XYCoordinate(1.0, 2.0);
+        v1.compareTo(5);
+    }
+
 }

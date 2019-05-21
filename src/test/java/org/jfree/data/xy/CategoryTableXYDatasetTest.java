@@ -130,6 +130,16 @@ public class CategoryTableXYDatasetTest {
         assertTrue(d1.equals(d2));
     }
 
+
+    /**
+     * Verify that this class implements {@link PublicCloneable}.
+     */
+    @Test
+    public void testDomainBounds() {
+        CategoryTableXYDataset d1 = new CategoryTableXYDataset();
+        d1.add(2, 5, "s1");
+    }
+
     /**
      * Verify that this class implements {@link PublicCloneable}.
      */
@@ -191,5 +201,21 @@ public class CategoryTableXYDatasetTest {
         assertEquals(6.75, d1.getStartXValue(0, 1), EPSILON);
         assertEquals(3.25, d1.getEndXValue(0, 0), EPSILON);
         assertEquals(7.25, d1.getEndXValue(0, 1), EPSILON);
+    }
+
+
+    @Test
+    public void domainLowerBoundTest() {
+        CategoryTableXYDataset d = new CategoryTableXYDataset();
+        d.add(3.0, 1.1, "S1");
+        assertTrue(d.getDomainLowerBound(false) == 3.0);
+    }
+
+
+    @Test
+    public void domainUpperBoundTest() {
+        CategoryTableXYDataset d = new CategoryTableXYDataset();
+        d.add(3.0, 1.1, "S1");
+        assertTrue(d.getDomainUpperBound(false) == 3.0);
     }
 }
