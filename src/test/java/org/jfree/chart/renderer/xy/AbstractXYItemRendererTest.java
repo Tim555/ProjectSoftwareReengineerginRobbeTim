@@ -44,6 +44,12 @@ package org.jfree.chart.renderer.xy;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.*;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.XYPlot;
 import org.junit.Test;
 
 import org.jfree.chart.labels.StandardXYSeriesLabelGenerator;
@@ -357,6 +363,37 @@ public class AbstractXYItemRendererTest {
 
     }
 
+
+
+    @Test
+    public void testEquals_findRangeBounds(){
+        XYBarRenderer r1 = new XYBarRenderer();
+        r1.setDataBoundsIncludesVisibleSeriesOnly(false);
+
+        Range range = r1.findRangeBounds(createDataset1());
+        Range test = new Range(1, 3);
+
+        assertEquals(range, test);
+
+        r1.setDataBoundsIncludesVisibleSeriesOnly(true);
+
+        range = r1.findRangeBounds(createDataset1());
+        assertEquals(range, test);
+
+        XYPlot plot = new XYPlot();
+        r1.setPlot(plot);
+        range = r1.findRangeBounds(createDataset1());
+        assertEquals(range, test);
+
+        plot.setRenderer(r1);
+        range = r1.findRangeBounds(createDataset1());
+        assertEquals(range, test);
+
+        plot.setDataset(createDataset1());
+        plot.setDomainAxis(new NumberAxis());
+        range = r1.findRangeBounds(createDataset1());
+        assertEquals(range, test);
+    }
 
 
 }
