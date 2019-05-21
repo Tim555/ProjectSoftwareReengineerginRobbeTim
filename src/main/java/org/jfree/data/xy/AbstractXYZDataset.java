@@ -45,7 +45,7 @@ package org.jfree.data.xy;
  * An base class that you can use to create new implementations of the
  * {@link XYZDataset} interface.
  */
-public abstract class AbstractXYZDataset extends AbstractXYDataset
+public abstract class AbstractXYZDataset extends DefaultAbstractXYDataset
         implements XYZDataset {
 
     /**
