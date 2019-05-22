@@ -67,6 +67,36 @@ public class XYDataItemTest {
 
         i2.setY(new Double(9.9));
         assertTrue(i1.equals(i2));
+
+        assertTrue(i1.equals(i1));
+
+        assertFalse(i1.equals(5));
+
+        // Different X
+        XYDataItem i3 = new XYDataItem(2.0, 1.1);
+        XYDataItem i4 = new XYDataItem(23.0, 1.1);
+        assertFalse(i3.equals(i4));
+    }
+
+    /**
+     * Test function compareTo
+     */
+    @Test
+    public void testcompareToWrongType() {
+        XYDataItem i3 = new XYDataItem(2.0, 1.1);
+        assertEquals(i3.compareTo(5), 1);
+    }
+
+    /**
+     * Test function compareTo
+     */
+    @Test
+    public void testYNull() {
+        XYDataItem i1 = new XYDataItem(2.0, null);
+        assertTrue(Double.compare(Double.NaN, i1.getYValue()) == 0.0);
+
+        i1.setY(10);
+        assertEquals(i1.getYValue(), 10);
     }
 
     /**
