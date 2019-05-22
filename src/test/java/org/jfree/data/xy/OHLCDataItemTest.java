@@ -63,8 +63,36 @@ public class OHLCDataItemTest {
                 5.0);
         OHLCDataItem i2 = new OHLCDataItem(new Date(1L), 1.0, 2.0, 3.0, 4.0, 
                 5.0);
+        OHLCDataItem i3 = new OHLCDataItem(new Date(1L), 1.0, 3.0, 3.0, 4.0,
+                5.0);
+        OHLCDataItem i4 = new OHLCDataItem(new Date(1L), 1.0, 2.0, 4.0, 4.0,
+                5.0);
+        OHLCDataItem i5 = new OHLCDataItem(new Date(1L), 1.0, 2.0, 3.0, 5.0,
+                5.0);
+        OHLCDataItem i6 = new OHLCDataItem(new Date(1L), 2.0, 2.0, 3.0, 5.0,
+                5.0);
         assertTrue(i1.equals(i2));
         assertTrue(i2.equals(i1));
+        assertTrue(i2.equals(i2));
+        assertFalse(i2.equals(4));
+        assertFalse(i2.equals(i3));
+        assertFalse(i2.equals(i4));
+        assertFalse(i2.equals(i5));
+        assertFalse(i2.equals(i6));
+    }
+
+    @Test
+    public void testGetters() {
+        OHLCDataItem i1 = new OHLCDataItem(
+                new Date(1L), 1.0, 2.0, 3.0, 4.0, 5.0
+        );
+
+        assertEquals(i1.getOpen(), (Number) 1.0);
+        assertEquals(i1.getHigh(), (Number) 2.0);
+        assertEquals(i1.getLow() , (Number) 3.0);
+        assertEquals(i1.getClose() , (Number) 4.0);
+        assertEquals(i1.getVolume() , (Number) 5.0);
+
     }
 
     /**
@@ -86,7 +114,17 @@ public class OHLCDataItemTest {
         OHLCDataItem i1 = new OHLCDataItem(new Date(1L), 1.0, 2.0, 3.0, 4.0, 
                 5.0);
         OHLCDataItem i2 = (OHLCDataItem) TestUtils.serialised(i1);
+
+
         assertEquals(i1, i2);
+    }
+
+    @Test(expected = ClassCastException.class)
+    public void testCompareWrongObject() {
+        OHLCDataItem i1 = new OHLCDataItem(new Date(1L), 1.0, 2.0, 3.0, 4.0,
+                5.0);
+        i1.compareTo(5);
+
     }
 
 }
