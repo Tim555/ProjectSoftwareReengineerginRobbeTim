@@ -902,7 +902,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
                     dataArea.getMaxX(), v);
         }
 
-        AbstractXYItemRenderer.drawLine(g2, paint, stroke, line);
+        drawLine(g2, paint, stroke, line);
     }
 
     /**
