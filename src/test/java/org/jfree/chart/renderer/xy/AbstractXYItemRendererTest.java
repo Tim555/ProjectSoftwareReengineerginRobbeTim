@@ -41,7 +41,10 @@
 
 package org.jfree.chart.renderer.xy;
 
+import org.jfree.chart.LegendItem;
+import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.*;
 import org.jfree.chart.plot.*;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
@@ -52,9 +55,6 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.junit.Test;
 
-import org.jfree.chart.labels.StandardXYSeriesLabelGenerator;
-import org.jfree.chart.labels.StandardXYToolTipGenerator;
-import org.jfree.chart.labels.StandardXYItemLabelGenerator;
 import org.jfree.data.Range;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -63,11 +63,14 @@ import org.jfree.data.xy.XYSeriesCollection;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import static org.junit.Assert.*;
 
@@ -363,7 +366,198 @@ public class AbstractXYItemRendererTest {
 
     }
 
+    @Test
+    public void test_DrawLineHorizontal(){
+        XYPlot plot = getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+        XYItemRenderer renderer = plot.getRenderer();
 
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+        renderer.drawDomainLine(g2, plot, new NumberAxis(), area, 0, new Color(255,255,255), new BasicStroke());
+        renderer.drawRangeLine(g2, plot, new NumberAxis(), area, 0, new Color(255,255,255), new BasicStroke());
+
+        File file = new File("./.testImages/testLine");
+        file.delete();
+        try {
+            boolean result = ImageIO.write(image, "jpeg", file);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testLineOracle"));
+            real = ImageIO.read(new File("./.testImages/testLine"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+    }
+
+    @Test
+    public void test_DrawLineVertical(){
+        XYPlot plot = getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+        XYItemRenderer renderer = plot.getRenderer();
+
+        plot.setOrientation(PlotOrientation.VERTICAL);
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+        renderer.drawDomainLine(g2, plot, new NumberAxis(), area, 0, new Color(255,255,255), new BasicStroke());
+        renderer.drawRangeLine(g2, plot, new NumberAxis(), area, 0, new Color(255,255,255), new BasicStroke());
+
+        File file = new File("./.testImages/testLineV");
+        file.delete();
+        try {
+            boolean result = ImageIO.write(image, "jpeg", file);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testLineVOracle"));
+            real = ImageIO.read(new File("./.testImages/testLineV"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+    }
+
+    @Test
+    public void test_DrawItemLabel() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        XYPlot plot = getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+
+        XYItemRenderer renderer = plot.getRenderer();
+        renderer.setDefaultItemLabelGenerator(new XYItemLabelGenerator() {
+            @Override
+            public String generateLabel(XYDataset dataset, int series, int item) {
+                return "test";
+            }
+        });
+
+
+        Method dil_test = AbstractXYItemRenderer.class.getDeclaredMethod("drawItemLabel",
+                                                                    Graphics2D.class,
+                                                                    PlotOrientation.class,
+                                                                    XYDataset.class,
+                                                                    int.class,
+                                                                    int.class,
+                                                                    double.class,
+                                                                    double.class,
+                                                                    boolean.class);
+
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+
+        dil_test.invoke(renderer, g2, plot.getOrientation(), plot.getDataset(), 0, 0, 10,10,false);
+
+
+        File file = new File("./.testImages/testItemLabel");
+        file.delete();
+        try {
+            boolean result = ImageIO.write(image, "jpeg", file);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testItemLabelOracle"));
+            real = ImageIO.read(new File("./.testImages/testItemLabel"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+    }
+
+    @Test
+    public void test_DrawItemLabelNegativeTrue() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        XYPlot plot = getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+
+        XYItemRenderer renderer = plot.getRenderer();
+        renderer.setDefaultItemLabelGenerator(new XYItemLabelGenerator() {
+            @Override
+            public String generateLabel(XYDataset dataset, int series, int item) {
+                return "test";
+            }
+        });
+
+
+        Method dil_test = AbstractXYItemRenderer.class.getDeclaredMethod("drawItemLabel",
+                Graphics2D.class,
+                PlotOrientation.class,
+                XYDataset.class,
+                int.class,
+                int.class,
+                double.class,
+                double.class,
+                boolean.class);
+
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+
+        dil_test.invoke(renderer, g2, plot.getOrientation(), plot.getDataset(), 0, 0, 10,10,true);
+
+
+        File file = new File("./.testImages/testItemLabel");
+        file.delete();
+        try {
+            boolean result = ImageIO.write(image, "jpeg", file);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testItemLabelOracle"));
+            real = ImageIO.read(new File("./.testImages/testItemLabel"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+    }
 
     @Test
     public void testEquals_findRangeBounds(){
@@ -394,6 +588,57 @@ public class AbstractXYItemRendererTest {
         range = r1.findRangeBounds(createDataset1());
         assertEquals(range, test);
     }
+
+    @Test
+    public void testEquals_getLegendItems(){
+        XYBarRenderer r1 = new XYBarRenderer();
+        LegendItemCollection test = new LegendItemCollection();
+
+        assertEquals(test, r1.getLegendItems());
+
+        XYPlot plot = new XYPlot();
+        r1.setPlot(plot);
+        assertEquals(test, r1.getLegendItems());
+
+        plot.setDataset(createDataset1());
+        r1.setPlot(plot);
+        plot.setRenderer(r1);
+        test.add(new LegendItem("test"));
+        LegendItemCollection temp = r1.getLegendItems();
+        assertEquals(test.getItemCount(), r1.getLegendItems().getItemCount());
+
+    }
+
+    @Test
+    public void testEquals_getLegendItem(){
+        VectorRenderer r1 = new VectorRenderer();
+        assertNull(r1.getLegendItem(1, 2));
+
+
+
+        XYPlot plot = getPlot();
+        r1.setPlot(plot);
+        assertNull(r1.getLegendItem(3, 2));
+        assertEquals(r1.getLegendItem(0, 0).getLabel(), new LegendItem("Series").getLabel());
+
+        r1.setLegendItemToolTipGenerator(new XYSeriesLabelGenerator() {
+            @Override
+            public String generateLabel(XYDataset dataset, int series) {
+                return "TestGenLabel";
+            }
+        });
+        assertEquals(r1.getLegendItem(0, 0).getLabel(), new LegendItem("Series").getLabel());
+
+        r1.setLegendItemURLGenerator(new XYSeriesLabelGenerator() {
+            @Override
+            public String generateLabel(XYDataset dataset, int series) {
+                return "TestGenURL";
+            }
+        });
+        assertEquals(r1.getLegendItem(0, 0).getLabel(), new LegendItem("Series").getLabel());
+
+    }
+
 
 
 }
