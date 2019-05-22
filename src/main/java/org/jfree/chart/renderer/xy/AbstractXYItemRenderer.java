@@ -350,7 +350,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
 
         // otherwise look up the generator table
         XYItemLabelGenerator generator
-            = (XYItemLabelGenerator) this.itemLabelGeneratorMap.get(series);
+            = this.itemLabelGeneratorMap.get(series);
         if (generator == null) {
             generator = this.defaultItemLabelGenerator;
         }
@@ -422,7 +422,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
 
         // otherwise look up the generator table
         XYToolTipGenerator generator
-                = (XYToolTipGenerator) this.toolTipGeneratorMap.get(series);
+                = this.toolTipGeneratorMap.get(series);
         if (generator == null) {
             generator = this.defaultToolTipGenerator;
         }
@@ -719,17 +719,22 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             return null;
         }
         if (getDataBoundsIncludesVisibleSeriesOnly()) {
-            List visibleSeriesKeys = new ArrayList();
-            int seriesCount = dataset.getSeriesCount();
-            for (int s = 0; s < seriesCount; s++) {
-                if (isSeriesVisible(s)) {
-                    visibleSeriesKeys.add(dataset.getSeriesKey(s));
-                }
-            }
+            List visibleSeriesKeys = getVisibleSeriesKeys(dataset);
             return DatasetUtils.findDomainBounds(dataset,
                     visibleSeriesKeys, includeInterval);
         }
         return DatasetUtils.findDomainBounds(dataset, includeInterval);
+    }
+
+    private List getVisibleSeriesKeys(XYDataset dataset) {
+        List visibleSeriesKeys = new ArrayList();
+        int seriesCount = dataset.getSeriesCount();
+        for (int s = 0; s < seriesCount; s++) {
+            if (isSeriesVisible(s)) {
+                visibleSeriesKeys.add(dataset.getSeriesKey(s));
+            }
+        }
+        return visibleSeriesKeys;
     }
 
     /**
@@ -766,13 +771,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             return null;
         }
         if (getDataBoundsIncludesVisibleSeriesOnly()) {
-            List visibleSeriesKeys = new ArrayList();
-            int seriesCount = dataset.getSeriesCount();
-            for (int s = 0; s < seriesCount; s++) {
-                if (isSeriesVisible(s)) {
-                    visibleSeriesKeys.add(dataset.getSeriesKey(s));
-                }
-            }
+            List visibleSeriesKeys = getVisibleSeriesKeys(dataset);
             // the bounds should be calculated using just the items within
             // the current range of the x-axis...if there is one
             Range xRange = null;
@@ -995,10 +994,14 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                     dataArea.getMaxY());
         }
 
+        drawLine(g2, paint, stroke, line);
+    }
+
+    public static void drawLine(Graphics2D g2, Paint paint, Stroke stroke, Line2D line) {
         g2.setPaint(paint);
         g2.setStroke(stroke);
         Object saved = g2.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);
-        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, 
+        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
                 RenderingHints.VALUE_STROKE_NORMALIZE);
         g2.draw(line);
         g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, saved);
@@ -1027,7 +1030,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
 
         PlotOrientation orientation = plot.getOrientation();
         Line2D line = null;
-        double v = axis.valueToJava2D(value, dataArea, plot.getRangeAxisEdge());      
+        double v = axis.valueToJava2D(value, dataArea, plot.getRangeAxisEdge());
         if (orientation == PlotOrientation.HORIZONTAL) {
             line = new Line2D.Double(v, dataArea.getMinY(), v,
                     dataArea.getMaxY());
@@ -1036,13 +1039,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                     dataArea.getMaxX(), v);
         }
 
-        g2.setPaint(paint);
-        g2.setStroke(stroke);
-        Object saved = g2.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);
-        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, 
-                RenderingHints.VALUE_STROKE_NORMALIZE);
-        g2.draw(line);
-        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, saved);
+        drawLine(g2, paint, stroke, line);
     }
 
     /**
@@ -1081,12 +1078,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                 throw new IllegalStateException("Unrecognised orientation.");
             }
 
-            final Composite originalComposite = g2.getComposite();
-            g2.setComposite(AlphaComposite.getInstance(
-                    AlphaComposite.SRC_OVER, marker.getAlpha()));
-            g2.setPaint(marker.getPaint());
-            g2.setStroke(marker.getStroke());
-            g2.draw(line);
+            final Composite originalComposite = getComposite(g2, marker, line);
 
             String label = marker.getLabel();
             RectangleAnchor anchor = marker.getLabelAnchor();
@@ -1097,15 +1089,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                         g2, orientation, dataArea, line.getBounds2D(),
                         marker.getLabelOffset(),
                         LengthAdjustmentType.EXPAND, anchor);
-                Rectangle2D r = TextUtils.calcAlignedStringBounds(label, 
-                        g2, (float) coords.getX(), (float) coords.getY(), 
-                        marker.getLabelTextAnchor());
-                g2.setPaint(marker.getLabelBackgroundColor());
-                g2.fill(r);
-                g2.setPaint(marker.getLabelPaint());
-                TextUtils.drawAlignedString(label, g2,
-                        (float) coords.getX(), (float) coords.getY(),
-                        marker.getLabelTextAnchor());
+                drawLabel(g2, marker, label, coords);
             }
             g2.setComposite(originalComposite);
         } else if (marker instanceof IntervalMarker) {
@@ -1200,18 +1184,32 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                         g2, orientation, dataArea, rect,
                         marker.getLabelOffset(), marker.getLabelOffsetType(),
                         anchor);
-                Rectangle2D r = TextUtils.calcAlignedStringBounds(label, 
-                        g2, (float) coords.getX(), (float) coords.getY(), 
-                        marker.getLabelTextAnchor());
-                g2.setPaint(marker.getLabelBackgroundColor());
-                g2.fill(r);
-                g2.setPaint(marker.getLabelPaint());
-                TextUtils.drawAlignedString(label, g2,
-                        (float) coords.getX(), (float) coords.getY(),
-                        marker.getLabelTextAnchor());
+                drawLabel(g2, marker, label, coords);
             }
             g2.setComposite(originalComposite);
         }
+    }
+
+    private Composite getComposite(Graphics2D g2, Marker marker, Line2D line) {
+        final Composite originalComposite = g2.getComposite();
+        g2.setComposite(AlphaComposite.getInstance(
+                AlphaComposite.SRC_OVER, marker.getAlpha()));
+        g2.setPaint(marker.getPaint());
+        g2.setStroke(marker.getStroke());
+        g2.draw(line);
+        return originalComposite;
+    }
+
+    public static void drawLabel(Graphics2D g2, Marker marker, String label, Point2D coords) {
+        Rectangle2D r = TextUtils.calcAlignedStringBounds(label,
+                g2, (float) coords.getX(), (float) coords.getY(),
+                marker.getLabelTextAnchor());
+        g2.setPaint(marker.getLabelBackgroundColor());
+        g2.fill(r);
+        g2.setPaint(marker.getLabelPaint());
+        TextUtils.drawAlignedString(label, g2,
+                (float) coords.getX(), (float) coords.getY(),
+                marker.getLabelTextAnchor());
     }
 
     /**
@@ -1281,12 +1279,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                 throw new IllegalStateException("Unrecognised orientation.");
             }
 
-            final Composite originalComposite = g2.getComposite();
-            g2.setComposite(AlphaComposite.getInstance(
-                    AlphaComposite.SRC_OVER, marker.getAlpha()));
-            g2.setPaint(marker.getPaint());
-            g2.setStroke(marker.getStroke());
-            g2.draw(line);
+            final Composite originalComposite = getComposite(g2, marker, line);
 
             String label = marker.getLabel();
             RectangleAnchor anchor = marker.getLabelAnchor();
@@ -1297,15 +1290,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                         g2, orientation, dataArea, line.getBounds2D(),
                         marker.getLabelOffset(),
                         LengthAdjustmentType.EXPAND, anchor);
-                Rectangle2D r = TextUtils.calcAlignedStringBounds(label, 
-                        g2, (float) coords.getX(), (float) coords.getY(), 
-                        marker.getLabelTextAnchor());
-                g2.setPaint(marker.getLabelBackgroundColor());
-                g2.fill(r);
-                g2.setPaint(marker.getLabelPaint());
-                TextUtils.drawAlignedString(label, g2,
-                        (float) coords.getX(), (float) coords.getY(),
-                        marker.getLabelTextAnchor());
+                drawLabel(g2, marker, label, coords);
             }
             g2.setComposite(originalComposite);
         } else if (marker instanceof IntervalMarker) {
@@ -1400,15 +1385,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                         g2, orientation, dataArea, rect,
                         marker.getLabelOffset(), marker.getLabelOffsetType(),
                         anchor);
-                Rectangle2D r = TextUtils.calcAlignedStringBounds(label, 
-                        g2, (float) coords.getX(), (float) coords.getY(), 
-                        marker.getLabelTextAnchor());
-                g2.setPaint(marker.getLabelBackgroundColor());
-                g2.fill(r);
-                g2.setPaint(marker.getLabelPaint());
-                TextUtils.drawAlignedString(label, g2,
-                        (float) coords.getX(), (float) coords.getY(),
-                        marker.getLabelTextAnchor());
+                drawLabel(g2, marker, label, coords);
             }
             g2.setComposite(originalComposite);
         }
@@ -1754,5 +1731,5 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     protected static void lineTo(GeneralPath hotspot, double x, double y) {
         hotspot.lineTo((float) x, (float) y);
     }
- 
+
 }
