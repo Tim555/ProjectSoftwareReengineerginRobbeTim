@@ -96,7 +96,7 @@ public class XYDataItemTest {
         assertTrue(Double.compare(Double.NaN, i1.getYValue()) == 0.0);
 
         i1.setY(10);
-        assertEquals(i1.getYValue(), 10);
+        assertTrue(i1.getYValue() == 10);
     }
 
     /**
