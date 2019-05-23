@@ -42,22 +42,28 @@
 
 package org.jfree.chart.renderer.xy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNotNull;
-
-import java.awt.Color;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import org.jfree.chart.TestUtils;
 
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.LookupPaintScale;
 import org.jfree.data.Range;
 import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.junit.Test;
+
+import javax.imageio.ImageIO;
+
+import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for the {@link XYShapeRenderer} class.
@@ -189,5 +195,349 @@ public class XYShapeRendererTest {
         r = renderer.findDomainBounds(dataset);
         assertNull(r);
     }
+
+    public XYPlot getPlot(){
+        XYSeries series = new XYSeries("Series");
+        series.add(1.0, 1.0);
+        series.add(2.0, 2.0);
+        series.add(3.0, 3.0);
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(series);
+
+        NumberAxis xAxis = new NumberAxis("testX");
+        NumberAxis yAxis = new NumberAxis("testY");
+        XYItemRenderer renderer= new XYLineAndShapeRenderer(true, false);
+        XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
+        return plot;
+    }
+
+    static boolean bufferedImagesEqual(BufferedImage img1, BufferedImage img2) {
+        if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) {
+            for (int x = 0; x < img1.getWidth(); x++) {
+                for (int y = 0; y < img1.getHeight(); y++) {
+                    if (img1.getRGB(x, y) != img2.getRGB(x, y))
+                        return false;
+                }
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    @Test
+    public void test_drawItem_notVisible() throws IOException {
+        XYShapeRenderer r = new XYShapeRenderer();
+        XYPlot plot = getPlot();
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+        r.setDefaultSeriesVisible(false, false);
+
+        r.drawItem(g2, null, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 0);
+
+        File file = new File("./.testImages/testXYShapesDrawItem1");
+        file.delete();
+        boolean result = ImageIO.write(image, "jpeg", file);
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testXYShapesDrawItemOracle1"));
+            real = ImageIO.read(new File("./.testImages/testXYShapesDrawItem1"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+
+
+
+    }
+
+    @Test
+    public void test_drawItem() throws IOException {
+        XYShapeRenderer r = new XYShapeRenderer();
+        XYPlot plot = getPlot();
+
+        r.setGuideLinesVisible(true);
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+
+
+        r.drawItem(g2, null, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 0);
+        r.drawItem(g2, null, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 1);
+
+
+        File file = new File("./.testImages/testXYShapesDrawItem2");
+        file.delete();
+        boolean result = ImageIO.write(image, "jpeg", file);
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testXYShapesDrawItemOracle2"));
+            real = ImageIO.read(new File("./.testImages/testXYShapesDrawItem2"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+
+
+
+    }
+
+    @Test
+    public void test_drawItemHorizontal() throws IOException {
+        XYShapeRenderer r = new XYShapeRenderer();
+        XYPlot plot = getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+        r.setGuideLinesVisible(true);
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+        XYItemRendererState state = new XYItemRendererState(null);
+
+
+
+        r.drawItem(g2, state, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 0);
+        r.drawItem(g2, state, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 1);
+
+
+        File file = new File("./.testImages/testXYShapesDrawItem3");
+        file.delete();
+        boolean result = ImageIO.write(image, "jpeg", file);
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testXYShapesDrawItemOracle3"));
+            real = ImageIO.read(new File("./.testImages/testXYShapesDrawItem3"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+
+
+
+    }
+
+    @Test
+    public void test_drawItemUseFillPaint() throws IOException {
+        XYShapeRenderer r = new XYShapeRenderer();
+        r.setUseFillPaint(true);
+        XYPlot plot = getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+
+
+        r.drawItem(g2, null, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 0);
+        r.drawItem(g2, null, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 1);
+
+
+        File file = new File("./.testImages/testXYShapesDrawItem4");
+        file.delete();
+        boolean result = ImageIO.write(image, "jpeg", file);
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testXYShapesDrawItemOracle4"));
+            real = ImageIO.read(new File("./.testImages/testXYShapesDrawItem4"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+
+
+
+    }
+
+    @Test
+    public void test_drawItemUseOutlinePaint() throws IOException {
+        XYShapeRenderer r = new XYShapeRenderer();
+        r.setUseFillPaint(true);
+        r.setUseOutlinePaint(true);
+        r.setDrawOutlines(true);
+        XYPlot plot = getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+
+        r.drawItem(g2, null, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 0);
+        r.drawItem(g2, null, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 1);
+
+
+        File file = new File("./.testImages/testXYShapesDrawItem5");
+        file.delete();
+        boolean result = ImageIO.write(image, "jpeg", file);
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testXYShapesDrawItemOracle5"));
+            real = ImageIO.read(new File("./.testImages/testXYShapesDrawItem5"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+
+
+
+    }
+
+    @Test
+    public void test_drawItemNoUseOutlinePaint() throws IOException {
+        XYShapeRenderer r = new XYShapeRenderer();
+        r.setUseFillPaint(true);
+        r.setUseOutlinePaint(false);
+        r.setDrawOutlines(true);
+        XYPlot plot = getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+
+        r.drawItem(g2, null, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 0);
+        r.drawItem(g2, null, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 1);
+
+
+        File file = new File("./.testImages/testXYShapesDrawItem7");
+        file.delete();
+        boolean result = ImageIO.write(image, "jpeg", file);
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testXYShapesDrawItemOracle7"));
+            real = ImageIO.read(new File("./.testImages/testXYShapesDrawItem7"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+
+
+
+    }
+
+    @Test
+    public void test_drawNoOutline() throws IOException {
+        XYShapeRenderer r = new XYShapeRenderer();
+        r.setDrawOutlines(false);
+        XYPlot plot = getPlot();
+        plot.setOrientation(PlotOrientation.HORIZONTAL);
+
+        BufferedImage image = new BufferedImage(200 , 100,
+                BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2 = image.createGraphics();
+        Rectangle2D area = new Rectangle(0, 0, 40, 40);
+
+
+
+        r.drawItem(g2, null, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 0);
+        r.drawItem(g2, null, area,null,
+                plot, plot.getDomainAxis(), plot.getRangeAxis(),
+                plot.getDataset(),0,0,null, 1);
+
+
+        File file = new File("./.testImages/testXYShapesDrawItem6");
+        file.delete();
+        boolean result = ImageIO.write(image, "jpeg", file);
+
+
+        BufferedImage test = null;
+        BufferedImage real = null;
+        try {
+            test = ImageIO.read(new File("./.testImages/testXYShapesDrawItemOracle6"));
+            real = ImageIO.read(new File("./.testImages/testXYShapesDrawItem6"));
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        boolean outcome = bufferedImagesEqual(test, real);
+
+        assertTrue(outcome);
+
+
+
+    }
+
+
 
 }
