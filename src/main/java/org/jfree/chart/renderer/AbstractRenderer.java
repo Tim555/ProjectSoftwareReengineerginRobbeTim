@@ -107,7 +107,6 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -136,8 +135,6 @@ import org.jfree.chart.util.PaintList;
 import org.jfree.chart.util.PaintUtils;
 import org.jfree.chart.util.Args;
 import org.jfree.chart.util.SerialUtils;
-import org.jfree.chart.util.ShapeList;
-import org.jfree.chart.util.ShapeUtils;
 import org.jfree.chart.util.StrokeList;
 import org.jfree.data.ItemKey;
 
@@ -175,9 +172,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /** The default outline stroke. */
     public static final Stroke DEFAULT_OUTLINE_STROKE = new BasicStroke(1.0f);
 
-    /** The default shape. */
-    public static final Shape DEFAULT_SHAPE
-            = new Rectangle2D.Double(-3.0, -3.0, 6.0, 6.0);
 
     /** The default value label font. */
     public static final Font DEFAULT_VALUE_LABEL_FONT
@@ -271,19 +265,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     private boolean autoPopulateSeriesOutlineStroke;
 
-    /** A shape list. */
-    private ShapeList shapeList;
-
-    /**
-     * A flag that controls whether or not the shapeList is auto-populated
-     * in the {@link #lookupSeriesShape(int)} method.
-     *
-     * @since 1.0.6
-     */
-    private boolean autoPopulateSeriesShape;
-
-    /** The base shape. */
-    private transient Shape defaultShape;
 
     /** Visibility of the item labels PER series. */
     private BooleanList itemLabelsVisibleList;
@@ -330,28 +311,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     private boolean defaultCreateEntities;
 
-    /**
-     * The per-series legend shape settings.
-     *
-     * @since 1.0.11
-     */
-    private ShapeList legendShapeList;
 
-    /**
-     * The base shape for legend items.  If this is {@code null}, the
-     * series shape will be used.
-     *
-     * @since 1.0.11
-     */
-    private transient Shape defaultLegendShape;
-
-    /**
-     * A special flag that, if true, will cause the getLegendItem() method
-     * to configure the legend shape as if it were a line.
-     *
-     * @since 1.0.14
-     */
-    private boolean treatLegendShapeAsLine;
 
     /**
      * The per-series legend text font.
@@ -401,6 +361,11 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     private transient RendererChangeEvent event;
 
     /**
+     * Shape renderer
+     */
+    private ShapeManager shapeManager;
+
+    /**
      * Default constructor.
      */
     public AbstractRenderer() {
@@ -429,11 +394,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.outlineStrokeList = new StrokeList();
         this.defaultOutlineStroke = DEFAULT_OUTLINE_STROKE;
         this.autoPopulateSeriesOutlineStroke = false;
-
-        this.shapeList = new ShapeList();
-        this.defaultShape = DEFAULT_SHAPE;
-        this.autoPopulateSeriesShape = true;
-
         this.itemLabelsVisibleList = new BooleanList();
         this.defaultItemLabelsVisible = false;
 
@@ -458,11 +418,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
         this.defaultEntityRadius = 3;
 
-        this.legendShapeList = new ShapeList();
-        this.defaultLegendShape = null;
-
-        this.treatLegendShapeAsLine = false;
-
         this.legendTextFontMap = new HashMap<Integer, Font>();
         this.defaultLegendTextFont = null;
 
@@ -470,6 +425,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.defaultLegendTextPaint = null;
 
         this.listenerList = new EventListenerList();
+
+        this.shapeManager = new ShapeManager(this);
     }
 
     /**
@@ -1565,8 +1522,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /**
      * Returns a shape used to represent a data item.
      * <p>
-     * The default implementation passes control to the 
-     * {@link #lookupSeriesShape(int)} method. You can override this method if 
+     * The default implementation passes control to the
+     * {@link #lookupSeriesShape(int)} method. You can override this method if
      * you require different behaviour.
      *
      * @param row  the row (or series) index (zero-based).
@@ -1575,7 +1532,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @return The shape (never {@code null}).
      */
     public Shape getItemShape(int row, int column) {
-        return lookupSeriesShape(row);
+        return this.shapeManager.getItemShape(row, column);
     }
 
     /**
@@ -1588,19 +1545,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.6
      */
     public Shape lookupSeriesShape(int series) {
-
-        Shape result = getSeriesShape(series);
-        if (result == null && this.autoPopulateSeriesShape) {
-            DrawingSupplier supplier = getDrawingSupplier();
-            if (supplier != null) {
-                result = supplier.getNextShape();
-                setSeriesShape(series, result, false);
-            }
-        }
-        if (result == null) {
-            result = this.defaultShape;
-        }
-        return result;
+        return this.shapeManager.lookupSeriesShape(series);
 
     }
 
@@ -1614,7 +1559,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setSeriesShape(int, Shape)
      */
     public Shape getSeriesShape(int series) {
-        return this.shapeList.getShape(series);
+        return this.shapeManager.getSeriesShape(series);
     }
 
     /**
@@ -1627,7 +1572,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesShape(int)
      */
     public void setSeriesShape(int series, Shape shape) {
-        setSeriesShape(series, shape, true);
+        this.shapeManager.setSeriesShape(series, shape);
     }
 
     /**
@@ -1641,10 +1586,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesShape(int)
      */
     public void setSeriesShape(int series, Shape shape, boolean notify) {
-        this.shapeList.setShape(series, shape);
-        if (notify) {
-            fireChangeEvent();
-        }
+        this.shapeManager.setSeriesShape(series, shape, notify);
     }
 
     /**
@@ -1655,7 +1597,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setDefaultShape(Shape)
      */
     public Shape getDefaultShape() {
-        return this.defaultShape;
+        return this.shapeManager.getDefaultShape();
     }
 
     /**
@@ -1668,7 +1610,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDefaultShape(Shape shape) {
         // defer argument checking...
-        setDefaultShape(shape, true);
+        this.shapeManager.setDefaultShape(shape, true);
     }
 
     /**
@@ -1681,11 +1623,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getDefaultShape()
      */
     public void setDefaultShape(Shape shape, boolean notify) {
-        Args.nullNotPermitted(shape, "shape");
-        this.defaultShape = shape;
-        if (notify) {
-            fireChangeEvent();
-        }
+        this.shapeManager.setDefaultShape(shape, notify);
     }
 
     /**
@@ -1699,7 +1637,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setAutoPopulateSeriesShape(boolean)
      */
     public boolean getAutoPopulateSeriesShape() {
-        return this.autoPopulateSeriesShape;
+        return this.shapeManager.getAutoPopulateSeriesShape();
     }
 
     /**
@@ -1713,7 +1651,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getAutoPopulateSeriesShape()
      */
     public void setAutoPopulateSeriesShape(boolean auto) {
-        this.autoPopulateSeriesShape = auto;
+        this.shapeManager.setAutoPopulateSeriesShape(auto);
     }
 
     // ITEM LABEL VISIBILITY...
@@ -2422,14 +2360,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public Shape lookupLegendShape(int series) {
-        Shape result = getLegendShape(series);
-        if (result == null) {
-            result = this.defaultLegendShape;
-        }
-        if (result == null) {
-            result = lookupSeriesShape(series);
-        }
-        return result;
+        return this.shapeManager.lookupLegendShape(series);
     }
 
     /**
@@ -2445,7 +2376,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public Shape getLegendShape(int series) {
-        return this.legendShapeList.getShape(series);
+        return this.shapeManager.getLegendShape(series);
     }
 
     /**
@@ -2458,8 +2389,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void setLegendShape(int series, Shape shape) {
-        this.legendShapeList.setShape(series, shape);
-        fireChangeEvent();
+        this.shapeManager.setLegendShape(series, shape);
     }
 
     /**
@@ -2470,7 +2400,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public Shape getDefaultLegendShape() {
-        return this.defaultLegendShape;
+        return this.shapeManager.getDefaultLegendShape();
     }
 
     /**
@@ -2482,8 +2412,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void setDefaultLegendShape(Shape shape) {
-        this.defaultLegendShape = shape;
-        fireChangeEvent();
+        this.shapeManager.setDefaultLegendShape(shape);
     }
 
     /**
@@ -2495,7 +2424,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.14
      */
     protected boolean getTreatLegendShapeAsLine() {
-        return this.treatLegendShapeAsLine;
+        return this.shapeManager.getTreatLegendShapeAsLine();
     }
 
     /**
@@ -2507,10 +2436,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.14
      */
     protected void setTreatLegendShapeAsLine(boolean treatAsLine) {
-        if (this.treatLegendShapeAsLine != treatAsLine) {
-            this.treatLegendShapeAsLine = treatAsLine;
-            fireChangeEvent();
-        }
+        this.shapeManager.setTreatLegendShapeAsLine(treatAsLine);
     }
 
     /**
@@ -2880,6 +2806,13 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     }
 
     /**
+     * Get Shaperenderer
+     */
+    public ShapeManager getShapeManager() {
+        return this.shapeManager;
+    }
+
+    /**
      * Tests this renderer for equality with another object.
      *
      * @param obj  the object ({@code null} permitted).
@@ -2899,7 +2832,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                 != that.dataBoundsIncludesVisibleSeriesOnly) {
             return false;
         }
-        if (this.treatLegendShapeAsLine != that.treatLegendShapeAsLine) {
+        if (!this.shapeManager.equals(that.getShapeManager())) {
             return false;
         }
         if (this.defaultEntityRadius != that.defaultEntityRadius) {
@@ -2954,12 +2887,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                 that.defaultOutlineStroke)) {
             return false;
         }
-        if (!ObjectUtils.equal(this.shapeList, that.shapeList)) {
-            return false;
-        }
-        if (!ShapeUtils.equal(this.defaultShape, that.defaultShape)) {
-            return false;
-        }
         if (!ObjectUtils.equal(this.itemLabelsVisibleList,
                 that.itemLabelsVisibleList)) {
             return false;
@@ -3011,14 +2938,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             return false;
         }
         if (this.defaultCreateEntities != that.defaultCreateEntities) {
-            return false;
-        }
-        if (!ObjectUtils.equal(this.legendShapeList,
-                that.legendShapeList)) {
-            return false;
-        }
-        if (!ShapeUtils.equal(this.defaultLegendShape,
-                that.defaultLegendShape)) {
             return false;
         }
         if (!ObjectUtils.equal(this.legendTextFontMap, 
@@ -3092,6 +3011,10 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     protected Object clone() throws CloneNotSupportedException {
         AbstractRenderer clone = (AbstractRenderer) super.clone();
 
+        if (this.shapeManager != null) {
+            clone.shapeManager = (ShapeManager) this.shapeManager.clone();
+        }
+
         if (this.seriesVisibleList != null) {
             clone.seriesVisibleList
                     = (BooleanList) this.seriesVisibleList.clone();
@@ -3130,13 +3053,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         }
         // 'baseOutlineStroke' : immutable, no need to clone reference
 
-        if (this.shapeList != null) {
-            clone.shapeList = (ShapeList) this.shapeList.clone();
-        }
-        if (this.defaultShape != null) {
-            clone.defaultShape = ShapeUtils.clone(this.defaultShape);
-        }
-
         // 'itemLabelsVisible' : immutable, no need to clone reference
         if (this.itemLabelsVisibleList != null) {
             clone.itemLabelsVisibleList
@@ -3174,10 +3090,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             clone.createEntitiesList
                     = (BooleanList) this.createEntitiesList.clone();
         }
-
-        if (this.legendShapeList != null) {
-            clone.legendShapeList = (ShapeList) this.legendShapeList.clone();
-        }
         if (this.legendTextFontMap != null) {
             // Font objects are immutable so just shallow copy the map
             clone.legendTextFontMap = new HashMap<Integer, Font>(
@@ -3205,9 +3117,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         SerialUtils.writePaint(this.defaultOutlinePaint, stream);
         SerialUtils.writeStroke(this.defaultStroke, stream);
         SerialUtils.writeStroke(this.defaultOutlineStroke, stream);
-        SerialUtils.writeShape(this.defaultShape, stream);
         SerialUtils.writePaint(this.defaultItemLabelPaint, stream);
-        SerialUtils.writeShape(this.defaultLegendShape, stream);
+//        SerialUtils.writeShape(this.getShapeManager().getDefaultShape(), stream);
+//        SerialUtils.writeShape(this.getShapeManager().getDefaultLegendShape(), stream);
         SerialUtils.writePaint(this.defaultLegendTextPaint, stream);
     }
 
@@ -3227,9 +3139,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.defaultOutlinePaint = SerialUtils.readPaint(stream);
         this.defaultStroke = SerialUtils.readStroke(stream);
         this.defaultOutlineStroke = SerialUtils.readStroke(stream);
-        this.defaultShape = SerialUtils.readShape(stream);
         this.defaultItemLabelPaint = SerialUtils.readPaint(stream);
-        this.defaultLegendShape = SerialUtils.readShape(stream);
+//        this.shapeManager.setDefaultShape(SerialUtils.readShape(stream));
+//        this.shapeManager.setDefaultLegendShape(SerialUtils.readShape(stream));
         this.defaultLegendTextPaint = SerialUtils.readPaint(stream);
 
         // listeners are not restored automatically, but storage must be
