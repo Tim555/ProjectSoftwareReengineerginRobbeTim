@@ -346,7 +346,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     public void setBase(double base) {
         this.base = base;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -373,7 +373,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     public void setItemMargin(double percent) {
         this.itemMargin = percent;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -397,7 +397,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     public void setDrawBarOutline(boolean draw) {
         this.drawBarOutline = draw;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -423,7 +423,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     public void setMaximumBarWidth(double percent) {
         this.maximumBarWidth = percent;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -457,7 +457,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
             throw new IllegalArgumentException("Requires 'min' >= 0.0");
         }
         this.minimumBarLength = min;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -483,7 +483,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     public void setGradientPaintTransformer(
             GradientPaintTransformer transformer) {
         this.gradientPaintTransformer = transformer;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -510,7 +510,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     public void setPositiveItemLabelPositionFallback(
             ItemLabelPosition position) {
         this.positiveItemLabelPositionFallback = position;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -537,7 +537,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     public void setNegativeItemLabelPositionFallback(
             ItemLabelPosition position) {
         this.negativeItemLabelPositionFallback = position;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -571,7 +571,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     public void setIncludeBaseInRange(boolean include) {
         if (this.includeBaseInRange != include) {
             this.includeBaseInRange = include;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -601,7 +601,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     public void setBarPainter(BarPainter painter) {
         Args.nullNotPermitted(painter, "painter");
         this.barPainter = painter;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -626,7 +626,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     public void setShadowVisible(boolean visible) {
         this.shadowsVisible = visible;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -655,7 +655,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
     public void setShadowPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.shadowPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -679,7 +679,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     public void setShadowXOffset(double offset) {
         this.shadowXOffset = offset;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -703,7 +703,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
      */
     public void setShadowYOffset(double offset) {
         this.shadowYOffset = offset;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

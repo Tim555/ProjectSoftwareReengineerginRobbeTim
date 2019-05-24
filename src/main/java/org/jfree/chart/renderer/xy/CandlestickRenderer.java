@@ -275,7 +275,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setCandleWidth(double width) {
         if (width != this.candleWidth) {
             this.candleWidth = width;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -304,7 +304,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      */
     public void setMaxCandleWidthInMilliseconds(double millis) {
         this.maxCandleWidthInMilliseconds = millis;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -347,7 +347,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setAutoWidthMethod(int autoWidthMethod) {
         if (this.autoWidthMethod != autoWidthMethod) {
             this.autoWidthMethod = autoWidthMethod;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -379,7 +379,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setAutoWidthFactor(double autoWidthFactor) {
         if (this.autoWidthFactor != autoWidthFactor) {
             this.autoWidthFactor = autoWidthFactor;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -411,7 +411,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setAutoWidthGap(double autoWidthGap) {
         if (this.autoWidthGap != autoWidthGap) {
             this.autoWidthGap = autoWidthGap;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -438,7 +438,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      */
     public void setUpPaint(Paint paint) {
         this.upPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -462,7 +462,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      */
     public void setDownPaint(Paint paint) {
         this.downPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -491,7 +491,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setDrawVolume(boolean flag) {
         if (this.drawVolume != flag) {
             this.drawVolume = flag;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -523,7 +523,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setVolumePaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.volumePaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -555,7 +555,7 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
     public void setUseOutlinePaint(boolean use) {
         if (this.useOutlinePaint != use) {
             this.useOutlinePaint = use;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 

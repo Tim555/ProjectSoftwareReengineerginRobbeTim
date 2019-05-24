@@ -170,7 +170,7 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
     public void setPaintScale(PaintScale scale) {
         Args.nullNotPermitted(scale, "scale");
         this.paintScale = scale;
-        notifyListeners(new RendererChangeEvent(this));
+        this.getListenerManager().notifyListeners(new RendererChangeEvent(this));
     }
 
     /**
@@ -199,7 +199,7 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
      */
     public void setDrawOutlines(boolean flag) {
         this.drawOutlines = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -230,7 +230,7 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
      */
     public void setUseFillPaint(boolean flag) {
         this.useFillPaint = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -256,7 +256,7 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
      */
     public void setUseOutlinePaint(boolean use) {
         this.useOutlinePaint = use;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -283,7 +283,7 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
      */
     public void setGuideLinesVisible(boolean visible) {
         this.guideLinesVisible = visible;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -308,7 +308,7 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
     public void setGuideLinePaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.guideLinePaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -333,7 +333,7 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
     public void setGuideLineStroke(Stroke stroke) {
         Args.nullNotPermitted(stroke, "stroke");
         this.guideLineStroke = stroke;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

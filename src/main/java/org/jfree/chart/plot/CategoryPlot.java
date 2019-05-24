@@ -614,7 +614,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         this.renderers.put(0, renderer);
         if (renderer != null) {
             renderer.setPlot(this);
-            renderer.addChangeListener(this);
+            renderer.getListenerManager().addChangeListener(this);
         }
 
         this.domainAxes.put(0, domainAxis);
@@ -1629,12 +1629,12 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             boolean notify) {
         CategoryItemRenderer existing = this.renderers.get(index);
         if (existing != null) {
-            existing.removeChangeListener(this);
+            existing.getListenerManager().removeChangeListener(this);
         }
         this.renderers.put(index, renderer);
         if (renderer != null) {
             renderer.setPlot(this);
-            renderer.addChangeListener(this);
+            renderer.getListenerManager().addChangeListener(this);
         }
         configureDomainAxes();
         configureRangeAxes();
@@ -5001,7 +5001,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         for (CategoryItemRenderer renderer : clone.renderers.values()) {
             if (renderer != null) {
                 renderer.setPlot(clone);
-                renderer.addChangeListener(clone);
+                renderer.getListenerManager().addChangeListener(clone);
             }
         }
         if (this.fixedDomainAxisSpace != null) {
@@ -5119,7 +5119,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         }
         for (CategoryItemRenderer renderer : this.renderers.values()) {
             if (renderer != null) {
-                renderer.addChangeListener(this);
+                renderer.getListenerManager().addChangeListener(this);
             }
         }
 

@@ -156,7 +156,7 @@ public class WaferMapPlot extends Plot implements RendererChangeListener,
         this.renderer = renderer;
         if (renderer != null) {
             renderer.setPlot(this);
-            renderer.addChangeListener(this);
+            renderer.getListenerManager().addChangeListener(this);
         }
 
     }
@@ -213,7 +213,7 @@ public class WaferMapPlot extends Plot implements RendererChangeListener,
      */
     public void setRenderer(WaferMapRenderer renderer) {
         if (this.renderer != null) {
-            this.renderer.removeChangeListener(this);
+            this.renderer.getListenerManager().removeChangeListener(this);
         }
         this.renderer = renderer;
         if (renderer != null) {

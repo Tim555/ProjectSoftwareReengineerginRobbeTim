@@ -263,7 +263,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesLinesVisible(int series, Boolean flag) {
         this.seriesLinesVisible.setBoolean(series, flag);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -300,7 +300,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setDefaultLinesVisible(boolean flag) {
         this.defaultLinesVisible = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     // SHAPES VISIBLE
@@ -360,7 +360,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesShapesVisible(int series, Boolean flag) {
         this.seriesShapesVisible.setBoolean(series, flag);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -384,7 +384,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setDefaultShapesVisible(boolean flag) {
         this.defaultShapesVisible = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -413,7 +413,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setDrawOutlines(boolean flag) {
         this.drawOutlines = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -439,7 +439,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseOutlinePaint(boolean use) {
         this.useOutlinePaint = use;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     // SHAPES FILLED
@@ -486,7 +486,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesShapesFilled(int series, Boolean filled) {
         this.seriesShapesFilled.setBoolean(series, filled);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -524,7 +524,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setDefaultShapesFilled(boolean flag) {
         this.defaultShapesFilled = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -551,7 +551,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseFillPaint(boolean flag) {
         this.useFillPaint = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -581,7 +581,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseSeriesOffset(boolean offset) {
         this.useSeriesOffset = offset;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -618,7 +618,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             throw new IllegalArgumentException("Requires 0.0 <= margin < 1.0.");
         }
         this.itemMargin = margin;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -913,6 +913,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                 = (BooleanList) this.seriesShapesVisible.clone();
         clone.seriesShapesFilled
                 = (BooleanList) this.seriesShapesFilled.clone();
+
         return clone;
     }
 

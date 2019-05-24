@@ -162,7 +162,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseSeriesOffset(boolean offset) {
         this.useSeriesOffset = offset;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -195,7 +195,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
             throw new IllegalArgumentException("Requires 0.0 <= margin < 1.0.");
         }
         this.itemMargin = margin;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -223,7 +223,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      */
     public void setDrawOutlines(boolean flag) {
         this.drawOutlines = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -249,7 +249,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseOutlinePaint(boolean use) {
         this.useOutlinePaint = use;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     // SHAPES FILLED
@@ -295,7 +295,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesShapesFilled(int series, Boolean filled) {
         this.seriesShapesFilled.setBoolean(series, filled);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -307,7 +307,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesShapesFilled(int series, boolean filled) {
         this.seriesShapesFilled.setBoolean(series, Boolean.valueOf(filled));
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -327,7 +327,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      */
     public void setBaseShapesFilled(boolean flag) {
         this.baseShapesFilled = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -350,7 +350,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseFillPaint(boolean flag) {
         this.useFillPaint = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

@@ -158,7 +158,7 @@ public class ShapeManager implements Cloneable, Serializable {
     public void setSeriesShape(int series, Shape shape, boolean notify) {
         this.shapeList.setShape(series, shape);
         if (notify) {
-            this.abstractRenderer.fireChangeEvent();
+            this.abstractRenderer.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -199,7 +199,7 @@ public class ShapeManager implements Cloneable, Serializable {
         Args.nullNotPermitted(shape, "shape");
         this.defaultShape = shape;
         if (notify) {
-            this.abstractRenderer.fireChangeEvent();
+            this.abstractRenderer.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -279,7 +279,7 @@ public class ShapeManager implements Cloneable, Serializable {
      */
     public void setLegendShape(int series, Shape shape) {
         this.legendShapeList.setShape(series, shape);
-        this.abstractRenderer.fireChangeEvent();
+        this.abstractRenderer.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -311,7 +311,7 @@ public class ShapeManager implements Cloneable, Serializable {
      */
     public void setDefaultLegendShape(Shape shape) {
         this.defaultLegendShape = shape;
-        this.abstractRenderer.fireChangeEvent();
+        this.abstractRenderer.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -322,7 +322,7 @@ public class ShapeManager implements Cloneable, Serializable {
      *
      * @since 1.0.14
      */
-    protected boolean getTreatLegendShapeAsLine() {
+    public boolean getTreatLegendShapeAsLine() {
         return this.treatLegendShapeAsLine;
     }
 
@@ -337,7 +337,7 @@ public class ShapeManager implements Cloneable, Serializable {
     protected void setTreatLegendShapeAsLine(boolean treatAsLine) {
         if (this.treatLegendShapeAsLine != treatAsLine) {
             this.treatLegendShapeAsLine = treatAsLine;
-            this.abstractRenderer.fireChangeEvent();
+            this.abstractRenderer.getListenerManager().fireChangeEvent();
         }
     }
 

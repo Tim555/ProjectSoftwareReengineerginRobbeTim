@@ -379,7 +379,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setBase(double base) {
         this.base = base;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -406,7 +406,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setUseYInterval(boolean use) {
         if (this.useYInterval != use) {
             this.useYInterval = use;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -432,7 +432,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setMargin(double margin) {
         this.margin = margin;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -456,7 +456,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setDrawBarOutline(boolean draw) {
         this.drawBarOutline = draw;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -482,7 +482,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setGradientPaintTransformer(
             GradientPaintTransformer transformer) {
         this.gradientPaintTransformer = transformer;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -508,7 +508,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setLegendBar(Shape bar) {
         Args.nullNotPermitted(bar, "bar");
         this.legendBar = bar;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -537,7 +537,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setPositiveItemLabelPositionFallback(
             ItemLabelPosition position) {
         this.positiveItemLabelPositionFallback = position;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -566,7 +566,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setNegativeItemLabelPositionFallback(
             ItemLabelPosition position) {
         this.negativeItemLabelPositionFallback = position;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -591,7 +591,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setBarPainter(XYBarPainter painter) {
         Args.nullNotPermitted(painter, "painter");
         this.barPainter = painter;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -617,7 +617,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setShadowVisible(boolean visible) {
         this.shadowsVisible = visible;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -641,7 +641,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setShadowXOffset(double offset) {
         this.shadowXOffset = offset;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -665,7 +665,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setShadowYOffset(double offset) {
         this.shadowYOffset = offset;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -690,7 +690,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setBarAlignmentFactor(double factor) {
         this.barAlignmentFactor = factor;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

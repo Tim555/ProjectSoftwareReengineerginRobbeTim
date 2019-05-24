@@ -61,6 +61,12 @@ import org.jfree.data.xy.XYDataset;
  */
 public interface PolarItemRenderer {
 
+
+    /**
+     * Get ListenerManager
+     */
+    public ListenerManager getListenerManager();
+
     /**
      * Plots the data for a given series.
      *
@@ -121,20 +127,6 @@ public interface PolarItemRenderer {
      * @param plot  the plot.
      */
     public void setPlot(PolarPlot plot);
-
-    /**
-     * Adds a change listener.
-     *
-     * @param listener  the listener.
-     */
-    public void addChangeListener(RendererChangeListener listener);
-
-    /**
-     * Removes a change listener.
-     *
-     * @param listener  the listener.
-     */
-    public void removeChangeListener(RendererChangeListener listener);
 
 
     //// TOOL TIP GENERATOR ///////////////////////////////////////////////////

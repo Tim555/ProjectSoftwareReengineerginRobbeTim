@@ -145,7 +145,7 @@ public class GanttRenderer extends IntervalBarRenderer
     public void setCompletePaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.completePaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -170,7 +170,7 @@ public class GanttRenderer extends IntervalBarRenderer
     public void setIncompletePaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.incompletePaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -196,7 +196,7 @@ public class GanttRenderer extends IntervalBarRenderer
      */
     public void setStartPercent(double percent) {
         this.startPercent = percent;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -222,7 +222,7 @@ public class GanttRenderer extends IntervalBarRenderer
      */
     public void setEndPercent(double percent) {
         this.endPercent = percent;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

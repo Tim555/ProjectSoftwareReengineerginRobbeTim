@@ -145,7 +145,7 @@ public class AreaRenderer extends AbstractCategoryItemRenderer
     public void setEndType(AreaRendererEndType type) {
         Args.nullNotPermitted(type, "type");
         this.endType = type;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

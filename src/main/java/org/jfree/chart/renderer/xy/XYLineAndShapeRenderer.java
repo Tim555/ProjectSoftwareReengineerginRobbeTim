@@ -227,7 +227,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
     public void setDrawSeriesLineAsPath(boolean flag) {
         if (this.drawSeriesLineAsPath != flag) {
             this.drawSeriesLineAsPath = flag;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -287,7 +287,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setSeriesLinesVisible(int series, Boolean flag) {
         this.seriesLinesVisible.setBoolean(series, flag);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -324,7 +324,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setDefaultLinesVisible(boolean flag) {
         this.defaultLinesVisible = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -349,7 +349,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
     public void setLegendLine(Shape line) {
         Args.nullNotPermitted(line, "line");
         this.legendLine = line;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     // SHAPES VISIBLE
@@ -413,7 +413,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setSeriesShapesVisible(int series, Boolean flag) {
         this.seriesShapesVisible.setBoolean(series, flag);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -437,7 +437,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setDefaultShapesVisible(boolean flag) {
         this.defaultShapesVisible = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     // SHAPES FILLED
@@ -502,7 +502,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setSeriesShapesFilled(int series, Boolean flag) {
         this.seriesShapesFilled.setBoolean(series, flag);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -526,7 +526,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setDefaultShapesFilled(boolean flag) {
         this.defaultShapesFilled = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -555,7 +555,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setDrawOutlines(boolean flag) {
         this.drawOutlines = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -586,7 +586,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setUseFillPaint(boolean flag) {
         this.useFillPaint = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -617,7 +617,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      */
     public void setUseOutlinePaint(boolean flag) {
         this.useOutlinePaint = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

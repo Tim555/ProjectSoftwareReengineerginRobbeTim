@@ -570,10 +570,10 @@ public class AbstractRendererTest {
         assertTrue(r1.equals(r2));
 
         MyRendererChangeListener listener = new MyRendererChangeListener();
-        r2.addChangeListener(listener);
+        r2.getListenerManager().addChangeListener(listener);
         r2.setDefaultPaint(Color.RED);
         assertTrue(listener.lastEvent.getRenderer() == r2);
-        assertFalse(r1.hasListener(listener));
+        assertFalse(r1.getListenerManager().hasListener(listener));
     }
 
     /**
@@ -585,7 +585,7 @@ public class AbstractRendererTest {
         RendererChangeDetector detector = new RendererChangeDetector();
         BarRenderer r1 = new BarRenderer();  // have to use a subclass of
                                              // AbstractRenderer
-        r1.addChangeListener(detector);
+        r1.getListenerManager().addChangeListener(detector);
 
         // PAINT
         detector.setNotified(false);
@@ -698,7 +698,7 @@ public class AbstractRendererTest {
         BarRenderer r2 = (BarRenderer) TestUtils.serialised(r1);
         assertEquals(r1, r2);
         try {
-            r2.notifyListeners(new RendererChangeEvent(r2));
+            r2.getListenerManager().notifyListeners(new RendererChangeEvent(r2));
         }
         catch (NullPointerException e) {
             fail("No exception should be thrown.");  // failed

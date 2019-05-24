@@ -175,7 +175,7 @@ public class XYStepRenderer extends XYLineAndShapeRenderer
                     "Requires stepPoint in [0.0;1.0]");
         }
         this.stepPoint = stepPoint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

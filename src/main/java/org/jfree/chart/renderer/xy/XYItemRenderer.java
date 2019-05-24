@@ -107,6 +107,7 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.ListenerManager;
 import org.jfree.chart.ui.Layer;
 import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.data.Range;
@@ -120,6 +121,11 @@ import org.jfree.data.xy.XYDataset;
  * the {@link Cloneable} and {@code PublicCloneable} interfaces.
  */
 public interface XYItemRenderer extends LegendItemSource {
+
+    /**
+     * Get Listener manager
+     */
+    public ListenerManager getListenerManager();
 
     /**
      * Returns the plot that this renderer has been assigned to.
@@ -166,24 +172,6 @@ public interface XYItemRenderer extends LegendItemSource {
      *         {@code null} or empty).
      */
     public Range findRangeBounds(XYDataset dataset);
-
-    /**
-     * Add a renderer change listener.
-     *
-     * @param listener  the listener.
-     *
-     * @see #removeChangeListener(RendererChangeListener)
-     */
-    public void addChangeListener(RendererChangeListener listener);
-
-    /**
-     * Removes a change listener.
-     *
-     * @param listener  the listener.
-     *
-     * @see #addChangeListener(RendererChangeListener)
-     */
-    public void removeChangeListener(RendererChangeListener listener);
 
 
     //// VISIBLE //////////////////////////////////////////////////////////////

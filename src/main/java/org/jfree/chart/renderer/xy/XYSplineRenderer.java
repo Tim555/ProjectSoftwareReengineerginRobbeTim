@@ -197,7 +197,7 @@ public class XYSplineRenderer extends XYLineAndShapeRenderer {
             throw new IllegalArgumentException("Requires p > 0.");
         }
         this.precision = p;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -225,7 +225,7 @@ public class XYSplineRenderer extends XYLineAndShapeRenderer {
      */
     public void setFillType(FillType fillType) {
         this.fillType = fillType;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -249,7 +249,7 @@ public class XYSplineRenderer extends XYLineAndShapeRenderer {
      */
     public void setGradientPaintTransformer(GradientPaintTransformer gpt) {
         this.gradientPaintTransformer = gpt;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
     
     /**

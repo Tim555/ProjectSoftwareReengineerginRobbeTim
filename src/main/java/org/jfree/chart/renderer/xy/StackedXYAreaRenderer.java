@@ -284,7 +284,7 @@ public class StackedXYAreaRenderer extends XYAreaRenderer
      */
     public void setShapePaint(Paint shapePaint) {
         this.shapePaint = shapePaint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -309,7 +309,7 @@ public class StackedXYAreaRenderer extends XYAreaRenderer
      */
     public void setShapeStroke(Stroke shapeStroke) {
         this.shapeStroke = shapeStroke;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
