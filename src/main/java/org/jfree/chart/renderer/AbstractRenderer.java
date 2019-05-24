@@ -349,9 +349,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /** The default radius for the entity 'hotspot' */
     private int defaultEntityRadius;
 
-    /** Storage for registered change listeners. */
-    private transient EventListenerList listenerList;
-
     /** An event for re-use. */
     private transient RendererChangeEvent event;
 
@@ -359,6 +356,11 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * Shape renderer
      */
     private ShapeManager shapeManager;
+
+    /**
+     * Shape renderer
+     */
+    private ListenerManager listenerManager;
 
     /**
      * Default constructor.
@@ -419,9 +421,15 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.legendTextPaint = new PaintList();
         this.defaultLegendTextPaint = null;
 
-        this.listenerList = new EventListenerList();
-
         this.shapeManager = new ShapeManager(this);
+        this.listenerManager = new ListenerManager(this);
+    }
+
+    /**
+     * Listenermanager
+     */
+    public ListenerManager getListenerManager() {
+        return this.listenerManager;
     }
 
     /**
@@ -540,7 +548,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             // the event) that series visibility has changed so the axis
             // ranges might need updating...
             RendererChangeEvent e = new RendererChangeEvent(this, true);
-            notifyListeners(e);
+            this.listenerManager.notifyListeners(e);
         }
     }
 
@@ -585,7 +593,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             // the event) that series visibility has changed so the axis
             // ranges might need updating...
             RendererChangeEvent e = new RendererChangeEvent(this, true);
-            notifyListeners(e);
+            this.listenerManager.notifyListeners(e);
         }
     }
 
@@ -652,7 +660,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                                          boolean notify) {
         this.seriesVisibleInLegendList.setBoolean(series, visible);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -693,7 +701,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             boolean notify) {
         this.defaultSeriesVisibleInLegend = visible;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -781,7 +789,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setSeriesPaint(int series, Paint paint, boolean notify) {
         this.paintList.setPaint(series, paint);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -796,7 +804,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void clearSeriesPaints(boolean notify) {
         this.paintList.clear();
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -836,7 +844,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setDefaultPaint(Paint paint, boolean notify) {
         this.defaultPaint = paint;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -950,7 +958,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setSeriesFillPaint(int series, Paint paint, boolean notify) {
         this.fillPaintList.setPaint(series, paint);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -991,7 +999,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         Args.nullNotPermitted(paint, "paint");
         this.defaultFillPaint = paint;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1109,7 +1117,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setSeriesOutlinePaint(int series, Paint paint, boolean notify) {
         this.outlinePaintList.setPaint(series, paint);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1150,7 +1158,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         Args.nullNotPermitted(paint, "paint");
         this.defaultOutlinePaint = paint;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1266,7 +1274,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setSeriesStroke(int series, Stroke stroke, boolean notify) {
         this.strokeList.setStroke(series, stroke);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1281,7 +1289,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void clearSeriesStrokes(boolean notify) {
         this.strokeList.clear();
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1322,7 +1330,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         Args.nullNotPermitted(stroke, "stroke");
         this.defaultStroke = stroke;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1437,7 +1445,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                                        boolean notify) {
         this.outlineStrokeList.setStroke(series, stroke);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1478,7 +1486,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         Args.nullNotPermitted(stroke, "stroke");
         this.defaultOutlineStroke = stroke;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1578,7 +1586,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                                            boolean notify) {
         this.itemLabelsVisibleList.setBoolean(series, visible);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1620,7 +1628,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setDefaultItemLabelsVisible(boolean visible, boolean notify) {
         this.defaultItemLabelsVisible = visible;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1682,7 +1690,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setSeriesItemLabelFont(int series, Font font, boolean notify) {
         this.itemLabelFontMap.put(series, font);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1724,7 +1732,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setDefaultItemLabelFont(Font font, boolean notify) {
         this.defaultItemLabelFont = font;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1787,7 +1795,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                                         boolean notify) {
         this.itemLabelPaintList.setPaint(series, paint);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1829,7 +1837,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         Args.nullNotPermitted(paint, "paint");
         this.defaultItemLabelPaint = paint;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1897,7 +1905,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             ItemLabelPosition position, boolean notify) {
         this.positiveItemLabelPositionMap.put(series, position);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -1939,7 +1947,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         Args.nullNotPermitted(position, "position");
         this.defaultPositiveItemLabelPosition = position;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -2009,7 +2017,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             ItemLabelPosition position, boolean notify) {
         this.negativeItemLabelPositionMap.put(series, position);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -2051,7 +2059,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         Args.nullNotPermitted(position, "position");
         this.defaultNegativeItemLabelPosition = position;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -2075,7 +2083,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setItemLabelAnchorOffset(double offset) {
         this.itemLabelAnchorOffset = offset;
-        fireChangeEvent();
+        this.listenerManager.fireChangeEvent();
     }
 
     /**
@@ -2138,7 +2146,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                                         boolean notify) {
         this.createEntitiesList.setBoolean(series, create);
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -2180,7 +2188,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setDefaultCreateEntities(boolean create, boolean notify) {
         this.defaultCreateEntities = create;
         if (notify) {
-            fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -2274,18 +2282,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the flag that controls whether or not the legend shape is
-     * treated as a line when creating legend items.
-     * 
-     * @return A boolean.
-     * 
-     * @since 1.0.14
-     */
-    protected boolean getTreatLegendShapeAsLine() {
-        return this.shapeManager.getTreatLegendShapeAsLine();
-    }
-
-    /**
      * Sets the flag that controls whether or not the legend shape is
      * treated as a line when creating legend items.
      *
@@ -2341,7 +2337,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setLegendTextFont(int series, Font font) {
         this.legendTextFontMap.put(series, font);
-        fireChangeEvent();
+        this.listenerManager.fireChangeEvent();
     }
 
     /**
@@ -2366,7 +2362,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public void setDefaultLegendTextFont(Font font) {
         Args.nullNotPermitted(font, "font");
         this.defaultLegendTextFont = font;
-        fireChangeEvent();
+        this.listenerManager.fireChangeEvent();
     }
 
     /**
@@ -2413,7 +2409,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setLegendTextPaint(int series, Paint paint) {
         this.legendTextPaint.setPaint(series, paint);
-        fireChangeEvent();
+        this.listenerManager.fireChangeEvent();
     }
 
     /**
@@ -2437,7 +2433,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDefaultLegendTextPaint(Paint paint) {
         this.defaultLegendTextPaint = paint;
-        fireChangeEvent();
+        this.listenerManager.fireChangeEvent();
     }
 
     /**
@@ -2463,7 +2459,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDataBoundsIncludesVisibleSeriesOnly(boolean visibleOnly) {
         this.dataBoundsIncludesVisibleSeriesOnly = visibleOnly;
-        notifyListeners(new RendererChangeEvent(this, true));
+        this.listenerManager.notifyListeners(new RendererChangeEvent(this, true));
     }
 
     /** The adjacent offset. */
@@ -2591,77 +2587,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         return result;
     }
 
-    /**
-     * Registers an object to receive notification of changes to the renderer.
-     *
-     * @param listener  the listener ({@code null} not permitted).
-     *
-     * @see #removeChangeListener(RendererChangeListener)
-     */
-    public void addChangeListener(RendererChangeListener listener) {
-        Args.nullNotPermitted(listener, "listener");
-        this.listenerList.add(RendererChangeListener.class, listener);
-    }
-
-    /**
-     * Deregisters an object so that it no longer receives
-     * notification of changes to the renderer.
-     *
-     * @param listener  the object ({@code null} not permitted).
-     *
-     * @see #addChangeListener(RendererChangeListener)
-     */
-    public void removeChangeListener(RendererChangeListener listener) {
-        Args.nullNotPermitted(listener, "listener");
-        this.listenerList.remove(RendererChangeListener.class, listener);
-    }
-
-    /**
-     * Returns {@code true} if the specified object is registered with
-     * the dataset as a listener.  Most applications won't need to call this
-     * method, it exists mainly for use by unit testing code.
-     *
-     * @param listener  the listener.
-     *
-     * @return A boolean.
-     */
-    public boolean hasListener(EventListener listener) {
-        List list = Arrays.asList(this.listenerList.getListenerList());
-        return list.contains(listener);
-    }
-
-    /**
-     * Sends a {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @since 1.0.5
-     */
-    protected void fireChangeEvent() {
-
-        // the commented out code would be better, but only if
-        // RendererChangeEvent is immutable, which it isn't.  See if there is
-        // a way to fix this...
-
-        //if (this.event == null) {
-        //    this.event = new RendererChangeEvent(this);
-        //}
-        //notifyListeners(this.event);
-
-        notifyListeners(new RendererChangeEvent(this));
-    }
-
-    /**
-     * Notifies all registered listeners that the renderer has been modified.
-     *
-     * @param event  information about the change event.
-     */
-    public void notifyListeners(RendererChangeEvent event) {
-        Object[] ls = this.listenerList.getListenerList();
-        for (int i = ls.length - 2; i >= 0; i -= 2) {
-            if (ls[i] == RendererChangeListener.class) {
-                ((RendererChangeListener) ls[i + 1]).rendererChanged(event);
-            }
-        }
-    }
 
     /**
      * Get Shaperenderer
@@ -2966,7 +2891,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         if (this.legendTextPaint != null) {
             clone.legendTextPaint = (PaintList) this.legendTextPaint.clone();
         }
-        clone.listenerList = new EventListenerList();
+
+        clone.listenerManager = new ListenerManager(clone);
+
         clone.event = null;
         return clone;
     }
@@ -2986,8 +2913,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         SerialUtils.writeStroke(this.defaultStroke, stream);
         SerialUtils.writeStroke(this.defaultOutlineStroke, stream);
         SerialUtils.writePaint(this.defaultItemLabelPaint, stream);
-//        SerialUtils.writeShape(this.getShapeManager().getDefaultShape(), stream);
-//        SerialUtils.writeShape(this.getShapeManager().getDefaultLegendShape(), stream);
         SerialUtils.writePaint(this.defaultLegendTextPaint, stream);
     }
 
@@ -3008,13 +2933,11 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.defaultStroke = SerialUtils.readStroke(stream);
         this.defaultOutlineStroke = SerialUtils.readStroke(stream);
         this.defaultItemLabelPaint = SerialUtils.readPaint(stream);
-//        this.shapeManager.setDefaultShape(SerialUtils.readShape(stream));
-//        this.shapeManager.setDefaultLegendShape(SerialUtils.readShape(stream));
         this.defaultLegendTextPaint = SerialUtils.readPaint(stream);
 
         // listeners are not restored automatically, but storage must be
         // provided...
-        this.listenerList = new EventListenerList();
+        this.listenerManager = new ListenerManager(this);
     }
 
 }

@@ -78,7 +78,7 @@
  * 02-Oct-2008 : Check item visibility in drawItem() method (DG);
  * 21-Jan-2009 : Added flags to control visibility of mean and median
  *               indicators (DG);
- * 28-Sep-2009 : Added fireChangeEvent() to setMedianVisible (DG);
+ * 28-Sep-2009 : Added this.getListenerManager().fireChangeEvent() to setMedianVisible (DG);
  * 28-Sep-2009 : Added useOutlinePaintForWhiskers flag, see patch 2868585
  *               by Peter Becker (DG);
  * 28-Sep-2009 : Added whiskerWidth attribute, see patch 2868608 by Peter
@@ -228,7 +228,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
     public void setArtifactPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.artifactPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -252,7 +252,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
      */
     public void setFillBox(boolean flag) {
         this.fillBox = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -277,7 +277,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
      */
     public void setItemMargin(double margin) {
         this.itemMargin = margin;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -308,7 +308,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
      */
     public void setMaximumBarWidth(double percent) {
         this.maximumBarWidth = percent;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -341,7 +341,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             return;
         }
         this.meanVisible = visible;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -374,7 +374,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             return;
         }
         this.medianVisible = visible;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -403,7 +403,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             return;
         }
         this.useOutlinePaintForWhiskers = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -439,7 +439,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             return;
         }
         this.whiskerWidth = width;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

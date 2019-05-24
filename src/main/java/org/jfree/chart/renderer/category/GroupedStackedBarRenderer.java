@@ -103,7 +103,7 @@ public class GroupedStackedBarRenderer extends StackedBarRenderer
     public void setSeriesToGroupMap(KeyToGroupMap map) {
         Args.nullNotPermitted(map, "map");
         this.seriesToGroupMap = map;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

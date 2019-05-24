@@ -156,7 +156,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
      */
     public void setErrorIndicatorPaint(Paint paint) {
         this.errorIndicatorPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -186,7 +186,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
      */
     public void setErrorIndicatorStroke(Stroke stroke) {
         this.errorIndicatorStroke = stroke;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

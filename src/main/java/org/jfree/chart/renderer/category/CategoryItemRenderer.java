@@ -117,6 +117,7 @@ import org.jfree.chart.plot.CategoryMarker;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.renderer.ListenerManager;
 import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.chart.urls.CategoryURLGenerator;
 import org.jfree.data.Range;
@@ -139,6 +140,11 @@ import org.jfree.data.category.CategoryDataset;
  * non-{@code null} values.
  */
 public interface CategoryItemRenderer extends LegendItemSource {
+
+    /**
+     * Get ListenerManager
+     */
+    public ListenerManager getListenerManager();
 
     /**
      * Returns the number of passes through the dataset required by the
@@ -172,23 +178,6 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setPlot(CategoryPlot plot);
 
-    /**
-     * Adds a change listener.
-     *
-     * @param listener  the listener.
-     *
-     * @see #removeChangeListener(RendererChangeListener)
-     */
-    public void addChangeListener(RendererChangeListener listener);
-
-    /**
-     * Removes a change listener.
-     *
-     * @param listener  the listener.
-     *
-     * @see #addChangeListener(RendererChangeListener)
-     */
-    public void removeChangeListener(RendererChangeListener listener);
 
     /**
      * Returns the range of values the renderer requires to display all the

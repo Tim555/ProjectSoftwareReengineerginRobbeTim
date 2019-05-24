@@ -144,7 +144,7 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
         }
         this.blockWidth = width;
         updateOffsets();
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -173,7 +173,7 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
         }
         this.blockHeight = height;
         updateOffsets();
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -203,7 +203,7 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
         }
         this.blockAnchor = anchor;
         updateOffsets();
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -230,7 +230,7 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
     public void setPaintScale(PaintScale scale) {
         Args.nullNotPermitted(scale, "scale");
         this.paintScale = scale;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -256,7 +256,7 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
      */
     public void setDrawOutlines(boolean flag) {
         this.drawOutlines = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -283,7 +283,7 @@ public class XYBlockRenderer extends AbstractXYItemRenderer
      */
     public void setUseOutlinePaint(boolean flag) {
         this.useOutlinePaint = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

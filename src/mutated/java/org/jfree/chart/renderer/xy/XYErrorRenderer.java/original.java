@@ -142,7 +142,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
     public void setDrawXError(boolean draw) {
         if (this.drawXError != draw) {
             this.drawXError = draw;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -170,7 +170,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
     public void setDrawYError(boolean draw) {
         if (this.drawYError != draw) {
             this.drawYError = draw;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -196,7 +196,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      */
     public void setCapLength(double length) {
         this.capLength = length;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -221,7 +221,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      */
     public void setErrorPaint(Paint paint) {
         this.errorPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -251,7 +251,7 @@ public class XYErrorRenderer extends XYLineAndShapeRenderer {
      */
     public void setErrorStroke(Stroke stroke) {
         this.errorStroke = stroke;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

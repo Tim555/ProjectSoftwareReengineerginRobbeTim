@@ -134,7 +134,7 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      */
     public void setItemMargin(double percent) {
         this.itemMargin = percent;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -160,7 +160,7 @@ public class LevelRenderer extends AbstractCategoryItemRenderer
      */
     public void setMaximumItemWidth(double percent) {
         this.maxItemWidth = percent;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

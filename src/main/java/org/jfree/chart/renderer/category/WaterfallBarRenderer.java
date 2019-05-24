@@ -182,7 +182,7 @@ public class WaterfallBarRenderer extends BarRenderer {
     public void setFirstBarPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.firstBarPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -203,7 +203,7 @@ public class WaterfallBarRenderer extends BarRenderer {
     public void setLastBarPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.lastBarPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -223,7 +223,7 @@ public class WaterfallBarRenderer extends BarRenderer {
     public void setPositiveBarPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.positiveBarPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -244,7 +244,7 @@ public class WaterfallBarRenderer extends BarRenderer {
     public void setNegativeBarPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.negativeBarPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

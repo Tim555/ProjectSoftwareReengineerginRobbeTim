@@ -379,7 +379,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public void setSeriesItemLabelGenerator(int series,
             XYItemLabelGenerator generator) {
         this.itemLabelGeneratorMap.put(series, generator);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -401,7 +401,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     @Override
     public void setDefaultItemLabelGenerator(XYItemLabelGenerator generator) {
         this.defaultItemLabelGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     // TOOL TIP GENERATOR
@@ -451,7 +451,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public void setSeriesToolTipGenerator(int series,
             XYToolTipGenerator generator) {
         this.toolTipGeneratorMap.put(series, generator);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -467,7 +467,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     }
 
     /**
-     * Sets the default tool tip generator and sends a 
+     * Sets the default tool tip generator and sends a
      * {@link RendererChangeEvent} to all registered listeners.
      *
      * @param generator  the generator ({@code null} permitted).
@@ -477,7 +477,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     @Override
     public void setDefaultToolTipGenerator(XYToolTipGenerator generator) {
         this.defaultToolTipGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     // URL GENERATOR
@@ -501,7 +501,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     @Override
     public void setURLGenerator(XYURLGenerator urlGenerator) {
         this.urlGenerator = urlGenerator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -530,12 +530,12 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         if (layer.equals(Layer.FOREGROUND)) {
             this.foregroundAnnotations.add(annotation);
             annotation.addChangeListener(this);
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
         else if (layer.equals(Layer.BACKGROUND)) {
             this.backgroundAnnotations.add(annotation);
             annotation.addChangeListener(this);
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
         else {
             // should never get here
@@ -557,7 +557,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         boolean removed = this.foregroundAnnotations.remove(annotation);
         removed = removed & this.backgroundAnnotations.remove(annotation);
         annotation.removeChangeListener(this);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
         return removed;
     }
 
@@ -575,7 +575,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         }
         this.foregroundAnnotations.clear();
         this.backgroundAnnotations.clear();
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
 
@@ -589,7 +589,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      */
     @Override
     public void annotationChanged(AnnotationChangeEvent event) {
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -598,11 +598,11 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      *
      * @return A collection of annotations (possibly empty but never
      *     {@code null}).
-     * 
+     *
      * @since 1.0.13
      */
     public Collection<XYAnnotation> getAnnotations() {
-        List<XYAnnotation> result 
+        List<XYAnnotation> result
                 = new ArrayList<XYAnnotation>(this.foregroundAnnotations);
         result.addAll(this.backgroundAnnotations);
         return result;
@@ -632,7 +632,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public void setLegendItemLabelGenerator(XYSeriesLabelGenerator generator) {
         Args.nullNotPermitted(generator, "generator");
         this.legendItemLabelGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -657,7 +657,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
     public void setLegendItemToolTipGenerator(
             XYSeriesLabelGenerator generator) {
         this.legendItemToolTipGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -681,7 +681,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
      */
     public void setLegendItemURLGenerator(XYSeriesLabelGenerator generator) {
         this.legendItemURLGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -871,7 +871,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         item.setDataset(dataset);
         item.setDatasetIndex(datasetIndex);
 
-        if (getTreatLegendShapeAsLine()) {
+        if (this.getShapeManager().getTreatLegendShapeAsLine()) {
             item.setLineVisible(true);
             item.setLine(shape);
             item.setLinePaint(paint);

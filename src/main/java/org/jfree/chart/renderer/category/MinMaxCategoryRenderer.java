@@ -171,7 +171,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
     public void setDrawLines(boolean draw) {
         if (this.plotLines != draw) {
             this.plotLines = draw;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -199,7 +199,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
     public void setGroupPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.groupPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -224,7 +224,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
     public void setGroupStroke(Stroke stroke) {
         Args.nullNotPermitted(stroke, "stroke");
         this.groupStroke = stroke;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -249,7 +249,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
     public void setObjectIcon(Icon icon) {
         Args.nullNotPermitted(icon, "icon");
         this.objectIcon = icon;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -276,7 +276,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
     public void setMaxIcon(Icon icon) {
         Args.nullNotPermitted(icon, "icon");
         this.maxIcon = icon;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -303,7 +303,7 @@ public class MinMaxCategoryRenderer extends AbstractCategoryItemRenderer {
     public void setMinIcon(Icon icon) {
         Args.nullNotPermitted(icon, "icon");
         this.minIcon = icon;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

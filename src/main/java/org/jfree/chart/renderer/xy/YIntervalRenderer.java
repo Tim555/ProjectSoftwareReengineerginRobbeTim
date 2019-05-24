@@ -139,7 +139,7 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
     public void setAdditionalItemLabelGenerator(
             XYItemLabelGenerator generator) {
         this.additionalItemLabelGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

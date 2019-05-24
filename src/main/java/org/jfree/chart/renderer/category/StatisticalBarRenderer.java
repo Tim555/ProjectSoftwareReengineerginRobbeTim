@@ -152,7 +152,7 @@ public class StatisticalBarRenderer extends BarRenderer
      */
     public void setErrorIndicatorPaint(Paint paint) {
         this.errorIndicatorPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -183,7 +183,7 @@ public class StatisticalBarRenderer extends BarRenderer
      */
     public void setErrorIndicatorStroke(Stroke stroke) {
         this.errorIndicatorStroke = stroke;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

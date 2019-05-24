@@ -306,7 +306,7 @@ public class PolarPlot extends Plot implements ValueAxisPlot, Zoomable,
         this.renderers.set(0, renderer);
         if (renderer != null) {
             renderer.setPlot(this);
-            renderer.addChangeListener(this);
+            renderer.getListenerManager().addChangeListener(this);
         }
 
         this.angleOffset = DEFAULT_ANGLE_OFFSET;
@@ -702,12 +702,12 @@ public class PolarPlot extends Plot implements ValueAxisPlot, Zoomable,
                             boolean notify) {
         PolarItemRenderer existing = getRenderer(index);
         if (existing != null) {
-            existing.removeChangeListener(this);
+            existing.getListenerManager().removeChangeListener(this);
         }
         this.renderers.set(index, renderer);
         if (renderer != null) {
             renderer.setPlot(this);
-            renderer.addChangeListener(this);
+            renderer.getListenerManager().addChangeListener(this);
         }
         if (notify) {
             fireChangeEvent();
@@ -1908,7 +1908,7 @@ public class PolarPlot extends Plot implements ValueAxisPlot, Zoomable,
                 PolarItemRenderer rc = (PolarItemRenderer) pc.clone();
                 clone.renderers.set(i, rc);
                 rc.setPlot(clone);
-                rc.addChangeListener(clone);
+                rc.getListenerManager().addChangeListener(clone);
             }
         }
 
@@ -1970,7 +1970,7 @@ public class PolarPlot extends Plot implements ValueAxisPlot, Zoomable,
         for (int i = 0; i < rendererCount; i++) {
             PolarItemRenderer renderer = (PolarItemRenderer) this.renderers.get(i);
             if (renderer != null) {
-                renderer.addChangeListener(this);
+                renderer.getListenerManager().addChangeListener(this);
             }
         }
     }

@@ -196,7 +196,7 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
     public void setBoxWidth(double width) {
         if (width != this.boxWidth) {
             this.boxWidth = width;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -221,7 +221,7 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      */
     public void setBoxPaint(Paint paint) {
         this.boxPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -245,7 +245,7 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
      */
     public void setFillBox(boolean flag) {
         this.fillBox = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -272,7 +272,7 @@ public class XYBoxAndWhiskerRenderer extends AbstractXYItemRenderer
     public void setArtifactPaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.artifactPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

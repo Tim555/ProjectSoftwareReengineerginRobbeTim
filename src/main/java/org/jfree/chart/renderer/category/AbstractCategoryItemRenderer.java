@@ -347,7 +347,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             CategoryItemLabelGenerator generator, boolean notify) {
         this.itemLabelGeneratorMap.put(series, generator);
         if (notify) {
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -391,7 +391,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             CategoryItemLabelGenerator generator, boolean notify) {
         this.defaultItemLabelGenerator = generator;
         if (notify) {
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -464,7 +464,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             CategoryToolTipGenerator generator, boolean notify) {
         this.toolTipGeneratorMap.put(series, generator);
         if (notify) {
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -506,7 +506,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     public void setDefaultToolTipGenerator(CategoryToolTipGenerator generator, boolean notify) {
         this.defaultToolTipGenerator = generator;
         if (notify) {
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -576,7 +576,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             CategoryURLGenerator generator, boolean notify) {
         this.itemURLGeneratorMap.put(series, generator);
         if (notify) {
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -618,7 +618,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     public void setDefaultItemURLGenerator(CategoryURLGenerator generator, boolean notify) {
         this.defaultItemURLGenerator = generator;
         if (notify) {
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -1613,7 +1613,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             CategorySeriesLabelGenerator generator) {
         Args.nullNotPermitted(generator, "generator");
         this.legendItemLabelGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -1638,7 +1638,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     public void setLegendItemToolTipGenerator(
             CategorySeriesLabelGenerator generator) {
         this.legendItemToolTipGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -1663,7 +1663,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     public void setLegendItemURLGenerator(
             CategorySeriesLabelGenerator generator) {
         this.legendItemURLGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
     
     /**

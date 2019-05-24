@@ -152,7 +152,7 @@ public class StackedXYAreaRenderer2 extends XYAreaRenderer2
      */
     public void setRoundXCoordinates(boolean round) {
         this.roundXCoordinates = round;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

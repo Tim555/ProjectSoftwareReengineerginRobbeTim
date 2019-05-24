@@ -873,7 +873,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         item.setDataset(dataset);
         item.setDatasetIndex(datasetIndex);
 
-        if (getTreatLegendShapeAsLine()) {
+        if (this.shapeManager.fireChangeEvent()) {
             item.setLineVisible(true);
             item.setLine(shape);
             item.setLinePaint(paint);

@@ -188,7 +188,7 @@ public class StackedBarRenderer extends BarRenderer
      */
     public void setRenderAsPercentages(boolean asPercentages) {
         this.renderAsPercentages = asPercentages;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
