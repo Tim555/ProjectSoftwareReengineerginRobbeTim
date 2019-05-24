@@ -789,7 +789,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
         }
 
         if (pass == 1) {
-            Shape shape = getItemShape(row, column);
+            Shape shape = this.getShapeManager().getItemShape(row, column);
             if (orientation == PlotOrientation.HORIZONTAL) {
                 shape = ShapeUtils.createTranslatedShape(shape, y1, x1);
             }

@@ -466,7 +466,7 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
                         dataArea.getMaxX(), transY));
             }
         } else if (pass == 1) {
-            Shape shape = getItemShape(series, item);
+            Shape shape = this.getShapeManager().getItemShape(series, item);
             if (orientation == PlotOrientation.HORIZONTAL) {
                 shape = ShapeUtils.createTranslatedShape(shape, transY,
                         transX);

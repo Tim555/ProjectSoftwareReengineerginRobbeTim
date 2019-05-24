@@ -562,7 +562,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
                 final int x = Math.round(coords[0]);
                 final int y = Math.round(coords[1]);
                 final Shape shape = ShapeUtils.createTranslatedShape(
-                        getItemShape(seriesIndex, i++), x,  y);
+                        this.getShapeManager().getItemShape(seriesIndex, i++), x,  y);
 
                 Paint paint;
                 if (useFillPaint) {
@@ -709,7 +709,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
         Comparable seriesKey = dataset.getSeriesKey(series);
         String label = seriesKey.toString();
         String description = label;
-        Shape shape = lookupSeriesShape(series);
+        Shape shape = this.getShapeManager().lookupSeriesShape(series);
         Paint paint;
         if (this.useFillPaint) {
             paint = lookupSeriesFillPaint(series);

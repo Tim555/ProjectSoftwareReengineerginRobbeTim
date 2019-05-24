@@ -562,7 +562,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
                 final int x = Math.round(coords[0]);
                 final int y = Math.round(coords[1]);
                 final Shape shape = ShapeUtils.createTranslatedShape(
-                        getItemShape(seriesIndex, i++), x,  y);
+                        this.getShapeManager().getItemShape(seriesIndex, i++), x,  y);
 
                 Paint paint;
                 if (useFillPaint) {

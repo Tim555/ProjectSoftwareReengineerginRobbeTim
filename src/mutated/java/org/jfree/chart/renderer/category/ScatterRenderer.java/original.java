@@ -423,7 +423,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
             double y1 = rangeAxis.valueToJava2D(value, dataArea,
                     plot.getRangeAxisEdge());
 
-            Shape shape = getItemShape(row, column);
+            Shape shape = this.getShapeManager().getItemShape(row, column);
             if (orientation == PlotOrientation.HORIZONTAL) {
                 shape = ShapeUtils.createTranslatedShape(shape, y1, x1);
             }

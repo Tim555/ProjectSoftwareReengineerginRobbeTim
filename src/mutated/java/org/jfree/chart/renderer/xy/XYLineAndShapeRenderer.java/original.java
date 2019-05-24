@@ -978,7 +978,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         double transY1 = rangeAxis.valueToJava2D(y1, dataArea, yAxisLocation);
 
         if (getItemShapeVisible(series, item)) {
-            Shape shape = getItemShape(series, item);
+            Shape shape = this.getShapeManager().getItemShape(series, item);
             if (orientation == PlotOrientation.HORIZONTAL) {
                 shape = ShapeUtils.createTranslatedShape(shape, transY1,
                         transX1);
