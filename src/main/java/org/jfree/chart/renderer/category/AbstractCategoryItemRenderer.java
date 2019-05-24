@@ -152,6 +152,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.renderer.AbstractRenderer;
+import org.jfree.chart.renderer.xy.AbstractXYItemRenderer;
 import org.jfree.chart.text.TextUtils;
 import org.jfree.chart.ui.GradientPaintTransformer;
 import org.jfree.chart.ui.LengthAdjustmentType;
@@ -901,13 +902,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
                     dataArea.getMaxX(), v);
         }
 
-        g2.setPaint(paint);
-        g2.setStroke(stroke);
-        Object saved = g2.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);
-        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, 
-                RenderingHints.VALUE_STROKE_NORMALIZE);
-        g2.draw(line);
-        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, saved);
+        drawLine(g2, paint, stroke, line);
     }
 
     /**
@@ -1053,15 +1048,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
                         g2, orientation, dataArea, line.getBounds2D(),
                         marker.getLabelOffset(), LengthAdjustmentType.EXPAND,
                         anchor);
-                Rectangle2D rect = TextUtils.calcAlignedStringBounds(label, g2, 
-                        (float) coordinates.getX(), (float) coordinates.getY(), 
-                        marker.getLabelTextAnchor());
-                g2.setPaint(marker.getLabelBackgroundColor());
-                g2.fill(rect);
-                g2.setPaint(marker.getLabelPaint());
-                TextUtils.drawAlignedString(label, g2, 
-                        (float) coordinates.getX(), (float) coordinates.getY(),
-                        marker.getLabelTextAnchor());
+                AbstractXYItemRenderer.drawLabel(g2, marker, label, coordinates);
             }
             g2.setComposite(savedComposite);
         }
@@ -1159,15 +1146,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
                         g2, orientation, dataArea, rect,
                         marker.getLabelOffset(), marker.getLabelOffsetType(),
                         anchor);
-                Rectangle2D r = TextUtils.calcAlignedStringBounds(label, 
-                        g2, (float) coords.getX(), (float) coords.getY(), 
-                        marker.getLabelTextAnchor());
-                g2.setPaint(marker.getLabelBackgroundColor());
-                g2.fill(r);
-                g2.setPaint(marker.getLabelPaint());
-                TextUtils.drawAlignedString(label, g2,
-                        (float) coords.getX(), (float) coords.getY(),
-                        marker.getLabelTextAnchor());
+                AbstractXYItemRenderer.drawLabel(g2, marker, label, coords);
             }
             g2.setComposite(savedComposite);
         }
