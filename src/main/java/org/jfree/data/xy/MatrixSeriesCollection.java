@@ -112,6 +112,11 @@ public class MatrixSeriesCollection extends AbstractXYZDataset
         if ((seriesIndex < 0) || (seriesIndex > getSeriesCount())) {
             throw new IllegalArgumentException("Index outside valid range.");
         }
+
+        if (this.seriesList.size() == 0) {
+            return new NullMatrixSeries();
+        }
+
         MatrixSeries series = (MatrixSeries) this.seriesList.get(seriesIndex);
         return series;
     }

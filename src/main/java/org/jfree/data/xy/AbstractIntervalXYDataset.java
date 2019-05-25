@@ -51,6 +51,7 @@ package org.jfree.data.xy;
 public abstract class AbstractIntervalXYDataset extends AbstractXYDataset
         implements IntervalXYDataset {
 
+
     /**
      * Returns the start x-value (as a double primitive) for an item within a
      * series.

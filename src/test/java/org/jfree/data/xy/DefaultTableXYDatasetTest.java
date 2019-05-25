@@ -103,6 +103,11 @@ public class DefaultTableXYDatasetTest {
 
         s1.add(3.0, 3.3);
         assertFalse(d1.equals(d2));
+
+
+
+        d1.setIntervalPositionFactor(0.33);
+        assertFalse(d1.equals(d2));
     }
 
     /**
@@ -176,6 +181,49 @@ public class DefaultTableXYDatasetTest {
     }
 
     /**
+     * This is a test for bug 1312066 - adding a new series should trigger a
+     * recalculation of the interval width, if it is being automatically
+     * calculated.
+     */
+    @Test
+    public void testAddSeries2() {
+        DefaultTableXYDataset d1 = new DefaultTableXYDataset(true);
+        d1.setAutoWidth(true);
+        XYSeries s1 = new XYSeries("Series 1", true, false);
+        s1.add(3.0, 1.1);
+        s1.add(7.0, 2.2);
+        d1.addSeries(s1);
+        assertEquals(3.0, d1.getXValue(0, 0), EPSILON);
+        assertEquals(7.0, d1.getXValue(0, 1), EPSILON);
+        assertEquals(1.0, d1.getStartXValue(0, 0), EPSILON);
+        assertEquals(5.0, d1.getStartXValue(0, 1), EPSILON);
+        assertEquals(5.0, d1.getEndXValue(0, 0), EPSILON);
+        assertEquals(9.0, d1.getEndXValue(0, 1), EPSILON);
+
+        // now add another series
+        XYSeries s2 = new XYSeries("Series 2", true, false);
+        s2.add(7.5, 1.1);
+        s2.add(9.0, 2.2);
+        d1.addSeries(s2);
+
+        assertEquals(3.0, d1.getXValue(1, 0), EPSILON);
+        assertEquals(7.0, d1.getXValue(1, 1), EPSILON);
+        assertEquals(7.5, d1.getXValue(1, 2), EPSILON);
+        assertEquals(9.0, d1.getXValue(1, 3), EPSILON);
+
+        assertEquals(7.25, d1.getStartXValue(1, 2), EPSILON);
+        assertEquals(8.75, d1.getStartXValue(1, 3), EPSILON);
+        assertEquals(7.75, d1.getEndXValue(1, 2), EPSILON);
+        assertEquals(9.25, d1.getEndXValue(1, 3), EPSILON);
+
+        // and check the first series too...
+        assertEquals(2.75, d1.getStartXValue(0, 0), EPSILON);
+        assertEquals(6.75, d1.getStartXValue(0, 1), EPSILON);
+        assertEquals(3.25, d1.getEndXValue(0, 0), EPSILON);
+        assertEquals(7.25, d1.getEndXValue(0, 1), EPSILON);
+    }
+
+    /**
      * Some basic checks for the getSeries() method.
      */
     @Test
@@ -204,4 +252,116 @@ public class DefaultTableXYDatasetTest {
         assertTrue(pass);
     }
 
+    @Test
+    public void checkPruneFlagTest() {
+        DefaultTableXYDataset d1 = new DefaultTableXYDataset(true);
+        assertTrue(d1.isAutoPrune());
+    }
+
+    @Test
+    public void getItemCountTest() {
+        DefaultTableXYDataset d1 = new DefaultTableXYDataset();
+        assertTrue(d1.getItemCount() == 0);
+    }
+
+    @Test
+    public void pruneTest() {
+        DefaultTableXYDataset d1 = new DefaultTableXYDataset(true);
+        d1.updateXPoints();
+    }
+
+
+    /**
+     * Remove series
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void removeSeriesNegativeTest() {
+        DefaultTableXYDataset d = new DefaultTableXYDataset();
+        d.removeSeries(-1);
+    }
+
+    /**
+     * Remove series
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void removeSeriesMaxTest() {
+        DefaultTableXYDataset d = new DefaultTableXYDataset();
+        d.removeSeries(Integer.MAX_VALUE);
+    }
+
+    /**
+     * Remove series
+     */
+    @Test
+    public void removeSeries1SerieTest() {
+        DefaultTableXYDataset d = new DefaultTableXYDataset();
+        XYSeries s1 = new XYSeries("Series 1", true, false);
+        s1.add(3.0, 1.1);
+        s1.add(7.0, 2.2);
+        d.addSeries(s1);
+
+        d.removeSeries(0);
+    }
+
+    /**
+     * Remove series
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void removeSeries2SerieWithAllowDuplicateXValueTest() {
+        DefaultTableXYDataset d = new DefaultTableXYDataset();
+        XYSeries s1 = new XYSeries("Series 1", true, true);
+        s1.add(3.0, 1.1);
+        s1.add(7.0, 2.2);
+        d.addSeries(s1);
+
+        d.removeSeries(0);
+    }
+
+    @Test
+    public void equalWrongTypeTest() {
+        DefaultTableXYDataset d = new DefaultTableXYDataset();
+        assertFalse(d.equals(4));
+    }
+
+    @Test
+    public void equalOneHasNoAutoPruningTest() {
+        DefaultTableXYDataset d = new DefaultTableXYDataset(true);
+        XYSeries s1 = new XYSeries("Series 1", true, false);
+        s1.add(3.0, 1.1);
+        s1.add(7.0, 2.2);
+        d.addSeries(s1);
+
+        DefaultTableXYDataset d2 = new DefaultTableXYDataset();
+        XYSeries s2 = new XYSeries("Series 1", true, false);
+        s2.add(3.0, 1.1);
+        s2.add(7.0, 2.2);
+        d2.addSeries(s2);
+
+        assertFalse(d.equals(d2));
+    }
+
+    @Test
+    public void domainLowerBoundTest() {
+        DefaultTableXYDataset d = new DefaultTableXYDataset(true);
+        XYSeries s1 = new XYSeries("Series 1", true, false);
+        s1.add(3.0, 1.1);
+        s1.add(7.0, 2.2);
+        d.addSeries(s1);
+
+        assertTrue(d.getDomainLowerBound(false) == 3.0);
+        assertTrue(d.getDomainUpperBound(false) == 7.0);
+    }
+
+    @Test
+    public void basicXYTest() {
+        DefaultTableXYDataset d = new DefaultTableXYDataset(true);
+        XYSeries s1 = new XYSeries("Series 1", true, false);
+        s1.add(3.0, 1.1);
+        d.addSeries(s1);
+
+        Number n = 3.0;
+        Number n2 = 1.1;
+        assertTrue(d.getX(0,  0).equals(n));
+        assertTrue(d.getY(0,  0).equals(n2));
+    }
 }

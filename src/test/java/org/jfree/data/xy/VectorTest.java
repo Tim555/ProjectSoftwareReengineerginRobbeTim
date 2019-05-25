@@ -106,4 +106,17 @@ public class VectorTest {
         assertEquals(v1, v2);
     }
 
+    @Test
+    public void testEqualItself() {
+        Vector v1 = new Vector(1.0, 2.0);
+        assertTrue(v1.equals(v1));
+    }
+
+    @Test
+    public void testEqualDifferentObject() {
+        Vector v1 = new Vector(1.0, 2.0);
+        double k = 5;
+        assertFalse(v1.equals(k));
+    }
+
 }

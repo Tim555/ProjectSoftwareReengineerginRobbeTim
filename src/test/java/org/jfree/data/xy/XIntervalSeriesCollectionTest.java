@@ -80,6 +80,8 @@ public class XIntervalSeriesCollectionTest {
         assertFalse(c1.equals(c2));
         c2.addSeries(new XIntervalSeries("Empty Series"));
         assertTrue(c1.equals(c2));
+
+        assertFalse(c1.equals(5));
     }
 
     /**
@@ -108,6 +110,162 @@ public class XIntervalSeriesCollectionTest {
     public void testPublicCloneable() {
         XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
         assertTrue(c1 instanceof PublicCloneable);
+    }
+
+    /**
+     * Test removing series
+     */
+    @Test
+    public void testRemoveAllSeries() {
+        XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
+
+        // add a series
+        XIntervalSeries s1 = new XIntervalSeries("Series");
+        s1.add(1.0, 1.1, 1.2, 1.3);
+        c1.addSeries(s1);
+
+        assertTrue(c1.getSeriesCount() == 1);
+
+        c1.removeAllSeries();
+
+        assertTrue(c1.getSeriesCount() == 0);
+
+    }
+
+    /**
+     * Test removing series
+     */
+    @Test
+    public void testRemoveAllSeries2() {
+        XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
+
+        // add a series
+        XIntervalSeries s1 = new XIntervalSeries("Series");
+        s1.add(1.0, 1.1, 1.2, 1.3);
+        c1.addSeries(s1);
+
+        assertTrue(c1.getSeriesCount() == 1);
+
+        c1.removeSeries(0);
+
+        assertTrue(c1.getSeriesCount() == 0);
+
+    }
+
+    /**
+     * Test removing series
+     */
+    @Test
+    public void testRemoveAllSeries3() {
+        XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
+
+        // add a series
+        XIntervalSeries s1 = new XIntervalSeries("Series");
+        s1.add(1.0, 1.1, 1.2, 1.3);
+        c1.addSeries(s1);
+
+        assertTrue(c1.getSeriesCount() == 1);
+
+        c1.removeSeries(s1);
+
+        assertTrue(c1.getSeriesCount() == 0);
+
+    }
+
+    /**
+     * Test removing series
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testRemoveAllSeriesNull() {
+        XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
+
+        // add a series
+        XIntervalSeries s1 = new XIntervalSeries("Series");
+        s1.add(1.0, 1.1, 1.2, 1.3);
+        c1.addSeries(s1);
+
+        assertTrue(c1.getSeriesCount() == 1);
+
+        c1.removeSeries(null);
+    }
+
+    /**
+     * Test removing series
+     */
+    @Test
+    public void testRemoveAllSeriesNotInSeries() {
+        XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
+
+        // add a series
+        XIntervalSeries s1 = new XIntervalSeries("Series");
+        XIntervalSeries s2 = new XIntervalSeries("Series2");
+        s1.add(1.0, 1.1, 1.2, 1.3);
+        c1.addSeries(s1);
+
+        assertTrue(c1.getSeriesCount() == 1);
+
+        c1.removeSeries(s2);
+        assertTrue(c1.getSeriesCount() == 1);
+    }
+
+    /**
+     * X,y getters test
+     */
+    @Test
+    public void testXYGetters() {
+        XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
+
+        // add a series
+        XIntervalSeries s1 = new XIntervalSeries("Series");
+        s1.add(1.0, 1.1, 1.2, 1.3);
+        c1.addSeries(s1);
+
+        assertTrue(c1.getX(0,0).equals(s1.getX(0)));
+        assertTrue(c1.getY(0,0).equals(s1.getYValue(0)));
+        assertTrue(c1.getXValue(0,0) == 1.0);
+        assertTrue(c1.getYValue(0,0) == 1.3);
+        assertEquals(c1.getStartX(0,0), 1.1);
+        assertEquals(c1.getEndX(0,0), 1.2);
+        assertEquals(c1.getEndY(0,0), 1.3);
+        assertEquals(c1.getStartY(0,0), 1.3);
+        assertTrue(c1.getStartXValue(0,0) == 1.1);
+        assertTrue(c1.getEndXValue(0,0) == 1.2);
+        assertTrue(c1.getItemCount(0) == 1);
+
+    }
+
+    /**
+     * Getters test
+     */
+    @Test
+    public void gettersTest() {
+        XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
+
+        // add a series
+        XIntervalSeries s1 = new XIntervalSeries("Series");
+        s1.add(1.0, 1.1, 1.2, 1.3);
+        c1.addSeries(s1);
+
+        assertTrue(c1.getSeriesKey(0) == "Series");
+    }
+
+    /**
+     * GetSeries Illegal Arguments
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void getSeriesIllegalArguments() {
+        XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
+        c1.getSeries(-10);
+    }
+
+
+    /**
+     * GetSeries Illegal Arguments
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void getSeriesIllegalArgumentsOutOfBounds() {
+        XIntervalSeriesCollection c1 = new XIntervalSeriesCollection();
+        c1.getSeries(Integer.MAX_VALUE);
     }
 
     /**

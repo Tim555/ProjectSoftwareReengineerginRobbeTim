@@ -121,4 +121,160 @@ public class MatrixSeriesCollectionTest {
         assertEquals(c1, c2);
     }
 
+    /**
+     * Constructor with null
+     */
+    @Test
+    public void testConstructorWithNullValue() {
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(null);
+    }
+
+    /**
+     * MatrixSeriesCollection with no series and get a serie should return NullMatrixSeries object
+     */
+    @Test
+    public void testNullSeriesGetSerieTestValue() {
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(null);
+        assertTrue(matrixSeriesCollection.getSeries(0) instanceof NullMatrixSeries);
+    }
+
+
+    /**
+     * MatrixSeriesCollection serie get added
+     */
+    @Test
+    public void testSeriesGetSerieTestValue() {
+        MatrixSeries matrixSeries = new MatrixSeries("Series", 5, 5);
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(matrixSeries);
+
+        assertTrue(matrixSeriesCollection.getSeries(0).equals(matrixSeries));
+    }
+
+    /**
+     * getItemCount Test
+     */
+    @Test
+    public void testGetItemCount() {
+        MatrixSeries matrixSeries = new MatrixSeries("Series", 5, 5);
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(matrixSeries);
+
+        assertTrue(matrixSeriesCollection.getItemCount(0) == 25);
+    }
+
+    /**
+     * GetSeries Test negative
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetSeriesNegativeNumber() {
+        MatrixSeries matrixSeries = new MatrixSeries("Series", 5, 5);
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(matrixSeries);
+
+        matrixSeriesCollection.getSeries(-1);
+    }
+
+    /**
+     * GetSeries Test max
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetSeriesmaxNumber() {
+        MatrixSeries matrixSeries = new MatrixSeries("Series", 5, 5);
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(matrixSeries);
+
+        matrixSeriesCollection.getSeries(Integer.MAX_VALUE);
+    }
+
+    /**
+     * Test equals method
+     */
+    @Test
+    public void testGetSeries() {
+        MatrixSeries matrixSeries = new MatrixSeries("Series", 5, 5);
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(matrixSeries);
+
+        // Equals itself
+        assertTrue(matrixSeriesCollection.equals(matrixSeriesCollection));
+
+        // Equals null
+        assertFalse(matrixSeriesCollection.equals(null));
+
+        // Equals Wrong Type
+        assertFalse(matrixSeriesCollection.equals(5));
+    }
+
+    /**
+     * Test Remove series method
+     */
+    @Test
+    public void testRemoveSeries() {
+        MatrixSeries matrixSeries = new MatrixSeries("Series", 5, 5);
+        MatrixSeries matrixSeries2 = new MatrixSeries("Series2", 5, 5);
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(matrixSeries);
+        MatrixSeriesCollection matrixSeriesCollection2 = new MatrixSeriesCollection(matrixSeries);
+        MatrixSeriesCollection matrixSeriesCollection3 = new MatrixSeriesCollection(matrixSeries);
+        MatrixSeriesCollection matrixSeriesCollection4 = new MatrixSeriesCollection(matrixSeries);
+
+        matrixSeriesCollection.removeAllSeries();
+        matrixSeriesCollection2.removeSeries(0);
+        matrixSeriesCollection3.removeSeries(matrixSeries);
+        matrixSeriesCollection4.removeSeries(matrixSeries2);
+
+        assertTrue(matrixSeriesCollection.getSeriesCount() == 0);
+
+        assertTrue(matrixSeriesCollection2.getSeriesCount() == 0);
+
+        assertTrue(matrixSeriesCollection3.getSeriesCount() == 0);
+
+        assertTrue(matrixSeriesCollection4.getSeriesCount() == 1);
+    }
+
+    /**
+     * Test Remove series method
+     */
+    @Test
+    public void testHashCode() {
+        MatrixSeries matrixSeries = new MatrixSeries("Series", 5, 5);
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(null);
+        MatrixSeriesCollection matrixSeriesCollection2 = new MatrixSeriesCollection(null);
+
+        assertTrue(matrixSeriesCollection.hashCode() == matrixSeriesCollection2.hashCode());
+    }
+
+    /**
+     * removeSeries test wrong parameters
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void removeSeriesWrongParameters() {
+        MatrixSeries matrixSeries = new MatrixSeries("Series", 5, 5);
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(matrixSeries);
+        matrixSeriesCollection.removeSeries(-5);
+    }
+
+    /**
+     * removeSeries test wrong parameters
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void removeSeriesWrongParameters2() {
+        MatrixSeries matrixSeries = new MatrixSeries("Series", 5, 5);
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(matrixSeries);
+        matrixSeriesCollection.removeSeries(Integer.MAX_VALUE);
+    }
+
+    /**
+     * Getters test
+     */
+    @Test
+    public void testGetters() {
+        MatrixSeries matrixSeries = new MatrixSeries("Series", 5, 5);
+
+        MatrixSeriesCollection matrixSeriesCollection = new MatrixSeriesCollection(matrixSeries);
+
+        Number i = 1;
+        assertEquals(matrixSeriesCollection.getX(0, 1), i);
+        assertEquals(matrixSeriesCollection.getY(0, 1), 0);
+        assertEquals(matrixSeriesCollection.getZ(0, 1), 0.0);
+
+        assertTrue(matrixSeriesCollection.getSeriesKey(0) == "Series");
+
+    }
+
 }

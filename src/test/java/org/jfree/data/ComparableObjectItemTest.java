@@ -90,6 +90,9 @@ public class ComparableObjectItemTest {
         assertNotEquals(item1, item2);
         item2 = new ComparableObjectItem(new Integer(2), null);
         assertEquals(item1, item2);
+
+        item1 = new ComparableObjectItem(new Integer(2), "XYZ");
+        item1.equals(item1);
     }
 
     /**

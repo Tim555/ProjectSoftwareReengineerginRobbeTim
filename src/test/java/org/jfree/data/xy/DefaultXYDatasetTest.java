@@ -225,4 +225,127 @@ public class DefaultXYDatasetTest {
         return d;
     }
 
+    /**
+     * Remove series
+     */
+    @Test
+    public void removeSeriesTest() {
+        DefaultXYDataset d = new DefaultXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {4.0, 5.0, 6.0};
+        double[][] data1 = new double[][] {x1, y1};
+        d.addSeries("S1", data1);
+
+        d.removeSeries("S1");
+    }
+
+    /**
+     * Data null
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void addSeriesNullTest() {
+        DefaultXYDataset d = new DefaultXYDataset();
+        d.addSeries("S1", null);
+    }
+
+    /**
+     * Data length not 2
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void dateLengthNotTwoTest() {
+        DefaultXYDataset d = new DefaultXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1};
+        d.addSeries("S1", data1);
+    }
+
+    /**
+     * Two series not same size
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void dateLengthNotSameSizeTest() {
+        DefaultXYDataset d = new DefaultXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0, 4.0};
+        double[][] data1 = new double[][] {x1, y1};
+        d.addSeries("S1", data1);
+    }
+
+    /**
+     * Two series not same size
+     */
+    @Test
+    public void equalsTest() {
+        DefaultXYDataset d = new DefaultXYDataset();
+        DefaultXYDataset d2 = new DefaultXYDataset();
+
+        d.equals(d2);
+    }
+
+    /**
+     * Equals itself test
+     */
+    @Test
+    public void equalsItselfTest() {
+        DefaultXYDataset d = new DefaultXYDataset();
+        assertTrue(d.equals(d));
+    }
+
+    /**
+     * Equals other objecttype
+     */
+    @Test
+    public void equalsWrongObjectTest() {
+        DefaultXYDataset d = new DefaultXYDataset();
+        Double k = new Double(50);
+        assertFalse(d.equals(k));
+    }
+
+    /**
+     * Two series not same size
+     */
+    @Test
+    public void equalsWrongSize() {
+        DefaultXYDataset d1 = new DefaultXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1, y1};
+        d1.addSeries("S1", data1);
+
+        DefaultXYDataset d2 = new DefaultXYDataset();
+        double[] x2 = new double[] {1.0, 2.0, 3.0};
+        double[] y2= new double[] {1.0, 2.0, 3.1};
+        double[][] data2 = new double[][] {x2, y2};
+        d2.addSeries("S1", data2);
+        assertFalse(d1.equals(d2));
+    }
+
+    @Test
+    public void hashcodeTest() {
+        DefaultXYDataset d1 = new DefaultXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1, y1};
+        d1.addSeries("S1", data1);
+
+        d1.hashCode();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getItemCountNegativeNumberTest() {
+        DefaultXYDataset d1 = new DefaultXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1, y1};
+        d1.getItemCount(-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getItemCountLargerThanSeriesNumberTest() {
+        DefaultXYDataset d1 = new DefaultXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] y1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1, y1};
+        d1.getItemCount(Integer.MAX_VALUE);
+    }
 }

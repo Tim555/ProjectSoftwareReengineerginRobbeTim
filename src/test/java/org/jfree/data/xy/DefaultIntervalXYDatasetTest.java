@@ -359,4 +359,42 @@ public class DefaultIntervalXYDatasetTest {
         return d;
     }
 
+
+    /**
+     * Data null
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void addSeriesNullTest() {
+        DefaultIntervalXYDataset d = new DefaultIntervalXYDataset();
+        d.addSeries("S1", null);
+    }
+
+
+    /**
+     * Data length not 6
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void dateLengthNotTwoTest() {
+        DefaultIntervalXYDataset d = new DefaultIntervalXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[][] data1 = new double[][] {x1};
+        d.addSeries("S1", data1);
+    }
+
+    /**
+     * Two series not same size
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void dateLengthNotSameSizeTest() {
+        DefaultIntervalXYDataset d = new DefaultIntervalXYDataset();
+        double[] x1 = new double[] {1.0, 2.0, 3.0};
+        double[] x2 = new double[] {1.0, 2.0, 3.0};
+        double[] x3 = new double[] {1.0, 2.0, 3.0};
+        double[] x4 = new double[] {1.0, 2.0, 3.0};
+        double[] x5 = new double[] {1.0, 2.0, 3.0};
+        double[] x6 = new double[] {1.0, 2.0, 3.0, 4.0};
+        double[][] data1 = new double[][] {x1, x2, x3, x4, x5, x6};
+        d.addSeries("S1", data1);
+    }
+
 }
