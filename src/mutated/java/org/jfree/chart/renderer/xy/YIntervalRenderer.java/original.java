@@ -207,7 +207,7 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
         Stroke s = getItemStroke(series, item);
 
         Line2D line = null;
-        Shape shape = getItemShape(series, item);
+        Shape shape = this.getShapeManager().getItemShape(series, item);
         Shape top = null;
         Shape bottom = null;
         PlotOrientation orientation = plot.getOrientation();

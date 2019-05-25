@@ -191,7 +191,7 @@ public class XYAreaRenderer2 extends AbstractXYItemRenderer
      */
     public void setOutline(boolean show) {
         this.showOutline = show;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -216,7 +216,7 @@ public class XYAreaRenderer2 extends AbstractXYItemRenderer
     public void setLegendArea(Shape area) {
         Args.nullNotPermitted(area, "area");
         this.legendArea = area;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

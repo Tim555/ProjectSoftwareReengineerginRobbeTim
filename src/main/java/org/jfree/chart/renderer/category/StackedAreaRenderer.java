@@ -147,7 +147,7 @@ public class StackedAreaRenderer extends AreaRenderer
      */
     public void setRenderAsPercentages(boolean asPercentages) {
         this.renderAsPercentages = asPercentages;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

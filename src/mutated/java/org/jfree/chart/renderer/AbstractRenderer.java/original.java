@@ -1589,7 +1589,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public Shape lookupSeriesShape(int series) {
 
-        Shape result = getSeriesShape(series);
+        Shape result = this.getShapeManager().getSeriesShapeseries);
         if (result == null && this.autoPopulateSeriesShape) {
             DrawingSupplier supplier = getDrawingSupplier();
             if (supplier != null) {

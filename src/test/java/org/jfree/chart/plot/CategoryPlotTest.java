@@ -814,11 +814,11 @@ public class CategoryPlotTest {
         assertTrue(datasetA.hasListener(p2));
         assertTrue(domainAxisA.hasListener(p2));
         assertTrue(rangeAxisA.hasListener(p2));
-        assertTrue(rendererA.hasListener(p2));
+        assertTrue(rendererA.getListenerManager().hasListener(p2));
         assertTrue(datasetB.hasListener(p2));
         assertTrue(domainAxisB.hasListener(p2));
         assertTrue(rangeAxisB.hasListener(p2));
-        assertTrue(rendererB.hasListener(p2));
+        assertTrue(rendererB.getListenerManager().hasListener(p2));
     }
 
     /**

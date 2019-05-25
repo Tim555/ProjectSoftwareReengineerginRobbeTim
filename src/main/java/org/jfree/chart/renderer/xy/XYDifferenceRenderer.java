@@ -203,7 +203,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
     public void setPositivePaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.positivePaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -227,7 +227,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
     public void setNegativePaint(Paint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.negativePaint = paint;
-        notifyListeners(new RendererChangeEvent(this));
+        this.getListenerManager().notifyListeners(new RendererChangeEvent(this));
     }
 
     /**
@@ -253,7 +253,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      */
     public void setShapesVisible(boolean flag) {
         this.shapesVisible = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -278,7 +278,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
     public void setLegendLine(Shape line) {
         Args.nullNotPermitted(line, "line");
         this.legendLine = line;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -308,7 +308,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      */
     public void setRoundXCoordinates(boolean round) {
         this.roundXCoordinates = round;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -890,7 +890,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
                 l_rangeAxisLocation);
 
         if (getShapesVisible()) {
-            Shape l_shape = getItemShape(x_series, x_item);
+            Shape l_shape = this.getShapeManager().getItemShape(x_series, x_item);
             if (l_orientation == PlotOrientation.HORIZONTAL) {
                 l_shape = ShapeUtils.createTranslatedShape(l_shape,
                         l_y1, l_x1);

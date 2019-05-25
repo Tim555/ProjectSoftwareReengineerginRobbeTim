@@ -263,7 +263,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
      */
     public void setDrawOutlineWhenFilled(boolean drawOutlineWhenFilled) {
         this.drawOutlineWhenFilled = drawOutlineWhenFilled;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -289,7 +289,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
     public void setFillComposite(Composite composite) {
         Args.nullNotPermitted(composite, "composite");
         this.fillComposite = composite;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -315,7 +315,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
      */
     public void setShapesVisible(boolean visible) {
         this.shapesVisible = visible;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -341,7 +341,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
      */
     public void setConnectFirstAndLastPoint(boolean connect) {
         this.connectFirstAndLastPoint = connect;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -412,7 +412,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
      */
     public void setUseFillPaint(boolean flag) {
         this.useFillPaint = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -437,7 +437,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
     public void setLegendLine(Shape line) {
         Args.nullNotPermitted(line, "line");
         this.legendLine = line;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -562,7 +562,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
                 final int x = Math.round(coords[0]);
                 final int y = Math.round(coords[1]);
                 final Shape shape = ShapeUtils.createTranslatedShape(
-                        getItemShape(seriesIndex, i++), x,  y);
+                        this.getShapeManager().getItemShape(seriesIndex, i++), x,  y);
 
                 Paint paint;
                 if (useFillPaint) {
@@ -709,7 +709,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
         Comparable seriesKey = dataset.getSeriesKey(series);
         String label = seriesKey.toString();
         String description = label;
-        Shape shape = lookupSeriesShape(series);
+        Shape shape = this.getShapeManager().lookupSeriesShape(series);
         Paint paint;
         if (this.useFillPaint) {
             paint = lookupSeriesFillPaint(series);
@@ -779,7 +779,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
     public void setSeriesToolTipGenerator(int series,
             XYToolTipGenerator generator) {
         this.toolTipGeneratorList.set(series, generator);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -805,7 +805,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
     @Override
     public void setBaseToolTipGenerator(XYToolTipGenerator generator) {
         this.baseToolTipGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -830,7 +830,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
     @Override
     public void setURLGenerator(XYURLGenerator urlGenerator) {
         this.urlGenerator = urlGenerator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -857,7 +857,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
     public void setLegendItemToolTipGenerator(
             XYSeriesLabelGenerator generator) {
         this.legendItemToolTipGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -883,7 +883,7 @@ public class DefaultPolarItemRenderer extends AbstractRenderer
      */
     public void setLegendItemURLGenerator(XYSeriesLabelGenerator generator) {
         this.legendItemURLGenerator = generator;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

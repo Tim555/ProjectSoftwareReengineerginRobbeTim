@@ -305,7 +305,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setBaseShapesVisible(boolean flag) {
         if (this.baseShapesVisible != flag) {
             this.baseShapesVisible = flag;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -361,7 +361,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      */
     public void setSeriesShapesFilled(int series, Boolean flag) {
         this.seriesShapesFilled.setBoolean(series, flag);
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -410,7 +410,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setPlotLines(boolean flag) {
         if (this.plotLines != flag) {
             this.plotLines = flag;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -436,7 +436,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setGapThresholdType(UnitType thresholdType) {
         Args.nullNotPermitted(thresholdType, "thresholdType");
         this.gapThresholdType = thresholdType;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -460,7 +460,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      */
     public void setGapThreshold(double t) {
         this.gapThreshold = t;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -486,7 +486,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setPlotImages(boolean flag) {
         if (this.plotImages != flag) {
             this.plotImages = flag;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -512,7 +512,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setPlotDiscontinuous(boolean flag) {
         if (this.plotDiscontinuous != flag) {
             this.plotDiscontinuous = flag;
-            fireChangeEvent();
+            this.getListenerManager().fireChangeEvent();
         }
     }
 
@@ -562,7 +562,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setLegendLine(Shape line) {
         Args.nullNotPermitted(line, "line");
         this.legendLine = line;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -863,7 +863,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
 
         if (getBaseShapesVisible()) {
 
-            Shape shape = getItemShape(series, item);
+            Shape shape = this.getShapeManager().getItemShape(series, item);
             if (orientation == PlotOrientation.HORIZONTAL) {
                 shape = ShapeUtils.createTranslatedShape(shape, transY1,
                         transX1);

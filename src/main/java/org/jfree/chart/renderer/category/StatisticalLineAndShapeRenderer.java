@@ -156,7 +156,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
      */
     public void setErrorIndicatorPaint(Paint paint) {
         this.errorIndicatorPaint = paint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -186,7 +186,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
      */
     public void setErrorIndicatorStroke(Stroke stroke) {
         this.errorIndicatorStroke = stroke;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -331,7 +331,7 @@ public class StatisticalLineAndShapeRenderer extends LineAndShapeRenderer
 
         Shape hotspot = null;
         if (pass == 1 && getItemShapeVisible(row, column)) {
-            Shape shape = getItemShape(row, column);
+            Shape shape = this.getShapeManager().getItemShape(row, column);
             if (orientation == PlotOrientation.HORIZONTAL) {
                 shape = ShapeUtils.createTranslatedShape(shape, y1, x1);
             }

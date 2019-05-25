@@ -143,7 +143,7 @@ public class XYDotRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Requires w > 0.");
         }
         this.dotWidth = w;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -174,7 +174,7 @@ public class XYDotRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Requires h > 0.");
         }
         this.dotHeight = h;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -203,7 +203,7 @@ public class XYDotRenderer extends AbstractXYItemRenderer
     public void setLegendShape(Shape shape) {
         Args.nullNotPermitted(shape, "shape");
         this.legendShape = shape;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**

@@ -204,7 +204,7 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
      */
     public void setOutline(boolean show) {
         this.showOutline = show;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -229,7 +229,7 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
      */
     public void setShapesVisible(boolean flag) {
         this.shapesVisible = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -253,7 +253,7 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
      */
     public void setShapesFilled(boolean filled) {
         this.shapesFilled = filled;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -278,7 +278,7 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
      */
     public void setPlotArea(boolean flag) {
         this.plotArea = flag;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -307,7 +307,7 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
      */
     public void setRangeBase(double val) {
         this.rangeBase = val;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -343,7 +343,7 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
                      "Requires stepPoint in [0.0;1.0]");
         }
         this.stepPoint = stepPoint;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -493,7 +493,7 @@ public class XYStepAreaRenderer extends AbstractXYItemRenderer
             }
 
             if (getShapesVisible()) {
-                shape = getItemShape(series, item);
+                shape = this.getShapeManager().getItemShape(series, item);
                 if (orientation == PlotOrientation.VERTICAL) {
                     shape = ShapeUtils.createTranslatedShape(shape,
                             transX1, transY1);

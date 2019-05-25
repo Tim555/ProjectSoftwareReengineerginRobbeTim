@@ -198,15 +198,15 @@ public class AbstractRendererTest {
         assertTrue(r1.equals(r2));
 
         // shapeList
-        r1.setSeriesShape(1, new Ellipse2D.Double(1, 2, 3, 4));
+        r1.getShapeManager().setSeriesShape(1, new Ellipse2D.Double(1, 2, 3, 4));
         assertFalse(r1.equals(r2));
-        r2.setSeriesShape(1, new Ellipse2D.Double(1, 2, 3, 4));
+        r2.getShapeManager().setSeriesShape(1, new Ellipse2D.Double(1, 2, 3, 4));
         assertTrue(r1.equals(r2));
 
         // defaultShape
-        r1.setDefaultShape(new Ellipse2D.Double(1, 2, 3, 4));
+        r1.getShapeManager().setDefaultShape(new Ellipse2D.Double(1, 2, 3, 4));
         assertFalse(r1.equals(r2));
-        r2.setDefaultShape(new Ellipse2D.Double(1, 2, 3, 4));
+        r2.getShapeManager().setDefaultShape(new Ellipse2D.Double(1, 2, 3, 4));
         assertTrue(r1.equals(r2));
 
         // itemLabelsVisibleList
@@ -418,7 +418,7 @@ public class AbstractRendererTest {
         LineAndShapeRenderer r1 = new LineAndShapeRenderer();
         Rectangle2D shape = new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0);
         Rectangle2D baseShape = new Rectangle2D.Double(11.0, 12.0, 13.0, 14.0);
-        r1.setDefaultShape(baseShape);
+        r1.getShapeManager().setDefaultShape(baseShape);
         r1.setDefaultLegendShape(new Rectangle(4, 3, 2, 1));
         r1.setDefaultLegendTextFont(new Font("Dialog", Font.PLAIN, 3));
         r1.setDefaultLegendTextPaint(new Color(1, 2, 3));
@@ -471,12 +471,12 @@ public class AbstractRendererTest {
 
         baseShape.setRect(4.0, 3.0, 2.0, 1.0);
         assertFalse(r1.equals(r2));
-        r2.setDefaultShape(new Rectangle2D.Double(4.0, 3.0, 2.0, 1.0));
+        r2.getShapeManager().setDefaultShape(new Rectangle2D.Double(4.0, 3.0, 2.0, 1.0));
         assertTrue(r1.equals(r2));
 
-        r1.setSeriesShape(0, new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0));
+        r1.getShapeManager().setSeriesShape(0, new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0));
         assertFalse(r1.equals(r2));
-        r2.setSeriesShape(0, new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0));
+        r2.getShapeManager().setSeriesShape(0, new Rectangle2D.Double(1.0, 2.0, 3.0, 4.0));
         assertTrue(r1.equals(r2));
 
         r1.setSeriesItemLabelsVisible(0, Boolean.TRUE);
@@ -570,10 +570,10 @@ public class AbstractRendererTest {
         assertTrue(r1.equals(r2));
 
         MyRendererChangeListener listener = new MyRendererChangeListener();
-        r2.addChangeListener(listener);
+        r2.getListenerManager().addChangeListener(listener);
         r2.setDefaultPaint(Color.RED);
         assertTrue(listener.lastEvent.getRenderer() == r2);
-        assertFalse(r1.hasListener(listener));
+        assertFalse(r1.getListenerManager().hasListener(listener));
     }
 
     /**
@@ -585,7 +585,7 @@ public class AbstractRendererTest {
         RendererChangeDetector detector = new RendererChangeDetector();
         BarRenderer r1 = new BarRenderer();  // have to use a subclass of
                                              // AbstractRenderer
-        r1.addChangeListener(detector);
+        r1.getListenerManager().addChangeListener(detector);
 
         // PAINT
         detector.setNotified(false);
@@ -625,11 +625,11 @@ public class AbstractRendererTest {
 
         // SHAPE
         detector.setNotified(false);
-        r1.setSeriesShape(0, new Rectangle2D.Float());
+        r1.getShapeManager().setSeriesShape(0, new Rectangle2D.Float());
         assertTrue(detector.getNotified());
 
         detector.setNotified(false);
-        r1.setDefaultShape(new Rectangle2D.Float());
+        r1.getShapeManager().setDefaultShape(new Rectangle2D.Float());
         assertTrue(detector.getNotified());
 
         // ITEM_LABELS_VISIBLE
@@ -698,7 +698,7 @@ public class AbstractRendererTest {
         BarRenderer r2 = (BarRenderer) TestUtils.serialised(r1);
         assertEquals(r1, r2);
         try {
-            r2.notifyListeners(new RendererChangeEvent(r2));
+            r2.getListenerManager().notifyListeners(new RendererChangeEvent(r2));
         }
         catch (NullPointerException e) {
             fail("No exception should be thrown.");  // failed
@@ -716,7 +716,7 @@ public class AbstractRendererTest {
         assertEquals(false, r.getAutoPopulateSeriesOutlinePaint());
         assertEquals(true, r.getAutoPopulateSeriesStroke());
         assertEquals(false, r.getAutoPopulateSeriesOutlineStroke());
-        assertEquals(true, r.getAutoPopulateSeriesShape());
+        assertEquals(true, r.getShapeManager().getAutoPopulateSeriesShape());
     }
 
     /**

@@ -326,7 +326,7 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
      */
     public void setOutline(boolean show) {
         this.showOutline = show;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -347,7 +347,7 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
     public void setLegendArea(Shape area) {
         Args.nullNotPermitted(area, "area");
         this.legendArea = area;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -373,7 +373,7 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
      */
     public void setUseFillPaint(boolean use) {
         this.useFillPaint = use;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -398,7 +398,7 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
     public void setGradientTransformer(GradientPaintTransformer transformer) {
         Args.nullNotPermitted(transformer, "transformer");
         this.gradientTransformer = transformer;
-        fireChangeEvent();
+        this.getListenerManager().fireChangeEvent();
     }
 
     /**
@@ -566,7 +566,7 @@ public class XYAreaRenderer extends AbstractXYItemRenderer
 
         Shape shape;
         if (getPlotShapes()) {
-            shape = getItemShape(series, item);
+            shape = this.getShapeManager().getItemShape(series, item);
             if (orientation == PlotOrientation.VERTICAL) {
                 shape = ShapeUtils.createTranslatedShape(shape, transX1,
                         transY1);

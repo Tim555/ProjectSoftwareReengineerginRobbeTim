@@ -117,6 +117,7 @@ import org.jfree.chart.plot.CategoryMarker;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotRenderingInfo;
+import org.jfree.chart.renderer.ListenerManager;
 import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.chart.urls.CategoryURLGenerator;
 import org.jfree.data.Range;
@@ -139,6 +140,11 @@ import org.jfree.data.category.CategoryDataset;
  * non-{@code null} values.
  */
 public interface CategoryItemRenderer extends LegendItemSource {
+
+    /**
+     * Get ListenerManager
+     */
+    public ListenerManager getListenerManager();
 
     /**
      * Returns the number of passes through the dataset required by the
@@ -172,23 +178,6 @@ public interface CategoryItemRenderer extends LegendItemSource {
      */
     public void setPlot(CategoryPlot plot);
 
-    /**
-     * Adds a change listener.
-     *
-     * @param listener  the listener.
-     *
-     * @see #removeChangeListener(RendererChangeListener)
-     */
-    public void addChangeListener(RendererChangeListener listener);
-
-    /**
-     * Removes a change listener.
-     *
-     * @param listener  the listener.
-     *
-     * @see #addChangeListener(RendererChangeListener)
-     */
-    public void removeChangeListener(RendererChangeListener listener);
 
     /**
      * Returns the range of values the renderer requires to display all the
@@ -677,60 +666,6 @@ public interface CategoryItemRenderer extends LegendItemSource {
 
     //// SHAPE /////////////////////////////////////////////////////////////////
 
-    /**
-     * Returns a shape used to represent a data item.
-     *
-     * @param row  the row (or series) index (zero-based).
-     * @param column  the column (or category) index (zero-based).
-     *
-     * @return The shape (never {@code null}).
-     */
-    public Shape getItemShape(int row, int column);
-
-    /**
-     * Returns a shape used to represent the items in a series.
-     *
-     * @param series  the series (zero-based index).
-     *
-     * @return The shape (possibly {@code null}).
-     *
-     * @see #setSeriesShape(int, Shape)
-     */
-    public Shape getSeriesShape(int series);
-
-    /**
-     * Sets the shape used for a series and sends a {@link RendererChangeEvent}
-     * to all registered listeners.
-     *
-     * @param series  the series index (zero-based).
-     * @param shape  the shape ({@code null} permitted).
-     *
-     * @see #getSeriesShape(int)
-     */
-    public void setSeriesShape(int series, Shape shape);
-
-    public void setSeriesShape(int series, Shape shape, boolean notify);
-
-    /**
-     * Returns the default shape.
-     *
-     * @return The shape (never {@code null}).
-     *
-     * @see #setDefaultShape(Shape)
-     */
-    public Shape getDefaultShape();
-
-    /**
-     * Sets the default shape and sends a {@link RendererChangeEvent} to all
-     * registered listeners.
-     *
-     * @param shape  the shape ({@code null} not permitted).
-     *
-     * @see #getDefaultShape()
-     */
-    public void setDefaultShape(Shape shape);
-
-    public void setDefaultShape(Shape shape, boolean notify);
 
     // ITEM LABELS VISIBLE
 

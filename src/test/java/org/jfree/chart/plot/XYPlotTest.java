@@ -573,7 +573,7 @@ public class XYPlotTest {
 
         // verify that the plot is listening to the cloned renderer
         XYLineAndShapeRenderer r2 = (XYLineAndShapeRenderer) p2.getRenderer();
-        assertTrue(r2.hasListener(p2));
+        assertTrue(r2.getListenerManager().hasListener(p2));
     }
 
     /**
@@ -823,11 +823,11 @@ public class XYPlotTest {
         assertTrue(datasetA.hasListener(p2));
         assertTrue(domainAxisA.hasListener(p2));
         assertTrue(rangeAxisA.hasListener(p2));
-        assertTrue(rendererA.hasListener(p2));
+        assertTrue(rendererA.getListenerManager().hasListener(p2));
         assertTrue(datasetB.hasListener(p2));
         assertTrue(domainAxisB.hasListener(p2));
         assertTrue(rangeAxisB.hasListener(p2));
-        assertTrue(rendererB.hasListener(p2));
+        assertTrue(rendererB.getListenerManager().hasListener(p2));
     }
 
     /**
