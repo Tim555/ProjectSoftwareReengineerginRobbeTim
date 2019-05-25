@@ -106,11 +106,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.EventListener;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.event.EventListenerList;
 
@@ -2468,23 +2465,36 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /** The opposite offset. */
     private static final double OPP = Math.sin(Math.PI / 6.0);
 
+
     /**
-     * Calculates the item label anchor point.
-     *
-     * @param anchor  the anchor.
-     * @param x  the x coordinate.
-     * @param y  the y coordinate.
-     * @param orientation  the plot orientation.
-     *
-     * @return The anchor point (never {@code null}).
+     * CalculateLabelAncorPoint Inside helper method
      */
-    protected Point2D calculateLabelAnchorPoint(ItemLabelAnchor anchor,
-            double x, double y, PlotOrientation orientation) {
+    private boolean calculateLabelAnchorPointInside(ItemLabelAnchor anchor) {
+        List<ItemLabelAnchor> list = new ArrayList<ItemLabelAnchor>();
+        list.add(ItemLabelAnchor.INSIDE1);
+        list.add(ItemLabelAnchor.INSIDE2);
+        list.add(ItemLabelAnchor.INSIDE3);
+        list.add(ItemLabelAnchor.INSIDE4);
+        list.add(ItemLabelAnchor.INSIDE5);
+        list.add(ItemLabelAnchor.INSIDE6);
+        list.add(ItemLabelAnchor.INSIDE7);
+        list.add(ItemLabelAnchor.INSIDE8);
+        list.add(ItemLabelAnchor.INSIDE9);
+        list.add(ItemLabelAnchor.INSIDE10);
+        list.add(ItemLabelAnchor.INSIDE11);
+        list.add(ItemLabelAnchor.INSIDE12);
+
+        return list.contains(anchor);
+    }
+
+    /**
+     *
+     */
+    private Point2D calculateInsideLabelAnchorPoint(ItemLabelAnchor anchor, double x, double y) {
+
         Point2D result = null;
-        if (anchor == ItemLabelAnchor.CENTER) {
-            result = new Point2D.Double(x, y);
-        }
-        else if (anchor == ItemLabelAnchor.INSIDE1) {
+
+        if (anchor == ItemLabelAnchor.INSIDE1) {
             result = new Point2D.Double(x + OPP * this.itemLabelAnchorOffset,
                     y - ADJ * this.itemLabelAnchorOffset);
         }
@@ -2528,7 +2538,39 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         else if (anchor == ItemLabelAnchor.INSIDE12) {
             result = new Point2D.Double(x, y - this.itemLabelAnchorOffset);
         }
-        else if (anchor == ItemLabelAnchor.OUTSIDE1) {
+
+        return result;
+    }
+
+    /**
+     * CalculateLabelAncorPoint Inside helper method
+     */
+    private boolean calculateLabelAnchorPointOutside(ItemLabelAnchor anchor) {
+        List<ItemLabelAnchor> list = new ArrayList<ItemLabelAnchor>();
+        list.add(ItemLabelAnchor.OUTSIDE1);
+        list.add(ItemLabelAnchor.OUTSIDE2);
+        list.add(ItemLabelAnchor.OUTSIDE3);
+        list.add(ItemLabelAnchor.OUTSIDE4);
+        list.add(ItemLabelAnchor.OUTSIDE5);
+        list.add(ItemLabelAnchor.OUTSIDE6);
+        list.add(ItemLabelAnchor.OUTSIDE7);
+        list.add(ItemLabelAnchor.OUTSIDE8);
+        list.add(ItemLabelAnchor.OUTSIDE9);
+        list.add(ItemLabelAnchor.OUTSIDE10);
+        list.add(ItemLabelAnchor.OUTSIDE11);
+        list.add(ItemLabelAnchor.OUTSIDE12);
+
+        return list.contains(anchor);
+    }
+
+    /**
+     *
+     */
+    private Point2D calculateOutsideLabelAnchorPoint(ItemLabelAnchor anchor, double x, double y) {
+
+        Point2D result = null;
+
+        if (anchor == ItemLabelAnchor.OUTSIDE1) {
             result = new Point2D.Double(
                     x + 2.0 * OPP * this.itemLabelAnchorOffset,
                     y - 2.0 * ADJ * this.itemLabelAnchorOffset);
@@ -2577,12 +2619,37 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         }
         else if (anchor == ItemLabelAnchor.OUTSIDE11) {
             result = new Point2D.Double(
-                x - 2.0 * OPP * this.itemLabelAnchorOffset,
-                y - 2.0 * ADJ * this.itemLabelAnchorOffset);
+                    x - 2.0 * OPP * this.itemLabelAnchorOffset,
+                    y - 2.0 * ADJ * this.itemLabelAnchorOffset);
         }
         else if (anchor == ItemLabelAnchor.OUTSIDE12) {
             result = new Point2D.Double(x,
                     y - 2.0 * this.itemLabelAnchorOffset);
+        }
+        return result;
+    }
+
+    /**
+     * Calculates the item label anchor point.
+     *
+     * @param anchor  the anchor.
+     * @param x  the x coordinate.
+     * @param y  the y coordinate.
+     * @param orientation  the plot orientation.
+     *
+     * @return The anchor point (never {@code null}).
+     */
+    protected Point2D calculateLabelAnchorPoint(ItemLabelAnchor anchor,
+            double x, double y, PlotOrientation orientation) {
+        Point2D result = null;
+        if (anchor == ItemLabelAnchor.CENTER) {
+            result = new Point2D.Double(x, y);
+        }
+        else if (this.calculateLabelAnchorPointInside(anchor)) {
+            result = this.calculateInsideLabelAnchorPoint(anchor, x, y);
+        }
+        else if (this.calculateLabelAnchorPointOutside(anchor)) {
+            result = this.calculateOutsideLabelAnchorPoint(anchor, x, y);
         }
         return result;
     }
