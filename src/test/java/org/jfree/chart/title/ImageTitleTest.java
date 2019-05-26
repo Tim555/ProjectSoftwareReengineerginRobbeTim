@@ -57,6 +57,9 @@ import org.junit.Test;
  */
 public class ImageTitleTest {
 
+    @Test
+    public void initialize() {}
+
 //    /**
 //     * Check that the equals() method distinguishes all fields.
 //     */
