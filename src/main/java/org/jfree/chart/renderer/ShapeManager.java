@@ -2,6 +2,7 @@ package org.jfree.chart.renderer;
 
 import org.jfree.chart.event.RendererChangeEvent;
 import org.jfree.chart.plot.DrawingSupplier;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.util.*;
 
 import java.awt.*;
@@ -419,6 +420,9 @@ public class ShapeManager implements Cloneable, Serializable {
     }
 
 
+
+
+
     /**
      * Returns an independent copy of the ShapeManager.
      *
@@ -472,4 +476,42 @@ public class ShapeManager implements Cloneable, Serializable {
         this.defaultShape = SerialUtils.readShape(stream);
         this.defaultLegendShape = SerialUtils.readShape(stream);
     }
+
+    public Shape drawShape(Graphics2D g2, int series, int item, Rectangle2D dataArea, PlotOrientation orientation, double transX1, double transY1, Shape shape, Config_DrawShape config) {
+        Shape entityArea;
+        if (orientation == PlotOrientation.HORIZONTAL) {
+            shape = ShapeUtils.createTranslatedShape(shape, transY1,
+                    transX1);
+        }
+        else if (orientation == PlotOrientation.VERTICAL) {
+            shape = ShapeUtils.createTranslatedShape(shape, transX1,
+                    transY1);
+        }
+        entityArea = shape;
+        if (shape.intersects(dataArea)) {
+            if (config.isItemShapeFilled()) {
+                if (config.isUseFillPaint()) {
+                    g2.setPaint(config.getItemFillPaint());
+                }
+                else {
+                    g2.setPaint(config.getItemPaint());
+                }
+                g2.fill(shape);
+            }
+            if (config.isDrawOutlines()) {
+                if (config.isUseOutlinePaint()) {
+                    g2.setPaint(config.getItemOutlinePaint());
+                }
+                else {
+                    g2.setPaint(config.getItemPaint());
+                }
+                g2.setStroke(config.getItemOutlineStroke());
+                g2.draw(shape);
+            }
+        }
+        return entityArea;
+    }
+
+
+
 }

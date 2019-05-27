@@ -109,12 +109,9 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
-import javax.swing.event.EventListenerList;
-
 import org.jfree.chart.ChartHints;
 import org.jfree.chart.HashUtils;
 import org.jfree.chart.event.RendererChangeEvent;
-import org.jfree.chart.event.RendererChangeListener;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.plot.DrawingSupplier;

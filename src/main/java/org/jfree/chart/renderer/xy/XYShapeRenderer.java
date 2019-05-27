@@ -68,6 +68,7 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.Config_DrawShape;
 import org.jfree.chart.renderer.LookupPaintScale;
 import org.jfree.chart.renderer.PaintScale;
 import org.jfree.chart.util.Args;
@@ -430,7 +431,7 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
             ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
             int series, int item, CrosshairState crosshairState, int pass) {
 
-        Shape hotspot;
+        Shape hotspot = null;
         EntityCollection entities = null;
         if (info != null) {
             entities = info.getOwner().getEntityCollection();
@@ -467,29 +468,14 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
             }
         } else if (pass == 1) {
             Shape shape = this.getShapeManager().getItemShape(series, item);
-            if (orientation == PlotOrientation.HORIZONTAL) {
-                shape = ShapeUtils.createTranslatedShape(shape, transY,
-                        transX);
-            } else if (orientation == PlotOrientation.VERTICAL) {
-                shape = ShapeUtils.createTranslatedShape(shape, transX,
-                        transY);
-            }
-            hotspot = shape;
-            if (shape.intersects(dataArea)) {
-                //if (getItemShapeFilled(series, item)) {
-                    g2.setPaint(getPaint(dataset, series, item));
-                    g2.fill(shape);
-               //}
-                if (this.drawOutlines) {
-                    if (getUseOutlinePaint()) {
-                        g2.setPaint(getItemOutlinePaint(series, item));
-                    } else {
-                        g2.setPaint(getItemPaint(series, item));
-                    }
-                    g2.setStroke(getItemOutlineStroke(series, item));
-                    g2.draw(shape);
-                }
-            }
+            Config_DrawShape config = new Config_DrawShape(true,true, getPaint(dataset, series, item),
+                    getItemPaint(series, item), this.drawOutlines, getUseOutlinePaint(),
+                    getItemOutlinePaint(series, item), getItemOutlineStroke(series, item) );
+
+            this.getShapeManager().drawShape(g2,series, item, dataArea, orientation, transX, transY, shape, config);
+
+
+
             
             int datasetIndex = plot.indexOf(dataset);
             updateCrosshairValues(crosshairState, x, y, datasetIndex,
