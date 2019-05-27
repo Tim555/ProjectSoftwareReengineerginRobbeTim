@@ -978,37 +978,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         double transY1 = rangeAxis.valueToJava2D(y1, dataArea, yAxisLocation);
 
         if (getItemShapeVisible(series, item)) {
-            Shape shape = this.getShapeManager().getItemShape(series, item);
-            if (orientation == PlotOrientation.HORIZONTAL) {
-                shape = ShapeUtils.createTranslatedShape(shape, transY1,
-                        transX1);
-            }
-            else if (orientation == PlotOrientation.VERTICAL) {
-                shape = ShapeUtils.createTranslatedShape(shape, transX1,
-                        transY1);
-            }
-            entityArea = shape;
-            if (shape.intersects(dataArea)) {
-                if (getItemShapeFilled(series, item)) {
-                    if (this.useFillPaint) {
-                        g2.setPaint(getItemFillPaint(series, item));
-                    }
-                    else {
-                        g2.setPaint(getItemPaint(series, item));
-                    }
-                    g2.fill(shape);
-                }
-                if (this.drawOutlines) {
-                    if (getUseOutlinePaint()) {
-                        g2.setPaint(getItemOutlinePaint(series, item));
-                    }
-                    else {
-                        g2.setPaint(getItemPaint(series, item));
-                    }
-                    g2.setStroke(getItemOutlineStroke(series, item));
-                    g2.draw(shape);
-                }
-            }
+            entityArea = drawShape(g2, series, item, dataArea, orientation, transX1, transY1);
         }
 
         double xx = transX1;
@@ -1033,6 +1003,44 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         if (entities != null && ShapeUtils.isPointInRect(dataArea, xx, yy)) {
             addEntity(entities, entityArea, dataset, series, item, xx, yy);
         }
+    }
+
+
+
+    private Shape drawShape(Graphics2D g2, int series, int item, Rectangle2D dataArea, PlotOrientation orientation, double transX1, double transY1) {
+        Shape entityArea;
+        Shape shape = this.getShapeManager().getItemShape(series, item);
+        if (orientation == PlotOrientation.HORIZONTAL) {
+            shape = ShapeUtils.createTranslatedShape(shape, transY1,
+                    transX1);
+        }
+        else if (orientation == PlotOrientation.VERTICAL) {
+            shape = ShapeUtils.createTranslatedShape(shape, transX1,
+                    transY1);
+        }
+        entityArea = shape;
+        if (shape.intersects(dataArea)) {
+            if (getItemShapeFilled(series, item)) {
+                if (this.useFillPaint) {
+                    g2.setPaint(getItemFillPaint(series, item));
+                }
+                else {
+                    g2.setPaint(getItemPaint(series, item));
+                }
+                g2.fill(shape);
+            }
+            if (this.drawOutlines) {
+                if (getUseOutlinePaint()) {
+                    g2.setPaint(getItemOutlinePaint(series, item));
+                }
+                else {
+                    g2.setPaint(getItemPaint(series, item));
+                }
+                g2.setStroke(getItemOutlineStroke(series, item));
+                g2.draw(shape);
+            }
+        }
+        return entityArea;
     }
 
 
