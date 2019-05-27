@@ -363,6 +363,11 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * Default constructor.
      */
     public AbstractRenderer() {
+        this(null);
+    }
+
+    public AbstractRenderer(ShapeManager shapeManager) {
+
         this.seriesVisibleList = new BooleanList();
         this.defaultSeriesVisible = true;
 
@@ -419,7 +424,11 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.defaultLegendTextPaint = null;
 
         this.listenerManager = new ListenerManager(this);
-        this.shapeManager = new ShapeManager(this.listenerManager, this.getDrawingSupplier());
+        if (shapeManager == null) {
+            this.shapeManager = new ShapeManager(this.listenerManager, this.getDrawingSupplier());
+        } else {
+            this.shapeManager = shapeManager;
+        }
     }
 
     /**
