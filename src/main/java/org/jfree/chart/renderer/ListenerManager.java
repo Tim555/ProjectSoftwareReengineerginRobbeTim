@@ -130,20 +130,19 @@ public class ListenerManager implements Serializable {
     }
 
     public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof ListenerManager)) {
+            return false;
+        }
+        ListenerManager that = (ListenerManager) obj;
+
+        if (!this.listenerList.equals(that.getListenerList())) {
+            return false;
+        }
+
         return true;
-//        if (obj == this) {
-//            return true;
-//        }
-//        if (!(obj instanceof ListenerManager)) {
-//            return false;
-//        }
-//        ListenerManager that = (ListenerManager) obj;
-//
-//        if (!this.listenerList.equals(that.getListenerList())) {
-//            return false;
-//        }
-//
-//        return true;
     }
 
 }

@@ -418,8 +418,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.legendTextPaint = new PaintList();
         this.defaultLegendTextPaint = null;
 
-        this.shapeManager = new ShapeManager(this);
         this.listenerManager = new ListenerManager(this);
+        this.shapeManager = new ShapeManager(this.listenerManager, this.getDrawingSupplier());
     }
 
     /**

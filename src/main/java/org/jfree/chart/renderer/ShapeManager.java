@@ -50,7 +50,12 @@ public class ShapeManager implements Cloneable, Serializable {
     /**
      * Abstractrenderer
      */
-    private AbstractRenderer abstractRenderer;
+    private ListenerManager listenerManager;
+
+    /**
+     * drawingSupplier
+     */
+    private DrawingSupplier drawingSupplier;
 
     /**
      * A special flag that, if true, will cause the getLegendItem() method
@@ -60,7 +65,7 @@ public class ShapeManager implements Cloneable, Serializable {
      */
     private boolean treatLegendShapeAsLine;
 
-    public ShapeManager(AbstractRenderer abstractRenderer) {
+    public ShapeManager(ListenerManager listenerManager, DrawingSupplier drawingSupplier) {
 
         this.shapeList = new ShapeList();
         this.defaultShape = DEFAULT_SHAPE;
@@ -72,7 +77,8 @@ public class ShapeManager implements Cloneable, Serializable {
         this.treatLegendShapeAsLine = false;
         this.treatLegendShapeAsLine = false;
 
-        this.abstractRenderer = abstractRenderer;
+        this.listenerManager = listenerManager;
+        this.drawingSupplier = drawingSupplier;
     }
 
     // SHAPE
@@ -106,7 +112,7 @@ public class ShapeManager implements Cloneable, Serializable {
 
         Shape result = getSeriesShape(series);
         if (result == null && this.autoPopulateSeriesShape) {
-            DrawingSupplier supplier = this.abstractRenderer.getDrawingSupplier();
+            DrawingSupplier supplier = this.drawingSupplier;
             if (supplier != null) {
                 result = supplier.getNextShape();
                 setSeriesShape(series, result, false);
@@ -158,7 +164,7 @@ public class ShapeManager implements Cloneable, Serializable {
     public void setSeriesShape(int series, Shape shape, boolean notify) {
         this.shapeList.setShape(series, shape);
         if (notify) {
-            this.abstractRenderer.getListenerManager().fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -199,7 +205,7 @@ public class ShapeManager implements Cloneable, Serializable {
         Args.nullNotPermitted(shape, "shape");
         this.defaultShape = shape;
         if (notify) {
-            this.abstractRenderer.getListenerManager().fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
@@ -279,7 +285,7 @@ public class ShapeManager implements Cloneable, Serializable {
      */
     public void setLegendShape(int series, Shape shape) {
         this.legendShapeList.setShape(series, shape);
-        this.abstractRenderer.getListenerManager().fireChangeEvent();
+        this.listenerManager.fireChangeEvent();
     }
 
     /**
@@ -311,7 +317,7 @@ public class ShapeManager implements Cloneable, Serializable {
      */
     public void setDefaultLegendShape(Shape shape) {
         this.defaultLegendShape = shape;
-        this.abstractRenderer.getListenerManager().fireChangeEvent();
+        this.listenerManager.fireChangeEvent();
     }
 
     /**
@@ -337,7 +343,7 @@ public class ShapeManager implements Cloneable, Serializable {
     protected void setTreatLegendShapeAsLine(boolean treatAsLine) {
         if (this.treatLegendShapeAsLine != treatAsLine) {
             this.treatLegendShapeAsLine = treatAsLine;
-            this.abstractRenderer.getListenerManager().fireChangeEvent();
+            this.listenerManager.fireChangeEvent();
         }
     }
 
