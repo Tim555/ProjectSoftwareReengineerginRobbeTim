@@ -59,6 +59,9 @@ import org.junit.Test;
  */
 public class XYImageAnnotationTest {
 
+    @Test
+    public void initialize() {}
+
 //    /**
 //     * Confirm that the equals method can distinguish all the required fields.
 //     */
