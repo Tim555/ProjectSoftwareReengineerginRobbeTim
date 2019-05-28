@@ -1251,7 +1251,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             urlText = this.legendItemURLGenerator.generateLabel(dataset,
                     series);
         }
-        Shape shape = lookupLegendShape(series);
+        Shape shape = this.getShapeManager().lookupLegendShape(series);
         Paint paint = paintManager.lookupSeriesPaint(series);
         Paint outlinePaint = paintManager.lookupSeriesOutlinePaint(series);
         Stroke outlineStroke = lookupSeriesOutlineStroke(series);

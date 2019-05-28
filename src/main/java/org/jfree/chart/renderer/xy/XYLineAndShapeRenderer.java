@@ -1081,7 +1081,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
                     series);
         }
         boolean shapeIsVisible = getItemShapeVisible(series, 0);
-        Shape shape = lookupLegendShape(series);
+        Shape shape = this.getShapeManager().lookupLegendShape(series);
         boolean shapeIsFilled = getItemShapeFilled(series, 0);
         Paint fillPaint = (this.useFillPaint ? paintManager.lookupSeriesFillPaint(series)
                 : paintManager.lookupSeriesPaint(series));

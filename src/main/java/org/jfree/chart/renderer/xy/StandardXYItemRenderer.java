@@ -596,7 +596,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
                     urlText = getLegendItemURLGenerator().generateLabel(
                             dataset, series);
                 }
-                Shape shape = lookupLegendShape(series);
+                Shape shape = this.getShapeManager().lookupLegendShape(series);
                 boolean shapeFilled = getItemShapeFilled(series, 0);
                 Paint paint = paintManager.lookupSeriesPaint(series);
                 Paint linePaint = paint;

@@ -624,109 +624,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the paint used to fill an item drawn by the renderer.
-     *
-     * @param series  the series index (zero-based).
-     *
-     * @return The paint (never {@code null}).
-     *
-     * @since 1.0.6
-     */
-    public Paint lookupSeriesPaint(int series) {
-
-        return paintManager.lookupSeriesPaint(series);
-    }
-
-    /**
-     * Returns the paint used to fill an item drawn by the renderer.
-     *
-     * @param series  the series index (zero-based).
-     *
-     * @return The paint (possibly {@code null}).
-     *
-     * @see #setSeriesPaint(int, Paint)
-     */
-    public Paint getSeriesPaint(int series) {
-        return paintManager.getSeriesPaint(series);
-    }
-
-    /**
-     * Sets the paint used for a series and sends a {@link RendererChangeEvent}
-     * to all registered listeners.
-     *
-     * @param series  the series index (zero-based).
-     * @param paint  the paint ({@code null} permitted).
-     *
-     * @see #getSeriesPaint(int)
-     */
-    public void setSeriesPaint(int series, Paint paint) {
-        paintManager.setSeriesPaint(series, paint);
-    }
-
-    /**
-     * Sets the paint used for a series and, if requested, sends a
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param series  the series index.
-     * @param paint  the paint ({@code null} permitted).
-     * @param notify  notify listeners?
-     *
-     * @see #getSeriesPaint(int)
-     */
-    public void setSeriesPaint(int series, Paint paint, boolean notify) {
-        paintManager.setSeriesPaint(series, paint, notify);
-    }
-
-    /**
-     * Clears the series paint settings for this renderer and, if requested,
-     * sends a {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param notify  notify listeners?
-     *
-     * @since 1.0.11
-     */
-    public void clearSeriesPaints(boolean notify) {
-        paintManager.clearSeriesPaints(notify);
-    }
-
-    /**
-     * Returns the default paint.
-     *
-     * @return The default paint (never {@code null}).
-     *
-     * @see #setDefaultPaint(Paint)
-     */
-    public Paint getDefaultPaint() {
-        return paintManager.getDefaultPaint();
-    }
-
-    /**
-     * Sets the default paint and sends a {@link RendererChangeEvent} to all
-     * registered listeners.
-     *
-     * @param paint  the paint ({@code null} not permitted).
-     *
-     * @see #getDefaultPaint()
-     */
-    public void setDefaultPaint(Paint paint) {
-        // defer argument checking...
-        paintManager.setDefaultPaint(paint);
-    }
-
-    /**
-     * Sets the default paint and, if requested, sends a
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param paint  the paint ({@code null} not permitted).
-     * @param notify  notify listeners?
-     *
-     * @see #getDefaultPaint()
-     */
-    public void setDefaultPaint(Paint paint, boolean notify) {
-        paintManager.setDefaultPaint(paint, notify);
-    }
-
-    /**
      * Returns the flag that controls whether or not the series paint list is
      * automatically populated when {@link #lookupSeriesPaint(int)} is called.
      *
@@ -2045,82 +1942,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.defaultEntityRadius = radius;
     }
 
-    /**
-     * Performs a lookup for the legend shape.
-     *
-     * @param series  the series index.
-     *
-     * @return The shape (possibly {@code null}).
-     *
-     * @since 1.0.11
-     */
-    public Shape lookupLegendShape(int series) {
-        return this.shapeManager.lookupLegendShape(series);
-    }
-
-    /**
-     * Returns the legend shape defined for the specified series (possibly
-     * {@code null}).
-     *
-     * @param series  the series index.
-     *
-     * @return The shape (possibly {@code null}).
-     *
-     * @see #lookupLegendShape(int)
-     *
-     * @since 1.0.11
-     */
-    public Shape getLegendShape(int series) {
-        return this.shapeManager.getLegendShape(series);
-    }
-
-    /**
-     * Sets the shape used for the legend item for the specified series, and
-     * sends a {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param series  the series index.
-     * @param shape  the shape ({@code null} permitted).
-     *
-     * @since 1.0.11
-     */
-    public void setLegendShape(int series, Shape shape) {
-        this.shapeManager.setLegendShape(series, shape);
-    }
-
-    /**
-     * Returns the default legend shape, which may be {@code null}.
-     *
-     * @return The default legend shape.
-     *
-     * @since 1.0.11
-     */
-    public Shape getDefaultLegendShape() {
-        return this.shapeManager.getDefaultLegendShape();
-    }
-
-    /**
-     * Sets the default legend shape and sends a
-     * {@link RendererChangeEvent} to all registered listeners.
-     *
-     * @param shape  the shape ({@code null} permitted).
-     *
-     * @since 1.0.11
-     */
-    public void setDefaultLegendShape(Shape shape) {
-        this.shapeManager.setDefaultLegendShape(shape);
-    }
-
-    /**
-     * Sets the flag that controls whether or not the legend shape is
-     * treated as a line when creating legend items.
-     *
-     * @param treatAsLine  the new flag value.
-     *
-     * @since 1.0.14
-     */
-    protected void setTreatLegendShapeAsLine(boolean treatAsLine) {
-        this.shapeManager.setTreatLegendShapeAsLine(treatAsLine);
-    }
 
     /**
      * Performs a lookup for the legend text font.
@@ -2800,8 +2621,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         // listeners are not restored automatically, but storage must be
         // provided...
         this.listenerManager = new ListenerManager(this);
-
-//        this.paintManager = new PaintManager(this);
     }
 
 }

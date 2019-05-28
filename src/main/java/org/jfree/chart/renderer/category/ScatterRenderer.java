@@ -484,7 +484,7 @@ public class ScatterRenderer extends AbstractCategoryItemRenderer
                 urlText = getLegendItemURLGenerator().generateLabel(
                         dataset, series);
             }
-            Shape shape = lookupLegendShape(series);
+            Shape shape = this.getShapeManager().lookupLegendShape(series);
             Paint paint = paintManager.lookupSeriesPaint(series);
             Paint fillPaint = (this.useFillPaint
                     ? paintManager.getItemFillPaint(series, 0) : paint);

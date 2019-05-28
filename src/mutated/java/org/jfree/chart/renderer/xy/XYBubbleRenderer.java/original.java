@@ -309,7 +309,7 @@ public class XYBubbleRenderer extends AbstractXYItemRenderer
                     urlText = getLegendItemURLGenerator().generateLabel(
                             dataset, series);
                 }
-                Shape shape = lookupLegendShape(series);
+                Shape shape = this.getShapeManager().lookupLegendShape(series);
                 Paint paint = lookupSeriesPaint(series);
                 Paint outlinePaint = lookupSeriesOutlinePaint(series);
                 Stroke outlineStroke = lookupSeriesOutlineStroke(series);

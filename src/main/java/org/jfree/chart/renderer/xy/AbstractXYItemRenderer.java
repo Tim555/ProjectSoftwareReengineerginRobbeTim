@@ -856,7 +856,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             urlText = getLegendItemURLGenerator().generateLabel(dataset,
                     series);
         }
-        Shape shape = lookupLegendShape(series);
+        Shape shape = this.getShapeManager().lookupLegendShape(series);
         Paint paint = paintManager.lookupSeriesPaint(series);
         LegendItem item = new LegendItem(label, paint);
         item.setToolTipText(toolTipText);

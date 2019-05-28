@@ -133,7 +133,7 @@ public class CategoryStepRenderer extends AbstractCategoryItemRenderer
      */
     public CategoryStepRenderer(boolean stagger) {
         this.stagger = stagger;
-        setDefaultLegendShape(new Rectangle2D.Double(-4.0, -3.0, 8.0, 6.0));
+        this.getShapeManager().setDefaultLegendShape(new Rectangle2D.Double(-4.0, -3.0, 8.0, 6.0));
     }
 
     /**
@@ -192,7 +192,7 @@ public class CategoryStepRenderer extends AbstractCategoryItemRenderer
             urlText = getLegendItemURLGenerator().generateLabel(dataset,
                     series);
         }
-        Shape shape = lookupLegendShape(series);
+        Shape shape = this.getShapeManager().lookupLegendShape(series);
         Paint paint = paintManager.lookupSeriesPaint(series);
 
         LegendItem item = new LegendItem(label, description, toolTipText,

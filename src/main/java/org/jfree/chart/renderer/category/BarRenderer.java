@@ -316,7 +316,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
         this.negativeItemLabelPositionFallback = null;
         this.gradientPaintTransformer = new StandardGradientPaintTransformer();
         this.minimumBarLength = 0.0;
-        setDefaultLegendShape(new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0));
+        this.getShapeManager().setDefaultLegendShape(new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0));
         this.barPainter = getDefaultBarPainter();
         this.shadowsVisible = getDefaultShadowsVisible();
         this.shadowPaint = Color.GRAY;
@@ -943,7 +943,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
             urlText = getLegendItemURLGenerator().generateLabel(dataset,
                     series);
         }
-        Shape shape = lookupLegendShape(series);
+        Shape shape = this.getShapeManager().lookupLegendShape(series);
         Paint paint = paintManager.lookupSeriesPaint(series);
         Paint outlinePaint = paintManager.lookupSeriesOutlinePaint(series);
         Stroke outlineStroke = lookupSeriesOutlineStroke(series);

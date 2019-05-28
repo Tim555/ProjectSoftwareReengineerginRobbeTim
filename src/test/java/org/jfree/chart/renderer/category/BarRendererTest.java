@@ -231,7 +231,7 @@ public class BarRendererTest {
         r1.getListenerManager().addChangeListener(detector);
 
         detector.setNotified(false);
-        r1.setDefaultPaint(Color.RED);
+        r1.getPaintManager().setDefaultPaint(Color.RED);
         assertTrue(detector.getNotified());
 
     }

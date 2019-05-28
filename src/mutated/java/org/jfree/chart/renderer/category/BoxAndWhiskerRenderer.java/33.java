@@ -60,7 +60,7 @@ package org . jfree . chart . renderer . category  ;
   this   . meanVisible  = true      ;
   this   . useOutlinePaintForWhiskers  = false      ;
   this   . whiskerWidth  = 1.0      ;
-  setDefaultLegendShape   ( new Rectangle2D . Double  ( - 4.0     , - 4.0     , 8.0    , 8.0     )      )   ;
+  this.getShapeManager().setDefaultLegendShape   ( new Rectangle2D . Double  ( - 4.0     , - 4.0     , 8.0    , 8.0     )      )   ;
   }      public   Paint   getArtifactPaint ( )  { return this   . artifactPaint  ;
   }      public   void setArtifactPaint ( Paint   paint    )  { Args   . nullNotPermitted  ( paint   , "paint"     )   ;
   this   . artifactPaint  = paint     ;

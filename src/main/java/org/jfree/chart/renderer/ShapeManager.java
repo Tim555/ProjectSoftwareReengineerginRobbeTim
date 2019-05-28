@@ -340,7 +340,7 @@ public class ShapeManager implements Cloneable, Serializable {
      *
      * @since 1.0.14
      */
-    protected void setTreatLegendShapeAsLine(boolean treatAsLine) {
+    public void setTreatLegendShapeAsLine(boolean treatAsLine) {
         if (this.treatLegendShapeAsLine != treatAsLine) {
             this.treatLegendShapeAsLine = treatAsLine;
             this.listenerManager.fireChangeEvent();
