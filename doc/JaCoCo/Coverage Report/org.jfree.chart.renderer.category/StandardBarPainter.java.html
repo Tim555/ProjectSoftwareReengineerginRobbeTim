@@ -84,7 +84,7 @@ public class StandardBarPainter implements BarPainter, Serializable {
     public void paintBar(Graphics2D g2, BarRenderer renderer, int row,
             int column, RectangularShape bar, RectangleEdge base) {
 
-<span class="nc" id="L87">        Paint itemPaint = renderer.getItemPaint(row, column);</span>
+<span class="nc" id="L87">        Paint itemPaint = renderer.getPaintManager().getItemPaint(row, column);</span>
 <span class="nc" id="L88">        GradientPaintTransformer t = renderer.getGradientPaintTransformer();</span>
 <span class="nc bnc" id="L89" title="All 4 branches missed.">        if (t != null &amp;&amp; itemPaint instanceof GradientPaint) {</span>
 <span class="nc" id="L90">            itemPaint = t.transform((GradientPaint) itemPaint, bar);</span>
@@ -125,7 +125,7 @@ public class StandardBarPainter implements BarPainter, Serializable {
 
         // handle a special case - if the bar colour has alpha == 0, it is
         // invisible so we shouldn't draw any shadow
-<span class="nc" id="L128">        Paint itemPaint = renderer.getItemPaint(row, column);</span>
+<span class="nc" id="L128">        Paint itemPaint = renderer.getPaintManager().getItemPaint(row, column);</span>
 <span class="nc bnc" id="L129" title="All 2 branches missed.">        if (itemPaint instanceof Color) {</span>
 <span class="nc" id="L130">            Color c = (Color) itemPaint;</span>
 <span class="nc bnc" id="L131" title="All 2 branches missed.">            if (c.getAlpha() == 0) {</span>

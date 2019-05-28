@@ -874,7 +874,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
     protected void drawFirstPassShape(Graphics2D g2, int pass, int series,
                                       int item, Shape shape) {
         g2.setStroke(getItemStroke(series, item));
-        g2.setPaint(getItemPaint(series, item));
+        g2.setPaint(paintManager.getItemPaint(series, item));
         g2.draw(shape);
     }
 
@@ -1022,19 +1022,19 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         if (shape.intersects(dataArea)) {
             if (getItemShapeFilled(series, item)) {
                 if (this.useFillPaint) {
-                    g2.setPaint(getItemFillPaint(series, item));
+                    g2.setPaint(paintManager.getItemFillPaint(series, item));
                 }
                 else {
-                    g2.setPaint(getItemPaint(series, item));
+                    g2.setPaint(paintManager.getItemPaint(series, item));
                 }
                 g2.fill(shape);
             }
             if (this.drawOutlines) {
                 if (getUseOutlinePaint()) {
-                    g2.setPaint(getItemOutlinePaint(series, item));
+                    g2.setPaint(paintManager.getItemOutlinePaint(series, item));
                 }
                 else {
-                    g2.setPaint(getItemPaint(series, item));
+                    g2.setPaint(paintManager.getItemPaint(series, item));
                 }
                 g2.setStroke(getItemOutlineStroke(series, item));
                 g2.draw(shape);
@@ -1083,21 +1083,21 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         boolean shapeIsVisible = getItemShapeVisible(series, 0);
         Shape shape = lookupLegendShape(series);
         boolean shapeIsFilled = getItemShapeFilled(series, 0);
-        Paint fillPaint = (this.useFillPaint ? lookupSeriesFillPaint(series)
-                : lookupSeriesPaint(series));
+        Paint fillPaint = (this.useFillPaint ? paintManager.lookupSeriesFillPaint(series)
+                : paintManager.lookupSeriesPaint(series));
         boolean shapeOutlineVisible = this.drawOutlines;
-        Paint outlinePaint = (this.useOutlinePaint ? lookupSeriesOutlinePaint(
-                series) : lookupSeriesPaint(series));
+        Paint outlinePaint = (this.useOutlinePaint ? paintManager.lookupSeriesOutlinePaint(
+                series) : paintManager.lookupSeriesPaint(series));
         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
         boolean lineVisible = getItemLineVisible(series, 0);
         Stroke lineStroke = lookupSeriesStroke(series);
-        Paint linePaint = lookupSeriesPaint(series);
+        Paint linePaint = paintManager.lookupSeriesPaint(series);
         LegendItem result = new LegendItem(label, description, toolTipText,
                 urlText, shapeIsVisible, shape, shapeIsFilled, fillPaint,
                 shapeOutlineVisible, outlinePaint, outlineStroke, lineVisible,
                 this.legendLine, lineStroke, linePaint);
         result.setLabelFont(lookupLegendTextFont(series));
-        Paint labelPaint = lookupLegendTextPaint(series);
+        Paint labelPaint = paintManager.lookupLegendTextPaint(series);
         if (labelPaint != null) {
             result.setLabelPaint(labelPaint);
         }

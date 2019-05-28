@@ -83,7 +83,7 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
     public void paintBar(Graphics2D g2, XYBarRenderer renderer, int row,
             int column, RectangularShape bar, RectangleEdge base) {
 
-<span class="nc" id="L86">        Paint itemPaint = renderer.getItemPaint(row, column);</span>
+<span class="nc" id="L86">        Paint itemPaint = renderer.getPaintManager().getItemPaint(row, column);</span>
 <span class="nc" id="L87">        GradientPaintTransformer t = renderer.getGradientPaintTransformer();</span>
 <span class="nc bnc" id="L88" title="All 4 branches missed.">        if (t != null &amp;&amp; itemPaint instanceof GradientPaint) {</span>
 <span class="nc" id="L89">            itemPaint = t.transform((GradientPaint) itemPaint, bar);</span>
@@ -124,7 +124,7 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
 
         // handle a special case - if the bar colour has alpha == 0, it is
         // invisible so we shouldn't draw any shadow
-<span class="nc" id="L127">        Paint itemPaint = renderer.getItemPaint(row, column);</span>
+<span class="nc" id="L127">        Paint itemPaint = renderer.getPaintManager().getItemPaint(row, column);</span>
 <span class="nc bnc" id="L128" title="All 2 branches missed.">        if (itemPaint instanceof Color) {</span>
 <span class="nc" id="L129">            Color c = (Color) itemPaint;</span>
 <span class="nc bnc" id="L130" title="All 2 branches missed.">            if (c.getAlpha() == 0) {</span>

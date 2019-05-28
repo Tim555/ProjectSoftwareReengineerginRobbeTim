@@ -193,12 +193,12 @@ public class CategoryStepRenderer extends AbstractCategoryItemRenderer
                     series);
         }
         Shape shape = lookupLegendShape(series);
-        Paint paint = lookupSeriesPaint(series);
+        Paint paint = paintManager.lookupSeriesPaint(series);
 
         LegendItem item = new LegendItem(label, description, toolTipText,
                 urlText, shape, paint);
         item.setLabelFont(lookupLegendTextFont(series));
-        Paint labelPaint = lookupLegendTextPaint(series);
+        Paint labelPaint = paintManager.lookupLegendTextPaint(series);
         if (labelPaint != null) {
             item.setLabelPaint(labelPaint);
         }
@@ -295,7 +295,7 @@ public class CategoryStepRenderer extends AbstractCategoryItemRenderer
         double x1e = 2 * x1 - x1s; // or: x1s + 2*(x1-x1s)
         double y1 = rangeAxis.valueToJava2D(value.doubleValue(), dataArea,
                 plot.getRangeAxisEdge());
-        g2.setPaint(getItemPaint(row, column));
+        g2.setPaint(paintManager.getItemPaint(row, column));
         g2.setStroke(getItemStroke(row, column));
 
         if (column != 0) {

@@ -755,8 +755,8 @@ public class XYBarRenderer extends AbstractXYItemRenderer
                     series);
         }
         Shape shape = this.legendBar;
-        Paint paint = lookupSeriesPaint(series);
-        Paint outlinePaint = lookupSeriesOutlinePaint(series);
+        Paint paint = paintManager.lookupSeriesPaint(series);
+        Paint outlinePaint = paintManager.lookupSeriesOutlinePaint(series);
         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
         if (this.drawBarOutline) {
             result = new LegendItem(label, description, toolTipText,
@@ -767,7 +767,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
                     shape, paint);
         }
         result.setLabelFont(lookupLegendTextFont(series));
-        Paint labelPaint = lookupLegendTextPaint(series);
+        Paint labelPaint = paintManager.lookupLegendTextPaint(series);
         if (labelPaint != null) {
             result.setLabelPaint(labelPaint);
         }
@@ -980,7 +980,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
 
         Font labelFont = getItemLabelFont(series, item);
         g2.setFont(labelFont);
-        Paint paint = getItemLabelPaint(series, item);
+        Paint paint = paintManager.getItemLabelPaint(series, item);
         g2.setPaint(paint);
 
         // find out where to place the label...

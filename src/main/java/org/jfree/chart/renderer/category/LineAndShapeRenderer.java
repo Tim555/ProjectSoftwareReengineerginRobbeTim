@@ -653,12 +653,12 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                         dataset, series);
             }
             Shape shape = lookupLegendShape(series);
-            Paint paint = lookupSeriesPaint(series);
+            Paint paint = paintManager.lookupSeriesPaint(series);
             Paint fillPaint = (this.useFillPaint
-                    ? getItemFillPaint(series, 0) : paint);
+                    ? paintManager.getItemFillPaint(series, 0) : paint);
             boolean shapeOutlineVisible = this.drawOutlines;
             Paint outlinePaint = (this.useOutlinePaint
-                    ? getItemOutlinePaint(series, 0) : paint);
+                    ? paintManager.getItemOutlinePaint(series, 0) : paint);
             Stroke outlineStroke = lookupSeriesOutlineStroke(series);
             boolean lineVisible = getItemLineVisible(series, 0);
             boolean shapeVisible = getItemShapeVisible(series, 0);
@@ -666,9 +666,9 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                     urlText, shapeVisible, shape, getItemShapeFilled(series, 0),
                     fillPaint, shapeOutlineVisible, outlinePaint, outlineStroke,
                     lineVisible, new Line2D.Double(-7.0, 0.0, 7.0, 0.0),
-                    getItemStroke(series, 0), getItemPaint(series, 0));
+                    getItemStroke(series, 0), paintManager.getItemPaint(series, 0));
             result.setLabelFont(lookupLegendTextFont(series));
-            Paint labelPaint = lookupLegendTextPaint(series);
+            Paint labelPaint = paintManager.lookupLegendTextPaint(series);
             if (labelPaint != null) {
                 result.setLabelPaint(labelPaint);
             }
@@ -781,7 +781,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                     else if (orientation == PlotOrientation.VERTICAL) {
                         line = new Line2D.Double(x0, y0, x1, y1);
                     }
-                    g2.setPaint(getItemPaint(row, column));
+                    g2.setPaint(paintManager.getItemPaint(row, column));
                     g2.setStroke(getItemStroke(row, column));
                     g2.draw(line);
                 }
@@ -800,19 +800,19 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             if (getItemShapeVisible(row, column)) {
                 if (getItemShapeFilled(row, column)) {
                     if (this.useFillPaint) {
-                        g2.setPaint(getItemFillPaint(row, column));
+                        g2.setPaint(paintManager.getItemFillPaint(row, column));
                     }
                     else {
-                        g2.setPaint(getItemPaint(row, column));
+                        g2.setPaint(paintManager.getItemPaint(row, column));
                     }
                     g2.fill(shape);
                 }
                 if (this.drawOutlines) {
                     if (this.useOutlinePaint) {
-                        g2.setPaint(getItemOutlinePaint(row, column));
+                        g2.setPaint(paintManager.getItemOutlinePaint(row, column));
                     }
                     else {
-                        g2.setPaint(getItemPaint(row, column));
+                        g2.setPaint(paintManager.getItemPaint(row, column));
                     }
                     g2.setStroke(getItemOutlineStroke(row, column));
                     g2.draw(shape);

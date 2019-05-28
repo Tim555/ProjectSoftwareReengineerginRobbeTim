@@ -857,12 +857,12 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                     series);
         }
         Shape shape = lookupLegendShape(series);
-        Paint paint = lookupSeriesPaint(series);
+        Paint paint = paintManager.lookupSeriesPaint(series);
         LegendItem item = new LegendItem(label, paint);
         item.setToolTipText(toolTipText);
         item.setURLText(urlText);
         item.setLabelFont(lookupLegendTextFont(series));
-        Paint labelPaint = lookupLegendTextPaint(series);
+        Paint labelPaint = paintManager.lookupLegendTextPaint(series);
         if (labelPaint != null) {
             item.setLabelPaint(labelPaint);
         }
@@ -878,7 +878,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             item.setShapeVisible(false);
         }
         else {
-            Paint outlinePaint = lookupSeriesOutlinePaint(series);
+            Paint outlinePaint = paintManager.lookupSeriesOutlinePaint(series);
             Stroke outlineStroke = lookupSeriesOutlineStroke(series);
             item.setOutlinePaint(outlinePaint);
             item.setOutlineStroke(outlineStroke);
@@ -1586,7 +1586,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
         XYItemLabelGenerator generator = getItemLabelGenerator(series, item);
         if (generator != null) {
             Font labelFont = getItemLabelFont(series, item);
-            Paint paint = getItemLabelPaint(series, item);
+            Paint paint = paintManager.getItemLabelPaint(series, item);
             g2.setFont(labelFont);
             g2.setPaint(paint);
             String label = generator.generateLabel(dataset, series, item);

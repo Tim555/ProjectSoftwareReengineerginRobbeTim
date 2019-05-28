@@ -598,7 +598,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
                 }
                 Shape shape = lookupLegendShape(series);
                 boolean shapeFilled = getItemShapeFilled(series, 0);
-                Paint paint = lookupSeriesPaint(series);
+                Paint paint = paintManager.lookupSeriesPaint(series);
                 Paint linePaint = paint;
                 Stroke lineStroke = lookupSeriesStroke(series);
                 result = new LegendItem(label, description, toolTipText,
@@ -606,7 +606,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
                         paint, !shapeFilled, paint, lineStroke,
                         this.plotLines, this.legendLine, lineStroke, linePaint);
                 result.setLabelFont(lookupLegendTextFont(series));
-                Paint labelPaint = lookupLegendTextPaint(series);
+                Paint labelPaint = paintManager.lookupLegendTextPaint(series);
                 if (labelPaint != null) {
                     result.setLabelPaint(labelPaint);
                 }
@@ -747,7 +747,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
         }
 
         PlotOrientation orientation = plot.getOrientation();
-        Paint paint = getItemPaint(series, item);
+        Paint paint = paintManager.getItemPaint(series, item);
         Stroke seriesStroke = getItemStroke(series, item);
         g2.setPaint(paint);
         g2.setStroke(seriesStroke);
@@ -799,7 +799,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
                     if (s.seriesIndex == series) {
                         // draw path
                         g2.setStroke(lookupSeriesStroke(series));
-                        g2.setPaint(lookupSeriesPaint(series));
+                        g2.setPaint(paintManager.lookupSeriesPaint(series));
                         g2.draw(s.seriesPath);
                     }
                 }

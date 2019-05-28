@@ -203,7 +203,7 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
         double yyLow = rangeAxis.valueToJava2D(yLow, dataArea, yAxisLocation);
         double yyHigh = rangeAxis.valueToJava2D(yHigh, dataArea, yAxisLocation);
 
-        Paint p = getItemPaint(series, item);
+        Paint p = paintManager.getItemPaint(series, item);
         Stroke s = getItemStroke(series, item);
 
         Line2D line = null;
@@ -269,7 +269,7 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
         }
 
         Font labelFont = getItemLabelFont(series, item);
-        Paint paint = getItemLabelPaint(series, item);
+        Paint paint = paintManager.getItemLabelPaint(series, item);
         g2.setFont(labelFont);
         g2.setPaint(paint);
         String label = this.additionalItemLabelGenerator.generateLabel(dataset,

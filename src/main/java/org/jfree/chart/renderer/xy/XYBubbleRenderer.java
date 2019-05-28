@@ -242,10 +242,10 @@ public class XYBubbleRenderer extends AbstractXYItemRenderer
             } else {
                 throw new IllegalStateException();
             }
-            g2.setPaint(getItemPaint(series, item));
+            g2.setPaint(paintManager.getItemPaint(series, item));
             g2.fill(circle);
             g2.setStroke(getItemOutlineStroke(series, item));
-            g2.setPaint(getItemOutlinePaint(series, item));
+            g2.setPaint(paintManager.getItemOutlinePaint(series, item));
             g2.draw(circle);
 
             if (isItemLabelVisible(series, item)) {
@@ -310,13 +310,13 @@ public class XYBubbleRenderer extends AbstractXYItemRenderer
                             dataset, series);
                 }
                 Shape shape = lookupLegendShape(series);
-                Paint paint = lookupSeriesPaint(series);
-                Paint outlinePaint = lookupSeriesOutlinePaint(series);
+                Paint paint = paintManager.lookupSeriesPaint(series);
+                Paint outlinePaint = paintManager.lookupSeriesOutlinePaint(series);
                 Stroke outlineStroke = lookupSeriesOutlineStroke(series);
                 result = new LegendItem(label, description, toolTipText,
                         urlText, shape, paint, outlineStroke, outlinePaint);
                 result.setLabelFont(lookupLegendTextFont(series));
-                Paint labelPaint = lookupLegendTextPaint(series);
+                Paint labelPaint = paintManager.lookupLegendTextPaint(series);
                 if (labelPaint != null) {
                     result.setLabelPaint(labelPaint);
                 }

@@ -109,25 +109,16 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
-import javax.swing.event.EventListenerList;
-
 import org.jfree.chart.ChartHints;
 import org.jfree.chart.HashUtils;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.event.RendererChangeEvent;
-import org.jfree.chart.event.RendererChangeListener;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.plot.DrawingSupplier;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.ui.TextAnchor;
-import org.jfree.chart.util.BooleanList;
-import org.jfree.chart.util.ObjectUtils;
-import org.jfree.chart.util.PaintList;
-import org.jfree.chart.util.PaintUtils;
-import org.jfree.chart.util.Args;
-import org.jfree.chart.util.SerialUtils;
-import org.jfree.chart.util.StrokeList;
+import org.jfree.chart.util.*;
 import org.jfree.data.ItemKey;
 
 /**
@@ -141,7 +132,7 @@ import org.jfree.data.ItemKey;
  * care to ensure that the renderer implements cloning correctly, to ensure
  * that {@link JFreeChart} instances that use your renderer are also
  * cloneable.  It is recommended that you also implement the 
- * {@link PublicCloneable} interface to provide simple access to the clone 
+ * {@link PublicCloneable} interface to provide simple access to the clone
  * method.
  */
 public abstract class AbstractRenderer implements Cloneable, Serializable {
@@ -151,12 +142,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
     /** Zero represented as a {@code double}. */
     public static final Double ZERO = 0.0;
-
-    /** The default paint. */
-    public static final Paint DEFAULT_PAINT = Color.BLUE;
-
-    /** The default outline paint. */
-    public static final Paint DEFAULT_OUTLINE_PAINT = Color.GRAY;
 
     /** The default stroke. */
     public static final Stroke DEFAULT_STROKE = new BasicStroke(1.0f);
@@ -169,8 +154,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public static final Font DEFAULT_VALUE_LABEL_FONT
             = new Font("SansSerif", Font.PLAIN, 10);
 
-    /** The default value label paint. */
-    public static final Paint DEFAULT_VALUE_LABEL_PAINT = Color.BLACK;
+    protected PaintManager paintManager;
 
     /** A list of flags that controls whether or not each series is visible. */
     private BooleanList seriesVisibleList;
@@ -186,48 +170,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
     /** The default visibility for each series in the legend. */
     private boolean defaultSeriesVisibleInLegend;
-
-    /** The paint list. */
-    private PaintList paintList;
-
-    /**
-     * A flag that controls whether or not the paintList is auto-populated
-     * in the {@link #lookupSeriesPaint(int)} method.
-     *
-     * @since 1.0.6
-     */
-    private boolean autoPopulateSeriesPaint;
-
-    /** The default paint, used when there is no paint assigned for a series. */
-    private transient Paint defaultPaint;
-
-    /** The fill paint list. */
-    private PaintList fillPaintList;
-
-    /**
-     * A flag that controls whether or not the fillPaintList is auto-populated
-     * in the {@link #lookupSeriesFillPaint(int)} method.
-     *
-     * @since 1.0.6
-     */
-    private boolean autoPopulateSeriesFillPaint;
-
-    /** The base fill paint. */
-    private transient Paint defaultFillPaint;
-
-    /** The outline paint list. */
-    private PaintList outlinePaintList;
-
-    /**
-     * A flag that controls whether or not the outlinePaintList is
-     * auto-populated in the {@link #lookupSeriesOutlinePaint(int)} method.
-     *
-     * @since 1.0.6
-     */
-    private boolean autoPopulateSeriesOutlinePaint;
-
-    /** The base outline paint. */
-    private transient Paint defaultOutlinePaint;
 
     /** The stroke list. */
     private StrokeList strokeList;
@@ -269,12 +211,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
     /** The base item label font. */
     private Font defaultItemLabelFont;
-
-    /** The item label paint list (one paint per series). */
-    private PaintList itemLabelPaintList;
-
-    /** The base item label paint. */
-    private transient Paint defaultItemLabelPaint;
 
     /** The positive item label position (per series). */
     private Map<Integer, ItemLabelPosition> positiveItemLabelPositionMap;
@@ -320,22 +256,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     private Font defaultLegendTextFont;
 
     /**
-     * The per series legend text paint settings.
-     *
-     * @since 1.0.11
-     */
-    private PaintList legendTextPaint;
-
-    /**
-     * The default paint for the legend text items (if this is
-     * {@code null}, the {@link LegendTitle} class will determine the
-     * text paint to use.
-     *
-     * @since 1.0.11
-     */
-    private transient Paint defaultLegendTextPaint;
-
-    /**
      * A flag that controls whether or not the renderer will include the
      * non-visible series when calculating the data bounds.
      *
@@ -374,17 +294,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.seriesVisibleInLegendList = new BooleanList();
         this.defaultSeriesVisibleInLegend = true;
 
-        this.paintList = new PaintList();
-        this.defaultPaint = DEFAULT_PAINT;
-        this.autoPopulateSeriesPaint = true;
-
-        this.fillPaintList = new PaintList();
-        this.defaultFillPaint = Color.WHITE;
-        this.autoPopulateSeriesFillPaint = false;
-
-        this.outlinePaintList = new PaintList();
-        this.defaultOutlinePaint = DEFAULT_OUTLINE_PAINT;
-        this.autoPopulateSeriesOutlinePaint = false;
 
         this.strokeList = new StrokeList();
         this.defaultStroke = DEFAULT_STROKE;
@@ -399,8 +308,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.itemLabelFontMap = new HashMap<Integer, Font>();
         this.defaultItemLabelFont = new Font("SansSerif", Font.PLAIN, 10);
 
-        this.itemLabelPaintList = new PaintList();
-        this.defaultItemLabelPaint = Color.BLACK;
 
         this.positiveItemLabelPositionMap 
                 = new HashMap<Integer, ItemLabelPosition>();
@@ -420,8 +327,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         this.legendTextFontMap = new HashMap<Integer, Font>();
         this.defaultLegendTextFont = null;
 
-        this.legendTextPaint = new PaintList();
-        this.defaultLegendTextPaint = null;
 
         this.listenerManager = new ListenerManager(this);
         if (shapeManager == null) {
@@ -429,6 +334,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         } else {
             this.shapeManager = shapeManager;
         }
+        this.paintManager = new PaintManager(this);
     }
 
     /**
@@ -713,21 +619,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
     // PAINT
 
-    /**
-     * Returns the paint used to fill data items as they are drawn.
-     * (this is typically the same for an entire series).
-     * <p>
-     * The default implementation passes control to the
-     * {@code lookupSeriesPaint()} method. You can override this method
-     * if you require different behaviour.
-     *
-     * @param row  the row (or series) index (zero-based).
-     * @param column  the column (or category) index (zero-based).
-     *
-     * @return The paint (never {@code null}).
-     */
-    public Paint getItemPaint(int row, int column) {
-        return lookupSeriesPaint(row);
+    public PaintManager getPaintManager() {
+        return this.paintManager;
     }
 
     /**
@@ -741,19 +634,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public Paint lookupSeriesPaint(int series) {
 
-        Paint seriesPaint = getSeriesPaint(series);
-        if (seriesPaint == null && this.autoPopulateSeriesPaint) {
-            DrawingSupplier supplier = getDrawingSupplier();
-            if (supplier != null) {
-                seriesPaint = supplier.getNextPaint();
-                setSeriesPaint(series, seriesPaint, false);
-            }
-        }
-        if (seriesPaint == null) {
-            seriesPaint = this.defaultPaint;
-        }
-        return seriesPaint;
-
+        return paintManager.lookupSeriesPaint(series);
     }
 
     /**
@@ -766,7 +647,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setSeriesPaint(int, Paint)
      */
     public Paint getSeriesPaint(int series) {
-        return this.paintList.getPaint(series);
+        return paintManager.getSeriesPaint(series);
     }
 
     /**
@@ -779,7 +660,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesPaint(int)
      */
     public void setSeriesPaint(int series, Paint paint) {
-        setSeriesPaint(series, paint, true);
+        paintManager.setSeriesPaint(series, paint);
     }
 
     /**
@@ -793,10 +674,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesPaint(int)
      */
     public void setSeriesPaint(int series, Paint paint, boolean notify) {
-        this.paintList.setPaint(series, paint);
-        if (notify) {
-            this.listenerManager.fireChangeEvent();
-        }
+        paintManager.setSeriesPaint(series, paint, notify);
     }
 
     /**
@@ -808,10 +686,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void clearSeriesPaints(boolean notify) {
-        this.paintList.clear();
-        if (notify) {
-            this.listenerManager.fireChangeEvent();
-        }
+        paintManager.clearSeriesPaints(notify);
     }
 
     /**
@@ -822,7 +697,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setDefaultPaint(Paint)
      */
     public Paint getDefaultPaint() {
-        return this.defaultPaint;
+        return paintManager.getDefaultPaint();
     }
 
     /**
@@ -835,7 +710,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDefaultPaint(Paint paint) {
         // defer argument checking...
-        setDefaultPaint(paint, true);
+        paintManager.setDefaultPaint(paint);
     }
 
     /**
@@ -848,10 +723,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getDefaultPaint()
      */
     public void setDefaultPaint(Paint paint, boolean notify) {
-        this.defaultPaint = paint;
-        if (notify) {
-            this.listenerManager.fireChangeEvent();
-        }
+        paintManager.setDefaultPaint(paint, notify);
     }
 
     /**
@@ -865,7 +737,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setAutoPopulateSeriesPaint(boolean)
      */
     public boolean getAutoPopulateSeriesPaint() {
-        return this.autoPopulateSeriesPaint;
+        return paintManager.getAutoPopulateSeriesPaint();
     }
 
     /**
@@ -879,7 +751,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getAutoPopulateSeriesPaint()
      */
     public void setAutoPopulateSeriesPaint(boolean auto) {
-        this.autoPopulateSeriesPaint = auto;
+        paintManager.setAutoPopulateSeriesPaint(auto);
     }
 
     //// FILL PAINT //////////////////////////////////////////////////////////
@@ -896,7 +768,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @return The paint (never {@code null}).
      */
     public Paint getItemFillPaint(int row, int column) {
-        return lookupSeriesFillPaint(row);
+        return paintManager.getItemFillPaint(row, column);
     }
 
     /**
@@ -910,19 +782,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public Paint lookupSeriesFillPaint(int series) {
 
-        Paint seriesFillPaint = getSeriesFillPaint(series);
-        if (seriesFillPaint == null && this.autoPopulateSeriesFillPaint) {
-            DrawingSupplier supplier = getDrawingSupplier();
-            if (supplier != null) {
-                seriesFillPaint = supplier.getNextFillPaint();
-                setSeriesFillPaint(series, seriesFillPaint, false);
-            }
-        }
-        if (seriesFillPaint == null) {
-            seriesFillPaint = this.defaultFillPaint;
-        }
-        return seriesFillPaint;
-
+        return paintManager.lookupSeriesFillPaint(series);
     }
 
     /**
@@ -935,7 +795,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setSeriesFillPaint(int, Paint)
      */
     public Paint getSeriesFillPaint(int series) {
-        return this.fillPaintList.getPaint(series);
+        return paintManager.getSeriesFillPaint(series);
     }
 
     /**
@@ -948,7 +808,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesFillPaint(int)
      */
     public void setSeriesFillPaint(int series, Paint paint) {
-        setSeriesFillPaint(series, paint, true);
+        paintManager.setSeriesFillPaint(series, paint);
     }
 
     /**
@@ -962,10 +822,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesFillPaint(int)
      */
     public void setSeriesFillPaint(int series, Paint paint, boolean notify) {
-        this.fillPaintList.setPaint(series, paint);
-        if (notify) {
-            this.listenerManager.fireChangeEvent();
-        }
+        paintManager.setSeriesFillPaint(series, paint, notify);
     }
 
     /**
@@ -976,7 +833,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setDefaultFillPaint(Paint)
      */
     public Paint getDefaultFillPaint() {
-        return this.defaultFillPaint;
+        return paintManager.getDefaultFillPaint();
     }
 
     /**
@@ -989,7 +846,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDefaultFillPaint(Paint paint) {
         // defer argument checking...
-        setDefaultFillPaint(paint, true);
+        paintManager.setDefaultFillPaint(paint);
     }
 
     /**
@@ -1002,11 +859,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getDefaultFillPaint()
      */
     public void setDefaultFillPaint(Paint paint, boolean notify) {
-        Args.nullNotPermitted(paint, "paint");
-        this.defaultFillPaint = paint;
-        if (notify) {
-            this.listenerManager.fireChangeEvent();
-        }
+        paintManager.setDefaultFillPaint(paint, notify);
     }
 
     /**
@@ -1021,7 +874,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setAutoPopulateSeriesFillPaint(boolean)
      */
     public boolean getAutoPopulateSeriesFillPaint() {
-        return this.autoPopulateSeriesFillPaint;
+        return paintManager.getAutoPopulateSeriesFillPaint();
     }
 
     /**
@@ -1036,7 +889,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getAutoPopulateSeriesFillPaint()
      */
     public void setAutoPopulateSeriesFillPaint(boolean auto) {
-        this.autoPopulateSeriesFillPaint = auto;
+        paintManager.setAutoPopulateSeriesFillPaint(auto);
     }
 
     // OUTLINE PAINT //////////////////////////////////////////////////////////
@@ -1055,7 +908,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @return The paint (never {@code null}).
      */
     public Paint getItemOutlinePaint(int row, int column) {
-        return lookupSeriesOutlinePaint(row);
+        return paintManager.getItemOutlinePaint(row, column);
     }
 
     /**
@@ -1069,19 +922,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public Paint lookupSeriesOutlinePaint(int series) {
 
-        Paint seriesOutlinePaint = getSeriesOutlinePaint(series);
-        if (seriesOutlinePaint == null && this.autoPopulateSeriesOutlinePaint) {
-            DrawingSupplier supplier = getDrawingSupplier();
-            if (supplier != null) {
-                seriesOutlinePaint = supplier.getNextOutlinePaint();
-                setSeriesOutlinePaint(series, seriesOutlinePaint, false);
-            }
-        }
-        if (seriesOutlinePaint == null) {
-            seriesOutlinePaint = this.defaultOutlinePaint;
-        }
-        return seriesOutlinePaint;
-
+        return paintManager.lookupSeriesOutlinePaint(series);
     }
 
     /**
@@ -1094,7 +935,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setSeriesOutlinePaint(int, Paint)
      */
     public Paint getSeriesOutlinePaint(int series) {
-        return this.outlinePaintList.getPaint(series);
+        return paintManager.getSeriesOutlinePaint(series);
     }
 
     /**
@@ -1107,7 +948,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesOutlinePaint(int)
      */
     public void setSeriesOutlinePaint(int series, Paint paint) {
-        setSeriesOutlinePaint(series, paint, true);
+        paintManager.setSeriesOutlinePaint(series, paint);
     }
 
     /**
@@ -1121,10 +962,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesOutlinePaint(int)
      */
     public void setSeriesOutlinePaint(int series, Paint paint, boolean notify) {
-        this.outlinePaintList.setPaint(series, paint);
-        if (notify) {
-            this.listenerManager.fireChangeEvent();
-        }
+        paintManager.setSeriesOutlinePaint(series, paint, notify);
     }
 
     /**
@@ -1135,7 +973,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setDefaultOutlinePaint(Paint)
      */
     public Paint getDefaultOutlinePaint() {
-        return this.defaultOutlinePaint;
+        return paintManager.getDefaultOutlinePaint();
     }
 
     /**
@@ -1148,7 +986,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDefaultOutlinePaint(Paint paint) {
         // defer argument checking...
-        setDefaultOutlinePaint(paint, true);
+        paintManager.setDefaultOutlinePaint(paint);
     }
 
     /**
@@ -1161,11 +999,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getDefaultOutlinePaint()
      */
     public void setDefaultOutlinePaint(Paint paint, boolean notify) {
-        Args.nullNotPermitted(paint, "paint");
-        this.defaultOutlinePaint = paint;
-        if (notify) {
-            this.listenerManager.fireChangeEvent();
-        }
+        paintManager.setDefaultOutlinePaint(paint, notify);
     }
 
     /**
@@ -1180,7 +1014,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setAutoPopulateSeriesOutlinePaint(boolean)
      */
     public boolean getAutoPopulateSeriesOutlinePaint() {
-        return this.autoPopulateSeriesOutlinePaint;
+        return paintManager.getAutoPopulateSeriesOutlinePaint();
     }
 
     /**
@@ -1195,7 +1029,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getAutoPopulateSeriesOutlinePaint()
      */
     public void setAutoPopulateSeriesOutlinePaint(boolean auto) {
-        this.autoPopulateSeriesOutlinePaint = auto;
+        paintManager.setAutoPopulateSeriesOutlinePaint(auto);
     }
 
     // STROKE
@@ -1753,11 +1587,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @return The paint (never {@code null}).
      */
     public Paint getItemLabelPaint(int row, int column) {
-        Paint result = getSeriesItemLabelPaint(row);
-        if (result == null) {
-            result = this.defaultItemLabelPaint;
-        }
-        return result;
+        return paintManager.getItemLabelPaint(row, column);
     }
 
     /**
@@ -1770,7 +1600,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setSeriesItemLabelPaint(int, Paint)
      */
     public Paint getSeriesItemLabelPaint(int series) {
-        return this.itemLabelPaintList.getPaint(series);
+        return paintManager.getSeriesItemLabelPaint(series);
     }
 
     /**
@@ -1783,7 +1613,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getSeriesItemLabelPaint(int)
      */
     public void setSeriesItemLabelPaint(int series, Paint paint) {
-        setSeriesItemLabelPaint(series, paint, true);
+        paintManager.setSeriesItemLabelPaint(series, paint);
     }
 
     /**
@@ -1799,10 +1629,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setSeriesItemLabelPaint(int series, Paint paint,
                                         boolean notify) {
-        this.itemLabelPaintList.setPaint(series, paint);
-        if (notify) {
-            this.listenerManager.fireChangeEvent();
-        }
+        paintManager.setSeriesItemLabelPaint(series, paint, notify);
     }
 
     /**
@@ -1813,7 +1640,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #setDefaultItemLabelPaint(Paint)
      */
     public Paint getDefaultItemLabelPaint() {
-        return this.defaultItemLabelPaint;
+        return paintManager.getDefaultItemLabelPaint();
     }
 
     /**
@@ -1826,7 +1653,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     public void setDefaultItemLabelPaint(Paint paint) {
         // defer argument checking...
-        setDefaultItemLabelPaint(paint, true);
+        paintManager.setDefaultItemLabelPaint(paint);
     }
 
     /**
@@ -1840,11 +1667,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @see #getDefaultItemLabelPaint()
      */
     public void setDefaultItemLabelPaint(Paint paint, boolean notify) {
-        Args.nullNotPermitted(paint, "paint");
-        this.defaultItemLabelPaint = paint;
-        if (notify) {
-            this.listenerManager.fireChangeEvent();
-        }
+        paintManager.setDefaultItemLabelPaint(paint, notify);
     }
 
     // POSITIVE ITEM LABEL POSITION...
@@ -2381,11 +2204,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public Paint lookupLegendTextPaint(int series) {
-        Paint result = getLegendTextPaint(series);
-        if (result == null) {
-            result = this.defaultLegendTextPaint;
-        }
-        return result;
+        return paintManager.lookupLegendTextPaint(series);
     }
 
     /**
@@ -2401,7 +2220,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public Paint getLegendTextPaint(int series) {
-        return this.legendTextPaint.getPaint(series);
+        return paintManager.getLegendTextPaint(series);
     }
 
     /**
@@ -2414,8 +2233,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void setLegendTextPaint(int series, Paint paint) {
-        this.legendTextPaint.setPaint(series, paint);
-        this.listenerManager.fireChangeEvent();
+        paintManager.setLegendTextPaint(series, paint);
     }
 
     /**
@@ -2426,7 +2244,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public Paint getDefaultLegendTextPaint() {
-        return this.defaultLegendTextPaint;
+        return paintManager.getDefaultLegendTextPaint();
     }
 
     /**
@@ -2438,8 +2256,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @since 1.0.11
      */
     public void setDefaultLegendTextPaint(Paint paint) {
-        this.defaultLegendTextPaint = paint;
-        this.listenerManager.fireChangeEvent();
+        paintManager.setDefaultLegendTextPaint(paint);
     }
 
     /**
@@ -2711,25 +2528,25 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                 != that.defaultSeriesVisibleInLegend) {
             return false;
         }
-        if (!ObjectUtils.equal(this.paintList, that.paintList)) {
+        if (!ObjectUtils.equal(this.paintManager.paintList, that.paintManager.paintList)) {
             return false;
         }
-        if (!PaintUtils.equal(this.defaultPaint, that.defaultPaint)) {
+        if (!PaintUtils.equal(this.paintManager.getDefaultPaint(), that.paintManager.getDefaultPaint())) {
             return false;
         }
-        if (!ObjectUtils.equal(this.fillPaintList, that.fillPaintList)) {
+        if (!ObjectUtils.equal(this.paintManager.fillPaintList, that.paintManager.fillPaintList)) {
             return false;
         }
-        if (!PaintUtils.equal(this.defaultFillPaint,
-                that.defaultFillPaint)) {
+        if (!PaintUtils.equal(this.paintManager.getDefaultFillPaint(),
+                that.paintManager.getDefaultFillPaint())) {
             return false;
         }
-        if (!ObjectUtils.equal(this.outlinePaintList,
-                that.outlinePaintList)) {
+        if (!ObjectUtils.equal(this.paintManager.outlinePaintList,
+                that.paintManager.outlinePaintList)) {
             return false;
         }
-        if (!PaintUtils.equal(this.defaultOutlinePaint,
-                that.defaultOutlinePaint)) {
+        if (!PaintUtils.equal(this.paintManager.getDefaultOutlinePaint(),
+                that.paintManager.getDefaultOutlinePaint())) {
             return false;
         }
         if (!ObjectUtils.equal(this.strokeList, that.strokeList)) {
@@ -2763,12 +2580,12 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             return false;
         }
 
-        if (!ObjectUtils.equal(this.itemLabelPaintList,
-                that.itemLabelPaintList)) {
+        if (!ObjectUtils.equal(this.paintManager.itemLabelPaintList,
+                that.paintManager.itemLabelPaintList)) {
             return false;
         }
-        if (!PaintUtils.equal(this.defaultItemLabelPaint,
-                that.defaultItemLabelPaint)) {
+        if (!PaintUtils.equal(this.paintManager.getDefaultItemLabelPaint(),
+                that.paintManager.getDefaultItemLabelPaint())) {
             return false;
         }
 
@@ -2807,12 +2624,12 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                 that.defaultLegendTextFont)) {
             return false;
         }
-        if (!ObjectUtils.equal(this.legendTextPaint,
-                that.legendTextPaint)) {
+        if (!ObjectUtils.equal(this.paintManager.legendTextPaint,
+                that.paintManager.legendTextPaint)) {
             return false;
         }
-        if (!PaintUtils.equal(this.defaultLegendTextPaint,
-                that.defaultLegendTextPaint)) {
+        if (!PaintUtils.equal(this.paintManager.getDefaultLegendTextPaint(),
+                that.paintManager.getDefaultLegendTextPaint())) {
             return false;
         }
         return true;
@@ -2830,12 +2647,12 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         result = HashUtils.hashCode(result, this.defaultSeriesVisible);
         result = HashUtils.hashCode(result, this.seriesVisibleInLegendList);
         result = HashUtils.hashCode(result, this.defaultSeriesVisibleInLegend);
-        result = HashUtils.hashCode(result, this.paintList);
-        result = HashUtils.hashCode(result, this.defaultPaint);
-        result = HashUtils.hashCode(result, this.fillPaintList);
-        result = HashUtils.hashCode(result, this.defaultFillPaint);
-        result = HashUtils.hashCode(result, this.outlinePaintList);
-        result = HashUtils.hashCode(result, this.defaultOutlinePaint);
+        result = HashUtils.hashCode(result, this.paintManager.paintList);
+        result = HashUtils.hashCode(result, this.paintManager.getDefaultPaint());
+        result = HashUtils.hashCode(result, this.paintManager.fillPaintList);
+        result = HashUtils.hashCode(result, this.paintManager.getDefaultFillPaint());
+        result = HashUtils.hashCode(result, this.paintManager.outlinePaintList);
+        result = HashUtils.hashCode(result, this.paintManager.getDefaultOutlinePaint());
         result = HashUtils.hashCode(result, this.strokeList);
         result = HashUtils.hashCode(result, this.defaultStroke);
         result = HashUtils.hashCode(result, this.outlineStrokeList);
@@ -2894,19 +2711,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
                     = (BooleanList) this.seriesVisibleInLegendList.clone();
         }
 
-        // 'paint' : immutable, no need to clone reference
-        if (this.paintList != null) {
-            clone.paintList = (PaintList) this.paintList.clone();
-        }
-        // 'basePaint' : immutable, no need to clone reference
-
-        if (this.fillPaintList != null) {
-            clone.fillPaintList = (PaintList) this.fillPaintList.clone();
-        }
-        // 'outlinePaint' : immutable, no need to clone reference
-        if (this.outlinePaintList != null) {
-            clone.outlinePaintList = (PaintList) this.outlinePaintList.clone();
-        }
         // 'baseOutlinePaint' : immutable, no need to clone reference
 
         // 'stroke' : immutable, no need to clone reference
@@ -2936,11 +2740,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         }
         // 'baseItemLabelFont' : immutable, no need to clone reference
 
-        // 'itemLabelPaint' : immutable, no need to clone reference
-        if (this.itemLabelPaintList != null) {
-            clone.itemLabelPaintList
-                = (PaintList) this.itemLabelPaintList.clone();
-        }
         // 'baseItemLabelPaint' : immutable, no need to clone reference
 
         if (this.positiveItemLabelPositionMap != null) {
@@ -2964,9 +2763,6 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
             clone.legendTextFontMap = new HashMap<Integer, Font>(
                     this.legendTextFontMap);
         }
-        if (this.legendTextPaint != null) {
-            clone.legendTextPaint = (PaintList) this.legendTextPaint.clone();
-        }
 
         clone.listenerManager = new ListenerManager(clone);
 
@@ -2983,13 +2779,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      */
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.defaultWriteObject();
-        SerialUtils.writePaint(this.defaultPaint, stream);
-        SerialUtils.writePaint(this.defaultFillPaint, stream);
-        SerialUtils.writePaint(this.defaultOutlinePaint, stream);
         SerialUtils.writeStroke(this.defaultStroke, stream);
         SerialUtils.writeStroke(this.defaultOutlineStroke, stream);
-        SerialUtils.writePaint(this.defaultItemLabelPaint, stream);
-        SerialUtils.writePaint(this.defaultLegendTextPaint, stream);
     }
 
     /**
@@ -3003,17 +2794,14 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        this.defaultPaint = SerialUtils.readPaint(stream);
-        this.defaultFillPaint = SerialUtils.readPaint(stream);
-        this.defaultOutlinePaint = SerialUtils.readPaint(stream);
         this.defaultStroke = SerialUtils.readStroke(stream);
         this.defaultOutlineStroke = SerialUtils.readStroke(stream);
-        this.defaultItemLabelPaint = SerialUtils.readPaint(stream);
-        this.defaultLegendTextPaint = SerialUtils.readPaint(stream);
 
         // listeners are not restored automatically, but storage must be
         // provided...
         this.listenerManager = new ListenerManager(this);
+
+//        this.paintManager = new PaintManager(this);
     }
 
 }

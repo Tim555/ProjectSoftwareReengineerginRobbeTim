@@ -944,8 +944,8 @@ public class BarRenderer extends AbstractCategoryItemRenderer
                     series);
         }
         Shape shape = lookupLegendShape(series);
-        Paint paint = lookupSeriesPaint(series);
-        Paint outlinePaint = lookupSeriesOutlinePaint(series);
+        Paint paint = paintManager.lookupSeriesPaint(series);
+        Paint outlinePaint = paintManager.lookupSeriesOutlinePaint(series);
         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
 
         LegendItem result = new LegendItem(label, description, toolTipText,
@@ -953,7 +953,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
                 outlinePaint, outlineStroke, false, new Line2D.Float(),
                 new BasicStroke(1.0f), Color.BLACK);
         result.setLabelFont(lookupLegendTextFont(series));
-        Paint labelPaint = lookupLegendTextPaint(series);
+        Paint labelPaint = paintManager.lookupLegendTextPaint(series);
         if (labelPaint != null) {
             result.setLabelPaint(labelPaint);
         }
@@ -1142,7 +1142,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer
 
         Font labelFont = getItemLabelFont(row, column);
         g2.setFont(labelFont);
-        Paint paint = getItemLabelPaint(row, column);
+        Paint paint = paintManager.getItemLabelPaint(row, column);
         g2.setPaint(paint);
 
         // find out where to place the label...

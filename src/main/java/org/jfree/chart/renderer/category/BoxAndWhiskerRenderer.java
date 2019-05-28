@@ -478,13 +478,13 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
                     series);
         }
         Shape shape = lookupLegendShape(series);
-        Paint paint = lookupSeriesPaint(series);
-        Paint outlinePaint = lookupSeriesOutlinePaint(series);
+        Paint paint = paintManager.lookupSeriesPaint(series);
+        Paint outlinePaint = paintManager.lookupSeriesOutlinePaint(series);
         Stroke outlineStroke = lookupSeriesOutlineStroke(series);
         LegendItem result = new LegendItem(label, description, toolTipText,
                 urlText, shape, paint, outlineStroke, outlinePaint);
         result.setLabelFont(lookupLegendTextFont(series));
-        Paint labelPaint = lookupLegendTextPaint(series);
+        Paint labelPaint = paintManager.lookupLegendTextPaint(series);
         if (labelPaint != null) {
             result.setLabelPaint(labelPaint);
         }
@@ -662,7 +662,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
             yy = yy + offset;
         }
 
-        g2.setPaint(getItemPaint(row, column));
+        g2.setPaint(paintManager.getItemPaint(row, column));
         Stroke s = getItemStroke(row, column);
         g2.setStroke(s);
 
@@ -694,7 +694,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
                 g2.fill(box);
             }
 
-            Paint outlinePaint = getItemOutlinePaint(row, column);
+            Paint outlinePaint = paintManager.getItemOutlinePaint(row, column);
             if (this.useOutlinePaintForWhiskers) {
                 g2.setPaint(outlinePaint);
             }
@@ -808,7 +808,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
         double yyAverage;
         double yyOutlier;
 
-        Paint itemPaint = getItemPaint(row, column);
+        Paint itemPaint = paintManager.getItemPaint(row, column);
         g2.setPaint(itemPaint);
         Stroke s = getItemStroke(row, column);
         g2.setStroke(s);
@@ -842,7 +842,7 @@ public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
                 g2.fill(box);
             }
 
-            Paint outlinePaint = getItemOutlinePaint(row, column);
+            Paint outlinePaint = paintManager.getItemOutlinePaint(row, column);
             if (this.useOutlinePaintForWhiskers) {
                 g2.setPaint(outlinePaint);
             }

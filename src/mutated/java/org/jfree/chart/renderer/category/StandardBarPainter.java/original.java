@@ -84,7 +84,7 @@ public class StandardBarPainter implements BarPainter, Serializable {
     public void paintBar(Graphics2D g2, BarRenderer renderer, int row,
             int column, RectangularShape bar, RectangleEdge base) {
 
-        Paint itemPaint = renderer.getItemPaint(row, column);
+        Paint itemPaint = renderer.getPaintManager().getItemPaint(row, column);
         GradientPaintTransformer t = renderer.getGradientPaintTransformer();
         if (t != null && itemPaint instanceof GradientPaint) {
             itemPaint = t.transform((GradientPaint) itemPaint, bar);
@@ -125,7 +125,7 @@ public class StandardBarPainter implements BarPainter, Serializable {
 
         // handle a special case - if the bar colour has alpha == 0, it is
         // invisible so we shouldn't draw any shadow
-        Paint itemPaint = renderer.getItemPaint(row, column);
+        Paint itemPaint = renderer.getPaintManager().getItemPaint(row, column);
         if (itemPaint instanceof Color) {
             Color c = (Color) itemPaint;
             if (c.getAlpha() == 0) {
