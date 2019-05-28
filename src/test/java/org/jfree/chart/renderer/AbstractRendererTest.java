@@ -139,34 +139,34 @@ public class AbstractRendererTest {
         assertTrue(r1.equals(r2));
 
         // fillPaintList
-        r1.setSeriesFillPaint(0, new GradientPaint(1.0f, 2.0f, Color.BLUE,
+        r1.getPaintManager().setSeriesFillPaint(0, new GradientPaint(1.0f, 2.0f, Color.BLUE,
                 3.0f, 4.0f, Color.RED));
         assertFalse(r1.equals(r2));
-        r2.setSeriesFillPaint(0, new GradientPaint(1.0f, 2.0f, Color.BLUE,
+        r2.getPaintManager().setSeriesFillPaint(0, new GradientPaint(1.0f, 2.0f, Color.BLUE,
                 3.0f, 4.0f, Color.RED));
         assertTrue(r1.equals(r2));
 
         // defaultFillPaint
-        r1.setDefaultFillPaint(new GradientPaint(1.0f, 2.0f, Color.BLUE,
+        r1.getPaintManager().setDefaultFillPaint(new GradientPaint(1.0f, 2.0f, Color.BLUE,
                 3.0f, 4.0f, Color.RED));
         assertFalse(r1.equals(r2));
-        r2.setDefaultFillPaint(new GradientPaint(1.0f, 2.0f, Color.BLUE,
+        r2.getPaintManager().setDefaultFillPaint(new GradientPaint(1.0f, 2.0f, Color.BLUE,
                 3.0f, 4.0f, Color.RED));
         assertTrue(r1.equals(r2));
 
         // outlinePaintList
-        r1.setSeriesOutlinePaint(0, new GradientPaint(1.0f, 2.0f, Color.BLUE,
+        r1.getPaintManager().setSeriesOutlinePaint(0, new GradientPaint(1.0f, 2.0f, Color.BLUE,
                 3.0f, 4.0f, Color.RED));
         assertFalse(r1.equals(r2));
-        r2.setSeriesOutlinePaint(0, new GradientPaint(1.0f, 2.0f, Color.BLUE,
+        r2.getPaintManager().setSeriesOutlinePaint(0, new GradientPaint(1.0f, 2.0f, Color.BLUE,
                 3.0f, 4.0f, Color.RED));
         assertTrue(r1.equals(r2));
 
         // defaultOutlinePaint
-        r1.setDefaultOutlinePaint(new GradientPaint(1.0f, 2.0f, Color.BLUE,
+        r1.getPaintManager().setDefaultOutlinePaint(new GradientPaint(1.0f, 2.0f, Color.BLUE,
                 3.0f, 4.0f, Color.RED));
         assertFalse(r1.equals(r2));
-        r2.setDefaultOutlinePaint(new GradientPaint(1.0f, 2.0f, Color.BLUE,
+        r2.getPaintManager().setDefaultOutlinePaint(new GradientPaint(1.0f, 2.0f, Color.BLUE,
                 3.0f, 4.0f, Color.RED));
         assertTrue(r1.equals(r2));
 
@@ -448,14 +448,14 @@ public class AbstractRendererTest {
         r2.getPaintManager().setSeriesPaint(0, Color.BLACK);
         assertTrue(r1.equals(r2));
 
-        r1.setSeriesFillPaint(0, Color.YELLOW);
+        r1.getPaintManager().setSeriesFillPaint(0, Color.YELLOW);
         assertFalse(r1.equals(r2));
-        r2.setSeriesFillPaint(0, Color.YELLOW);
+        r2.getPaintManager().setSeriesFillPaint(0, Color.YELLOW);
         assertTrue(r1.equals(r2));
 
-        r1.setSeriesOutlinePaint(0, Color.YELLOW);
+        r1.getPaintManager().setSeriesOutlinePaint(0, Color.YELLOW);
         assertFalse(r1.equals(r2));
-        r2.setSeriesOutlinePaint(0, Color.YELLOW);
+        r2.getPaintManager().setSeriesOutlinePaint(0, Color.YELLOW);
         assertTrue(r1.equals(r2));
 
         r1.setSeriesStroke(0, new BasicStroke(2.2f));
@@ -597,11 +597,11 @@ public class AbstractRendererTest {
 
         // OUTLINE PAINT
         detector.setNotified(false);
-        r1.setSeriesOutlinePaint(0, Color.RED);
+        r1.getPaintManager().setSeriesOutlinePaint(0, Color.RED);
         assertTrue(detector.getNotified());
 
         detector.setNotified(false);
-        r1.setDefaultOutlinePaint(Color.RED);
+        r1.getPaintManager().setDefaultOutlinePaint(Color.RED);
         assertTrue(detector.getNotified());
 
         // STROKE
@@ -710,9 +710,9 @@ public class AbstractRendererTest {
     @Test
     public void testAutoPopulateFlagDefaults() {
         BarRenderer r = new BarRenderer();
-        assertEquals(true, r.getAutoPopulateSeriesPaint());
-        assertEquals(false, r.getAutoPopulateSeriesFillPaint());
-        assertEquals(false, r.getAutoPopulateSeriesOutlinePaint());
+        assertEquals(true, r.getPaintManager().getAutoPopulateSeriesPaint());
+        assertEquals(false, r.getPaintManager().getAutoPopulateSeriesFillPaint());
+        assertEquals(false, r.getPaintManager().getAutoPopulateSeriesOutlinePaint());
         assertEquals(true, r.getAutoPopulateSeriesStroke());
         assertEquals(false, r.getAutoPopulateSeriesOutlineStroke());
         assertEquals(true, r.getShapeManager().getAutoPopulateSeriesShape());
@@ -727,12 +727,12 @@ public class AbstractRendererTest {
         assertEquals(Color.BLUE, r.getPaintManager().getDefaultPaint());
 
         // first check that autoPopulate==false works as expected
-        r.setAutoPopulateSeriesPaint(false);
+        r.getPaintManager().setAutoPopulateSeriesPaint(false);
         assertEquals(Color.BLUE, r.getPaintManager().lookupSeriesPaint(0));
         assertNull(r.getPaintManager().getSeriesPaint(0));
 
         // now check autoPopulate==true
-        r.setAutoPopulateSeriesPaint(true);
+        r.getPaintManager().setAutoPopulateSeriesPaint(true);
         /*CategoryPlot plot =*/ new CategoryPlot(null, new CategoryAxis(
                 "Category"), new NumberAxis("Value"), r);
         assertEquals(DefaultDrawingSupplier.DEFAULT_PAINT_SEQUENCE[0],
@@ -746,20 +746,20 @@ public class AbstractRendererTest {
     @Test
     public void testFillPaintLookup() {
         BarRenderer r = new BarRenderer();
-        assertEquals(Color.WHITE, r.getDefaultFillPaint());
+        assertEquals(Color.WHITE, r.getPaintManager().getDefaultFillPaint());
 
         // first check that autoPopulate==false works as expected
-        r.setAutoPopulateSeriesFillPaint(false);
-        assertEquals(Color.WHITE, r.lookupSeriesFillPaint(0));
-        assertNull(r.getSeriesFillPaint(0));
+        r.getPaintManager().setAutoPopulateSeriesFillPaint(false);
+        assertEquals(Color.WHITE, r.getPaintManager().lookupSeriesFillPaint(0));
+        assertNull(r.getPaintManager().getSeriesFillPaint(0));
 
         // now check autoPopulate==true
-        r.setAutoPopulateSeriesFillPaint(true);
+        r.getPaintManager().setAutoPopulateSeriesFillPaint(true);
         /*CategoryPlot plot =*/ new CategoryPlot(null, new CategoryAxis(
                 "Category"), new NumberAxis("Value"), r);
         assertEquals(DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE[0],
-                r.lookupSeriesFillPaint(0));
-        assertNotNull(r.getSeriesFillPaint(0));
+                r.getPaintManager().lookupSeriesFillPaint(0));
+        assertNotNull(r.getPaintManager().getSeriesFillPaint(0));
     }
 
     /**
@@ -768,20 +768,20 @@ public class AbstractRendererTest {
     @Test
     public void testOutlinePaintLookup() {
         BarRenderer r = new BarRenderer();
-        assertEquals(Color.GRAY, r.getDefaultOutlinePaint());
+        assertEquals(Color.GRAY, r.getPaintManager().getDefaultOutlinePaint());
 
         // first check that autoPopulate==false works as expected
-        r.setAutoPopulateSeriesOutlinePaint(false);
-        assertEquals(Color.GRAY, r.lookupSeriesOutlinePaint(0));
-        assertNull(r.getSeriesOutlinePaint(0));
+        r.getPaintManager().setAutoPopulateSeriesOutlinePaint(false);
+        assertEquals(Color.GRAY, r.getPaintManager().lookupSeriesOutlinePaint(0));
+        assertNull(r.getPaintManager().getSeriesOutlinePaint(0));
 
         // now check autoPopulate==true
-        r.setAutoPopulateSeriesOutlinePaint(true);
+        r.getPaintManager().setAutoPopulateSeriesOutlinePaint(true);
         /*CategoryPlot plot =*/ new CategoryPlot(null, new CategoryAxis(
                 "Category"), new NumberAxis("Value"), r);
         assertEquals(DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE[0],
-                r.lookupSeriesOutlinePaint(0));
-        assertNotNull(r.getSeriesOutlinePaint(0));
+                r.getPaintManager().lookupSeriesOutlinePaint(0));
+        assertNotNull(r.getPaintManager().getSeriesOutlinePaint(0));
     }
 
 }

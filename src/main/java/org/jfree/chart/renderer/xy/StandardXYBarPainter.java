@@ -95,7 +95,7 @@ public class StandardXYBarPainter implements XYBarPainter, Serializable {
         if (renderer.isDrawBarOutline()) {
                // && state.getBarWidth() > BAR_OUTLINE_WIDTH_THRESHOLD) {
             Stroke stroke = renderer.getItemOutlineStroke(row, column);
-            Paint paint = renderer.getItemOutlinePaint(row, column);
+            Paint paint = renderer.getPaintManager().getItemOutlinePaint(row, column);
             if (stroke != null && paint != null) {
                 g2.setStroke(stroke);
                 g2.setPaint(paint);
