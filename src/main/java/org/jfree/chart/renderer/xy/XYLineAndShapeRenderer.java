@@ -93,6 +93,7 @@ import org.jfree.chart.plot.CrosshairState;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.Config_DrawShape;
 import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.chart.util.BooleanList;
 import org.jfree.chart.util.LineUtils;
@@ -957,7 +958,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
      * @param crosshairState  the crosshair state.
      * @param entities the entity collection.
      */
-    protected void drawSecondaryPass(Graphics2D g2, XYPlot plot, 
+    protected void drawSecondaryPass(Graphics2D g2, XYPlot plot,
             XYDataset dataset, int pass, int series, int item,
             ValueAxis domainAxis, Rectangle2D dataArea, ValueAxis rangeAxis,
             CrosshairState crosshairState, EntityCollection entities) {
@@ -978,7 +979,15 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
         double transY1 = rangeAxis.valueToJava2D(y1, dataArea, yAxisLocation);
 
         if (getItemShapeVisible(series, item)) {
-            entityArea = drawShape(g2, series, item, dataArea, orientation, transX1, transY1);
+
+            Shape shape = this.getShapeManager().getItemShape(series, item);
+
+            Config_DrawShape config = new Config_DrawShape(getItemShapeFilled(series, item),
+                    this.useFillPaint,getItemFillPaint(series, item), getItemPaint(series, item),
+                    this.drawOutlines, this.useOutlinePaint, getItemOutlinePaint(series,item),
+                    getItemOutlineStroke(series, item));
+            entityArea = this.getShapeManager().drawShape(g2, series, item, dataArea, orientation, transX1, transY1, shape, config);
+
         }
 
         double xx = transX1;
@@ -1007,41 +1016,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
 
 
 
-    private Shape drawShape(Graphics2D g2, int series, int item, Rectangle2D dataArea, PlotOrientation orientation, double transX1, double transY1) {
-        Shape entityArea;
-        Shape shape = this.getShapeManager().getItemShape(series, item);
-        if (orientation == PlotOrientation.HORIZONTAL) {
-            shape = ShapeUtils.createTranslatedShape(shape, transY1,
-                    transX1);
-        }
-        else if (orientation == PlotOrientation.VERTICAL) {
-            shape = ShapeUtils.createTranslatedShape(shape, transX1,
-                    transY1);
-        }
-        entityArea = shape;
-        if (shape.intersects(dataArea)) {
-            if (getItemShapeFilled(series, item)) {
-                if (this.useFillPaint) {
-                    g2.setPaint(paintManager.getItemFillPaint(series, item));
-                }
-                else {
-                    g2.setPaint(paintManager.getItemPaint(series, item));
-                }
-                g2.fill(shape);
-            }
-            if (this.drawOutlines) {
-                if (getUseOutlinePaint()) {
-                    g2.setPaint(paintManager.getItemOutlinePaint(series, item));
-                }
-                else {
-                    g2.setPaint(paintManager.getItemPaint(series, item));
-                }
-                g2.setStroke(getItemOutlineStroke(series, item));
-                g2.draw(shape);
-            }
-        }
-        return entityArea;
-    }
+
+
 
 
     /**
