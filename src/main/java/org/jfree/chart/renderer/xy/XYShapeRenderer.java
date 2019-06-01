@@ -469,8 +469,8 @@ public class XYShapeRenderer extends AbstractXYItemRenderer
         } else if (pass == 1) {
             Shape shape = this.getShapeManager().getItemShape(series, item);
             Config_DrawShape config = new Config_DrawShape(true,true, getPaint(dataset, series, item),
-                    getItemPaint(series, item), this.drawOutlines, getUseOutlinePaint(),
-                    getItemOutlinePaint(series, item), getItemOutlineStroke(series, item) );
+                    this.getPaintManager().getItemPaint(series, item), this.drawOutlines, getUseOutlinePaint(),
+                    this.getPaintManager().getItemOutlinePaint(series, item), getItemOutlineStroke(series, item) );
 
             this.getShapeManager().drawShape(g2,series, item, dataArea, orientation, transX, transY, shape, config);
 

@@ -983,8 +983,8 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
             Shape shape = this.getShapeManager().getItemShape(series, item);
 
             Config_DrawShape config = new Config_DrawShape(getItemShapeFilled(series, item),
-                    this.useFillPaint,getItemFillPaint(series, item), getItemPaint(series, item),
-                    this.drawOutlines, this.useOutlinePaint, getItemOutlinePaint(series,item),
+                    this.useFillPaint,getPaintManager().getItemFillPaint(series, item), this.getPaintManager().getItemPaint(series, item),
+                    this.drawOutlines, this.useOutlinePaint, getPaintManager().getItemOutlinePaint(series,item),
                     getItemOutlineStroke(series, item));
             entityArea = this.getShapeManager().drawShape(g2, series, item, dataArea, orientation, transX1, transY1, shape, config);
 
